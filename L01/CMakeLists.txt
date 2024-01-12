@@ -1,17 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Name of the project
-project(Lab01)
+project(Lab01 CXX)
 
 # Use glob to get the list of all source files.
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # We don't really need to include header and resource files to build, but it's
 # nice to have them show up in IDEs.
-file(GLOB_RECURSE HEADERS "src/*.h")
+include_directories("src/include")
+file(GLOB_RECURSE HEADERS "src/include/*.h")
 
 # Set the executable.
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES} ${HEADERS}) # ${HEADERS}
 # and the path where it goes "usually bin"
 set(EXECUTABLE_OUTPUT_PATH "../bin")
 

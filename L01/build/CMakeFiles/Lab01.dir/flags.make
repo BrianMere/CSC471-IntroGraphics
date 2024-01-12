@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include
 
 CXX_FLAGS =  -std=c++0x -Wall -pedantic -g
 

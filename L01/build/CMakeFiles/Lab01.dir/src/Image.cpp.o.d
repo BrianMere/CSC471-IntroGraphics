@@ -129,13 +129,13 @@ CMakeFiles/Lab01.dir/src/Image.cpp.o: \
  /usr/include/c++/13.2.1/bits/ostream.tcc /usr/include/c++/13.2.1/istream \
  /usr/include/c++/13.2.1/bits/istream.tcc /usr/include/c++/13.2.1/cassert \
  /usr/include/assert.h \
- /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/Image.h \
+ /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include/Image.h \
  /usr/include/c++/13.2.1/vector \
  /usr/include/c++/13.2.1/bits/stl_uninitialized.h \
  /usr/include/c++/13.2.1/bits/stl_vector.h \
  /usr/include/c++/13.2.1/bits/stl_bvector.h \
  /usr/include/c++/13.2.1/bits/vector.tcc \
- /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/stb_image_write.h \
+ /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include/stb_image_write.h \
  /usr/include/c++/13.2.1/stdlib.h /usr/include/string.h \
  /usr/include/strings.h /usr/include/c++/13.2.1/math.h \
  /usr/include/c++/13.2.1/cmath /usr/include/math.h \

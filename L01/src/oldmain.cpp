@@ -9,7 +9,7 @@
 // You should never do this in a header file.
 using namespace std;
 
-int main(int argc, char **argv)
+int main_old(int argc, char **argv)
 {
 	if(argc < 4) {
 		cout << "Usage: Lab1 <out_image_name>.png width height" << endl;

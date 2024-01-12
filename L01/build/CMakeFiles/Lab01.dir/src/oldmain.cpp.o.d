@@ -1,5 +1,5 @@
-CMakeFiles/Lab01.dir/src/main.cpp.o: \
- /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/main.cpp \
+CMakeFiles/Lab01.dir/src/oldmain.cpp.o: \
+ /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/oldmain.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/13.2.1/iostream \
  /usr/include/c++/13.2.1/bits/requires_hosted.h \
  /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
@@ -148,5 +148,4 @@ CMakeFiles/Lab01.dir/src/main.cpp.o: \
  /usr/include/c++/13.2.1/bits/atomic_base.h \
  /usr/include/c++/13.2.1/bits/atomic_lockfree_defines.h \
  /usr/include/c++/13.2.1/backward/auto_ptr.h \
- /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include/Image.h \
- /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include/BoundingBox.h
+ /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/include/Image.h

@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/Image.cpp" "CMakeFiles/Lab01.dir/src/Image.cpp.o" "gcc" "CMakeFiles/Lab01.dir/src/Image.cpp.o.d"
   "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/main.cpp" "CMakeFiles/Lab01.dir/src/main.cpp.o" "gcc" "CMakeFiles/Lab01.dir/src/main.cpp.o.d"
+  "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L01/src/oldmain.cpp" "CMakeFiles/Lab01.dir/src/oldmain.cpp.o" "gcc" "CMakeFiles/Lab01.dir/src/oldmain.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

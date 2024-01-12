@@ -2,6 +2,9 @@
 #include <iostream>
 #include <stdexcept>
 
+#ifndef BOUNDINGBOX_H
+#define BOUNDINGBOX_H
+
 // Class item to represent a bounding box, with dimension N
 template <typename T, int N>
 class BoundingBox
@@ -21,14 +24,14 @@ public:
     // add vertex to BoundingBox...
     void add_vertex(std::vector<T> v)
     {
-        this->refresh_maxmins();
-
         if (v.size() == N)
         {
-            this->m_list.insert(v);
+            this->m_list.push_back(v);
         }
         else
             std::cerr << "Invalid dimensional vertex passed in." << std::endl;
+    
+        this->refresh_maxmins();
     }
 
     void refresh_maxmins()
@@ -67,5 +70,30 @@ public:
     bool in_box(std::vector<T> v);
 };
 
+template <typename T, int N>
+bool BoundingBox<T, N>::in_box(std::vector<T> v)
+{
 
+    // check the dimension of the vector. 
+    if (v.size() != this->minimums.size() ||
+        v.size() != this->maximums.size()
+    )
+    {
+        std::cerr << "The input vector doesn't match the dimension of this box" << std::endl;
+        return false;
+    }
+
+    // check for boundedness...
+    for(int i = 0; i < v.size(); i++)
+    {
+        if(v.at(i) < this->minimums.at(i) || 
+            v.at(i) > this->maximums.at(i))
+        {
+            return false;
+        }
+    }
+    return true;
+};
+
+#endif
 
