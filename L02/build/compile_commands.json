@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/Lab01.dir/src/Image.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/Image.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/Image.cpp",
+  "output": "CMakeFiles/Lab01.dir/src/Image.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/Lab01.dir/src/main.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/main.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/L02/src/main.cpp",
+  "output": "CMakeFiles/Lab01.dir/src/main.cpp.o"
+}
+]
