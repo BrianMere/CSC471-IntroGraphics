@@ -1,0 +1,1 @@
+/usr/bin/g++  -std=c++0x -Wall -pedantic -g -rdynamic CMakeFiles/P1.dir/src/Image.cpp.o CMakeFiles/P1.dir/src/WorldToPixelConverter.cpp.o CMakeFiles/P1.dir/src/main.cpp.o CMakeFiles/P1.dir/src/tiny_obj_loader.cpp.o -o /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/bin/P1 

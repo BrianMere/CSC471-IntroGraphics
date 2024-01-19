@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/P1.dir/src/Image.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/Image.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/Image.cpp",
+  "output": "CMakeFiles/P1.dir/src/Image.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/P1.dir/src/WorldToPixelConverter.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/WorldToPixelConverter.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/WorldToPixelConverter.cpp",
+  "output": "CMakeFiles/P1.dir/src/WorldToPixelConverter.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/P1.dir/src/main.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/main.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/main.cpp",
+  "output": "CMakeFiles/P1.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/P1.dir/src/tiny_obj_loader.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/tiny_obj_loader.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/tiny_obj_loader.cpp",
+  "output": "CMakeFiles/P1.dir/src/tiny_obj_loader.cpp.o"
+}
+]

@@ -77,8 +77,17 @@ int main(int argc, char **argv)
 	*/
 
 	// 0. Get the width and height as limiting factors...
-	unsigned int width = 500;
-	unsigned int height = 500;
+	std::string in; // string input
+	unsigned int width; 
+	unsigned int height;
+
+	std::cout << "What is the width of your image?" << std::endl;
+	std::getline(std::cin, in);
+	width = getAs<unsigned int>(in);
+	std::cout << "What is the height of your image?" << std::endl;
+	std::getline(std::cin, in);
+	height = getAs<unsigned int>(in);
+
 	auto image = std::make_shared<Image>(width, height);
 	const Color background = BLACK;
 
