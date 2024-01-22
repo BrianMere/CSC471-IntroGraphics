@@ -19,6 +19,8 @@
 // You should never do this in a header file.
 using namespace std;
 
+#define EPSILON 0.001
+
 /*
    Helper function you will want all quarter
    Given a vector of shapes which has already been read from an obj file
@@ -202,7 +204,7 @@ int main(int argc, char **argv)
          for(int y = ymin; y < ymax; y++)
          {
             // 3. Compute Barycentric Coordinates as we did in L02...
-            VecN<int, 2> test_pt = VecN<int, 2>({x, y, 0});
+            VecN<int, 2> test_pt = VecN<int, 2>({x, y});
 
             if(tri.getBoundingBox().in_box(test_pt))
 			   {
@@ -216,21 +218,23 @@ int main(int argc, char **argv)
 
                // 5. Using the Barycentric Calculations prior, determine if we are in the triangle (ie: all values in (0,1) range)
                // - if we are, color based on the alpha, beta, gamma values from (4), otherwise, color in as background...
-               if(	alpha >= 0 && alpha <= 1 &&
+               if(alpha >= 0 && alpha <= 1 &&
                   beta >= 0 && beta <= 1 &&
                   gamma >= 0 && gamma <= 1) // write our determined triangle color...
                {
 
                   // 6. Do a z-buffer test, and add if we need to...
                   double current_z = (double)(alpha*v1.v[2] + beta*v2.v[2] + gamma*v3.v[2]);
-                  Color current_col = BLACK;
-                  current_col += (v1.c * alpha);
-                  current_col += (v2.c * beta);
-                  current_col += (v3.c * gamma);
+                  
                   if(Zbuff[x][y] < current_z)
                   {
                      // color pixel, update zbuf
-                     Zbuff[x][y] = current_z;
+                     
+                     Zbuff[x][y] = current_z - EPSILON;
+                     Color current_col = BLACK;
+                     current_col += (v1.c * alpha);
+                     current_col += (v2.c * beta);
+                     current_col += (v3.c * gamma);
                      image->setPixel(
                         x, 
                         y, 
