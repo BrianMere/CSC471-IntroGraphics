@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 #include <sstream>
+#include <limits>
 
 #include "tiny_obj_loader.h"
 #include "Image.h"
@@ -114,8 +115,18 @@ int main(int argc, char **argv)
    unsigned int g_height = getAs<unsigned int>(std::string(argv[4]));
    int coloring_mode = getAs<int>(std::string(argv[5]));
 
-   //create an image
+   //create an image, and our z-buffer with values of our maximum depth
 	auto image = make_shared<Image>(g_width, g_height);
+   double Zbuff[g_width][g_height];
+   for(unsigned int i = 0; i < g_width; i++)
+   {
+      for(unsigned int j = 0; j < g_height; j++)
+      {
+         Zbuff[i][j] = -std::numeric_limits<double>::max();
+      }
+   }
+      
+
 
 	// triangle buffer
 	vector<unsigned int> triBuf;
@@ -147,22 +158,43 @@ int main(int argc, char **argv)
    /*******************************************************************/
 
    WorldToPixelConverter wtpc = WorldToPixelConverter(g_width,g_height);
-   for(size_t i = 0; i < triBuf.size(); i += 3)
+   for(size_t i = 0; i < triBuf.size()/3; i += 3)
    {
       // 1. Get the current triangle we are on...
       std::vector<unsigned int> choose_vecs = GETVEC3(unsigned int, triBuf, i);
 
       // use the obj to search for the vertices in the posBuf to construct our triangle.
-      VertexColorPair v1 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[0])), .c = RED};
-      VertexColorPair v2 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[1])), .c = GREEN};
-      VertexColorPair v3 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[2])), .c = BLUE};
+      VertexColorPair<float, 3> v1 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[0])), .c = RED};
+      VertexColorPair<float, 3> v2 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[1])), .c = RED};
+      VertexColorPair<float, 3> v3 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[2])), .c = RED};
 
       // 2. Construct and interpret our triangle to possibly write pixels in its bounding box...
-      Triangle tri = Triangle(v1, v2, v3);
-      unsigned int xmin = wtpc.W2PX(tri.getBoundingBox().getMin(0)); // x-min
-      unsigned int ymin = wtpc.W2PY(tri.getBoundingBox().getMin(1)); // y-min
-      unsigned int xmax = wtpc.W2PX(tri.getBoundingBox().getMax(0)); // x-max
-      unsigned int ymax = wtpc.W2PY(tri.getBoundingBox().getMax(1)); // y-max
+      // ... convert our triangle vector into pixel coordinates for our L02 algorithm ... 
+      std::vector<VecN<int, 2>> vs = std::vector<VecN<int,2>>();
+      vs.push_back(VecN<int,2>({
+         (int) wtpc.W2PX(v1.v[0]),
+         (int) wtpc.W2PY(v1.v[1])
+      }));
+      vs.push_back(VecN<int,2>({
+         (int) wtpc.W2PX(v2.v[0]),
+         (int) wtpc.W2PY(v2.v[1])
+      }));
+      vs.push_back(VecN<int,2>({
+         (int) wtpc.W2PX(v3.v[0]),
+         (int) wtpc.W2PY(v3.v[1])
+      }));
+      double A = calc_TriArea(vs[0], vs[1], vs[2]);
+
+      Triangle<int, 2> tri = Triangle<int, 2>(
+         VertexColorPair<int, 2>({.v = vs[0], .c = v1.c}),
+         VertexColorPair<int, 2>({.v = vs[1], .c = v2.c}),
+         VertexColorPair<int, 2>({.v = vs[2], .c = v3.c})
+      );
+      
+      unsigned int xmin = tri.getBoundingBox().getMin(0); // x-min
+      unsigned int ymin = tri.getBoundingBox().getMin(1); // y-min
+      unsigned int xmax = tri.getBoundingBox().getMax(0); // x-max
+      unsigned int ymax = tri.getBoundingBox().getMax(1); // y-max
 
       // for each pixel in the bounding box of this triangle...
       for(int x = xmin; x < xmax; x++)
@@ -170,7 +202,45 @@ int main(int argc, char **argv)
          for(int y = ymin; y < ymax; y++)
          {
             // 3. Compute Barycentric Coordinates as we did in L02...
-            VecN<int, 2> test_pt = VecN<int, 2>({x, y}); 
+            VecN<int, 2> test_pt = VecN<int, 2>({x, y, 0});
+
+            if(tri.getBoundingBox().in_box(test_pt))
+			   {
+               // 4. Compute the Barycentric coordinates for each point here
+               /* We already have A, we need to find the smaller areas for the subtriangles for each alpha, beta, gamma */
+               // for alpha, we exclude considering v0, for beta exclude v1, ... and substitute with test_pt
+               double alpha = calc_TriArea(test_pt, vs[1], vs[2]) / A;
+               double beta = calc_TriArea(test_pt, vs[2], vs[0]) / A;
+               double gamma = calc_TriArea(test_pt, vs[0], vs[1]) / A;
+            
+
+               // 5. Using the Barycentric Calculations prior, determine if we are in the triangle (ie: all values in (0,1) range)
+               // - if we are, color based on the alpha, beta, gamma values from (4), otherwise, color in as background...
+               if(	alpha >= 0 && alpha <= 1 &&
+                  beta >= 0 && beta <= 1 &&
+                  gamma >= 0 && gamma <= 1) // write our determined triangle color...
+               {
+
+                  // 6. Do a z-buffer test, and add if we need to...
+                  double current_z = (double)(alpha*v1.v[2] + beta*v2.v[2] + gamma*v3.v[2]);
+                  Color current_col = BLACK;
+                  current_col += (v1.c * alpha);
+                  current_col += (v2.c * beta);
+                  current_col += (v3.c * gamma);
+                  if(Zbuff[x][y] < current_z)
+                  {
+                     // color pixel, update zbuf
+                     Zbuff[x][y] = current_z;
+                     image->setPixel(
+                        x, 
+                        y, 
+                        current_col[0], 
+                        current_col[1], 
+                        current_col[2]
+                     );
+                  }
+               }
+            }
          }
       }
    }

@@ -22,8 +22,14 @@ public:
     ~WorldToPixelConverter() {};
 
     // Convert x world coordinates to x pixel coordinates
-    inline unsigned int W2PX(float xw);
+    inline unsigned int W2PX(float xw) 
+    {
+        return (unsigned int)(this->C * xw + this->D);
+    }
     // Convert y world coordinates to y pixel coordinates
-    inline unsigned int W2PY(float yw);
+    inline unsigned int W2PY(float yw)
+    {
+        return (unsigned int)(this->E * yw + this->F);
+    }
 };
 

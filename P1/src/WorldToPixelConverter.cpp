@@ -29,13 +29,3 @@ WorldToPixelConverter::WorldToPixelConverter(unsigned int width, unsigned int he
     this->E = ((float)(height - 1))/(this->T - this->B);
     this->F = -(this->E * this->B);
 }
-
-inline unsigned int WorldToPixelConverter::W2PX(float xw)
-{
-    return (unsigned int)(this->C * xw + this->D);
-}
-
-inline unsigned int WorldToPixelConverter::W2PY(float yw)
-{
-    return (unsigned int)(this->E * yw + this->F);
-}
