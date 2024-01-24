@@ -149,7 +149,14 @@ CMakeFiles/P1.dir/src/main.cpp.o: \
  /usr/include/c++/13.2.1/bits/atomic_lockfree_defines.h \
  /usr/include/c++/13.2.1/backward/auto_ptr.h /usr/include/assert.h \
  /usr/include/c++/13.2.1/sstream /usr/include/c++/13.2.1/bits/sstream.tcc \
- /usr/include/c++/13.2.1/limits \
+ /usr/include/c++/13.2.1/limits /usr/include/c++/13.2.1/cmath \
+ /usr/include/math.h /usr/include/bits/math-vector.h \
+ /usr/include/bits/libm-simd-decl-stubs.h \
+ /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
+ /usr/include/bits/fp-fast.h \
+ /usr/include/bits/mathcalls-helper-functions.h \
+ /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
+ /usr/include/bits/iscanonical.h \
  /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include/tiny_obj_loader.h \
  /usr/include/c++/13.2.1/map /usr/include/c++/13.2.1/bits/stl_tree.h \
  /usr/include/c++/13.2.1/bits/stl_map.h \
@@ -158,13 +165,7 @@ CMakeFiles/P1.dir/src/main.cpp.o: \
  /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include/Image.h \
  /home/brianm/Documents/Repositories/CSC471-IntroGraphics/P1/src/include/VecN.h \
  /usr/include/c++/13.2.1/array /usr/include/c++/13.2.1/compare \
- /usr/include/c++/13.2.1/cmath /usr/include/math.h \
- /usr/include/bits/math-vector.h /usr/include/bits/libm-simd-decl-stubs.h \
- /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
- /usr/include/bits/fp-fast.h \
- /usr/include/bits/mathcalls-helper-functions.h \
- /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
- /usr/include/bits/iscanonical.h /usr/include/c++/13.2.1/algorithm \
+ /usr/include/c++/13.2.1/algorithm \
  /usr/include/c++/13.2.1/bits/stl_algo.h \
  /usr/include/c++/13.2.1/bits/algorithmfwd.h \
  /usr/include/c++/13.2.1/bits/stl_heap.h \

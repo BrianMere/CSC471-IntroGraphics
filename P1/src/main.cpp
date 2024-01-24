@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <sstream>
 #include <limits>
+#include <cmath>
 
 #include "tiny_obj_loader.h"
 #include "Image.h"
@@ -19,7 +20,8 @@
 // You should never do this in a header file.
 using namespace std;
 
-#define EPSILON 0.001
+#define EPSILON 0.0001
+#define MODE_THRSH 0.15 // keep this under 0.3333333....
 
 /*
    Helper function you will want all quarter
@@ -134,7 +136,7 @@ int main(int argc, char **argv)
 	vector<unsigned int> triBuf;
 	// position buffer
 	vector<float> posBuf;
-   #define GETVEC3(T,arr,i) (std::vector<T>({arr[3*i], arr[3*i + 1], arr[3*i + 2]}))
+   #define GETVEC3(T,arr,i) (std::vector<T>({arr[i], arr[i + 1], arr[i + 2]}))
 
 
 	// Some obj files contain material information.
@@ -160,15 +162,34 @@ int main(int argc, char **argv)
    /*******************************************************************/
 
    WorldToPixelConverter wtpc = WorldToPixelConverter(g_width,g_height);
-   for(size_t i = 0; i < triBuf.size()/3; i += 3)
+   Color background = BLACK;
+   Color C1 = ORANGE;
+   Color C2 = C1;
+   Color C3 = C1;
+
+   for(unsigned int x = 0; x < g_width; x++)
+   {
+      for(unsigned int y = 0; y < g_height; y++)
+      {
+         image->setPixel(
+            x, 
+            y,
+            background[0],
+            background[1],
+            background[2]
+         );
+      }
+   }
+
+   for(size_t i = 0; i < triBuf.size(); i += 3)
    {
       // 1. Get the current triangle we are on...
       std::vector<unsigned int> choose_vecs = GETVEC3(unsigned int, triBuf, i);
 
       // use the obj to search for the vertices in the posBuf to construct our triangle.
-      VertexColorPair<float, 3> v1 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[0])), .c = RED};
-      VertexColorPair<float, 3> v2 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[1])), .c = RED};
-      VertexColorPair<float, 3> v3 = {.v = VecN<float, 3>(GETVEC3(float, posBuf, choose_vecs[2])), .c = RED};
+      VertexColorPair<float, 3> v1 = {.v = VecN<float, 3>({posBuf[3*choose_vecs[0]], posBuf[3*choose_vecs[0]+1], posBuf[3*choose_vecs[0]+2]}), .c = C1};
+      VertexColorPair<float, 3> v2 = {.v = VecN<float, 3>({posBuf[3*choose_vecs[1]], posBuf[3*choose_vecs[1]+1], posBuf[3*choose_vecs[1]+2]}), .c = C2};
+      VertexColorPair<float, 3> v3 = {.v = VecN<float, 3>({posBuf[3*choose_vecs[2]], posBuf[3*choose_vecs[2]+1], posBuf[3*choose_vecs[2]+2]}), .c = C3};
 
       // 2. Construct and interpret our triangle to possibly write pixels in its bounding box...
       // ... convert our triangle vector into pixel coordinates for our L02 algorithm ... 
@@ -208,6 +229,8 @@ int main(int argc, char **argv)
 
             if(tri.getBoundingBox().in_box(test_pt))
 			   {
+
+
                // 4. Compute the Barycentric coordinates for each point here
                /* We already have A, we need to find the smaller areas for the subtriangles for each alpha, beta, gamma */
                // for alpha, we exclude considering v0, for beta exclude v1, ... and substitute with test_pt
@@ -229,19 +252,59 @@ int main(int argc, char **argv)
                   if(Zbuff[x][y] < current_z)
                   {
                      // color pixel, update zbuf
-                     
                      Zbuff[x][y] = current_z - EPSILON;
+
+                     // choose our color based on our color mode
                      Color current_col = BLACK;
-                     current_col += (v1.c * alpha);
-                     current_col += (v2.c * beta);
-                     current_col += (v3.c * gamma);
-                     image->setPixel(
-                        x, 
-                        y, 
-                        current_col[0], 
-                        current_col[1], 
-                        current_col[2]
-                     );
+                     if(coloring_mode == 1) // depth coloring
+                     {
+                        current_col += (v1.c * alpha);
+                        current_col += (v2.c * beta);
+                        current_col += (v3.c * gamma);
+
+                        // since z coordinates are -1 to 1, you can add 1 to all the z coordinates and divide by 2
+                        // scaling factor is (1 + current_z)/2. 
+                        current_col *= (1 + current_z)/2.0;
+
+                        image->setPixel(
+                           x, 
+                           y, 
+                           current_col[0], 
+                           current_col[1], 
+                           current_col[2]
+                        );
+                     }
+                     else if (coloring_mode == 2) // mesh coloring
+                     {
+                        if(alpha >= MODE_THRSH && beta >= MODE_THRSH && gamma >= MODE_THRSH)
+                        {
+                           current_col += (v1.c * alpha);
+                           current_col += (v2.c * beta);
+                           current_col += (v3.c * gamma);
+
+                           image->setPixel(
+                              x, 
+                              y, 
+                              current_col[0], 
+                              current_col[1], 
+                              current_col[2]
+                           );
+                        }
+                        // if we don't, don't color in the thing!!!
+                     }
+                     else { // standard coloring
+                        current_col += (v1.c * alpha);
+                        current_col += (v2.c * beta);
+                        current_col += (v3.c * gamma);
+
+                        image->setPixel(
+                           x, 
+                           y, 
+                           current_col[0], 
+                           current_col[1], 
+                           current_col[2]
+                        );
+                     }
                   }
                }
             }
@@ -254,6 +317,5 @@ int main(int argc, char **argv)
 	
 	//write out the image
    image->writeToFile(imgName);
-
 	return 0;
 }
