@@ -23,11 +23,37 @@ using namespace glm;
 
 /* Global data associated with triangle geometry - this will likely vary
 in later programs - so is left explicit for now  */
+#define NUM_TRIANGLES 3
 static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
-	};
+		// OG Triangle					
+		-0.80f, -0.85f, 0.0f,			
+		0.80f, -0.85f, 0.0f,			
+		0.0f, 0.85f, 0.0f,				
+
+		// New Triangle (left)
+		-0.90f, -0.85f, 0.0f,			
+		-0.90f, 0.85f, 0.0f,			
+		-0.2f, 0.85f, 0.0f,				
+
+		// (right)
+		0.90f, -0.85f, 0.0f,			
+		0.90f, 0.85f, 0.0f,				
+		0.2f, 0.85f, 0.0f
+};
+
+static const GLfloat g_color_buffer_data[] = {
+	1.0f, 1.0f, 0.0f,
+	1.0f, 1.0f, 0.0f, 
+	0.0f, 1.0f, 1.0f,
+
+	1.0f, 1.0f, 0.0f, 
+	1.0f, 0.0f, 0.0f, 
+	0.0f, 1.0f, 1.0f, 
+
+	1.0f, 0.0f, 0.0f, 
+	1.0f, 1.0f, 1.0f, 
+	0.0f, 1.0f, 0.0f
+};
 
 /* A big global wrapper for all our data */
 class Application : public EventCallbacks {
@@ -47,6 +73,9 @@ public:
 
 	// Data necessary to give our triangle to OpenGL
 	GLuint vertexBufferID;
+
+	// Data (color) *new*
+	GLuint colorBufferID;
 
 	/* we will work with matrices soon - don't worry - place holder for now */
 	void createIdentityMat(float *M) {
@@ -108,6 +137,7 @@ public:
 		prog->addUniform("V");
 		prog->addUniform("M");
 		prog->addAttribute("vertPos");
+		prog->addAttribute("vertCol");
 	}
 
 	void initGeom(const std::string& resourceDirectory)
@@ -122,6 +152,11 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 		//actually memcopy the data - only do this once
 		glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_DYNAMIC_DRAW);
+
+		// do the same for color data...
+		glGenBuffers(1, &colorBufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_DYNAMIC_DRAW);
 	}
 
 	void render()
@@ -157,11 +192,22 @@ public:
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 		//key function to get up how many elements to pull out at a time (3)
+
+		// define position vertex part
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+		
+
+		// define the color part
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		
 
 		//actually draw from vertex 0, 3 vertices
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0,  3 * NUM_TRIANGLES);
+		
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
 
 		prog->unbind();
 
@@ -171,7 +217,7 @@ public:
 int main(int argc, char *argv[])
 {
 	// Where the resources are loaded from
-	std::string resourceDir = "../resources";
+	std::string resourceDir = "resources";
 
 	if (argc >= 2)
 	{
@@ -192,7 +238,7 @@ int main(int argc, char *argv[])
 	// may need to initialize or set up different data and state
 
 	application->init(resourceDir);
-	application->initGeom(resourceDir);
+	application->initGeom(resourceDir); 
 
 	// Loop until the user closes the window.
 	while (! glfwWindowShouldClose(windowManager->getHandle()))
