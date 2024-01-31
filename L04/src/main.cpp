@@ -80,46 +80,115 @@ public:
 		M[0] = M[5] = M[10] = M[15] = 1;
 	}
 
+	/**
+	 * Create a translation matrix in column major order
+	 * ie:
+	 * 
+	 * 1 0 0 tx
+	 * 0 1 0 ty
+	 * 0 0 1 tz
+	 * 0 0 0 1
+	*/
 	void createTranslateMat(float *T, float x, float y, float z)
 	{
-   // IMPLEMENT ME
+		createIdentityMat(T);
+		
+		// set the tx, ty, tz values
+		T[12] = x;
+		T[13] = y;
+		T[14] = z;
 	}
 
-
+	/**
+	 * Create a scale matrix via:
+	 * sx 0 0 0 
+	 * 0 sy 0 0
+	 * 0 0 sx 0
+	 * 0 0 0  1
+	 * 
+	 * Scale by x in x-dir, y in y-dir, and z in z-dir
+	*/
 	void createScaleMat(float *S, float x, float y, float z)
 	{
-   // IMPLEMENT ME
+		createIdentityMat(S);
+
+		S[0] = x;
+		S[5] = y;
+		S[10] = z;
 	}
 
+	/**
+	 * Create a rotation matrix around the x-axis, by angle radians:
+	 * 
+	 * 1 0 0 0 
+	 * 0 cos(theta) -sin(theta) 0
+	 * 0 sin(theta) cos(theta) 0
+	 * 0 0 0 1
+	*/
 	void createRotateMatX(float *R, float radians)
 	{ 
-   // IMPLEMENT ME
+		createIdentityMat(R);
+
+		R[5] = cos(radians);
+		R[6] = sin(radians);
+		R[9] = -1 * sin(radians);
+		R[10] = R[5]; // these are the same values...
 	}
 
+	/** 
+	 * Create a rotation matrix around the y-axis, by angle radians:
+	 * 
+	 * cos(theta) 0 sin(theta) 0
+	 * 0 		  1 0 		   0
+	 * -sin(theta)0 cos(theta) 0
+	 * 0		  0 0 		   1
+	*/
 	void createRotateMatY(float *R, float radians)
 	{
-   // IMPLEMENT ME
+		createIdentityMat(R);
+
+		R[0] = cos(radians);
+		R[2] = -sin(radians);
+		R[8] = sin(radians);
+		R[10] = cos(radians);
 	}
 
+	/**
+	 * Create a z-axis rotation, rotating it radians amount
+	 * 
+	 * cos(theta) -sin(theta) 0 0
+	 * sin(theta) cos(theta)  0 0
+	 * 0          0           1 0 
+	 * 0          0           0 1
+	*/
 	void createRotateMatZ(float *R, float radians)
 	{
-   // IMPLEMENT ME
+		createIdentityMat(R);
+
+		R[0] = cos(radians);
+		R[1] = sin(radians);
+		R[4] = -sin(radians);
+		R[5] = cos(radians);
 	}
 
+	/**
+	 * Multiply AB, from right to left. Put the result into C. 
+	*/
 	void multMat(float *C, const float *A, const float *B)
 	{
 		float c = 0;
 		for(int k = 0; k < 4; ++k) {
-      // Process kth column of C
+      		// Process kth column of C
 			for(int i = 0; i < 4; ++i) {
-         // Process ith row of C.
-         // The (i,k)th element of C is the dot product
-         // of the ith row of A and kth col of B.
+         		// Process ith row of C.
+         		// The (i,k)th element of C is the dot product
+         		// of the ith row of A and kth col of B.
 				c = 0;
-         //vector dot
+         		//vector dot
 				for(int j = 0; j < 4; ++j) {
-            // IMPLEMENT ME
+					c += A[4*j + i] * B[4*k + j];
 				}
+				C[4*k + i] = c;
 			}
 		}
 	}
@@ -241,9 +310,23 @@ public:
 
 		//Use the local matrices for lab 4
 		float aspect = width/(float)height;
-		createPerspectiveMat(P, 70.0f, aspect, 0.1, 100.0f);	
-		createIdentityMat(M);
-		createIdentityMat(V);
+		createPerspectiveMat(P, 70.0f, aspect, 0.1, 100.0f);
+
+		// need to repeat the following code...	
+
+		// do matrix calls here...
+		// V will rotate by 45 degrees, then shift back by 6 units
+		float translateMat[16], rotateMat[16] = {0};
+		createTranslateMat(translateMat, 0, 0, -10);
+		createRotateMatY(rotateMat, - M_PI / 4);
+		multMat(V, translateMat, rotateMat);
+		// createTranslateMat(V, 0, 0, -10);
+
+		// Shape 1: Thin leftmost rectangle
+		float cubeTrans[16], cubeScale[16] = {0};
+		createScaleMat(cubeScale, 1, 4, 1);
+		createTranslateMat(cubeTrans, -3, 0, 0);
+		multMat(M, cubeTrans, cubeScale);
 
 		// Draw mesh using GLSL.
 		prog->bind();
@@ -252,6 +335,50 @@ public:
 		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
 		mesh->draw(prog);
 		prog->unbind();
+
+		// Shape 2: Thin middle rectangle
+		createScaleMat(cubeScale, 1, 4, 1);
+		createTranslateMat(cubeTrans, -1, 0, 0);
+		multMat(M, cubeTrans, cubeScale);
+
+		// Draw mesh using GLSL.
+		prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
+
+		// Shape 3: Thin rightmost rectangle
+		createScaleMat(cubeScale, 1, 4, 1);
+		createTranslateMat(cubeTrans, 2, 0, 0);
+		multMat(M, cubeTrans, cubeScale);
+
+		// Draw mesh using GLSL.
+		prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
+
+		// Shape 4: Diagonal Rectangle
+		float cubeRot[16], temp[16] = {0};
+		createRotateMatZ(cubeRot, M_PI / 3);
+		createScaleMat(cubeScale, 1, 4, 1);
+		createTranslateMat(cubeTrans, -2, 0.333f, 0);
+		multMat(temp, cubeRot, cubeScale);
+		multMat(M, cubeTrans, temp);
+
+		// Draw mesh using GLSL.
+		prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
+
+		
 
 	}
 };
