@@ -318,7 +318,7 @@ public:
 		// V will rotate by 45 degrees, then shift back by 6 units
 		float translateMat[16], rotateMat[16] = {0};
 		createTranslateMat(translateMat, 0, 0, -10);
-		createRotateMatY(rotateMat, - M_PI / 4);
+		createRotateMatY(rotateMat, + M_PI / 4);
 		multMat(V, translateMat, rotateMat);
 		// createTranslateMat(V, 0, 0, -10);
 
