@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <glad/glad.h>
+#include <functional>
 
 #include "GLSL.h"
 #include "Program.h"
@@ -21,6 +22,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+// my own graphics classes
+#include "MeshContainer.h"
+#include "Object.h"
+#include "function_generator.h"
+
+#define DEF_ANGLE 0.0f // M_PIf / 6.0f
+#define SETCOLOR(r, g, b) (glUniform3f(solidColorProg->getUniform("solidColor"), r, g, b))
+
 using namespace std;
 using namespace glm;
 
@@ -30,24 +39,38 @@ public:
 
 	WindowManager * windowManager = nullptr;
 
+	/* Define shaders here ... */
+
 	// Our shader program
 	std::shared_ptr<Program> prog;
-
 	// Our shader program
 	std::shared_ptr<Program> solidColorProg;
 
+	/* Define Mesh and Object file memories here... */
+
 	// Shape to be used (from  file) - modify to support multiple
-	shared_ptr<Shape> mesh;
-
-	//a different mesh
-	shared_ptr<Shape> bunny;
-
-	//example data that might be useful when trying to compute bounds on multi-shape
-	vec3 gMin;
+	std::map<std::string, shared_ptr<Object>> objects;
 
 	//animation data
 	float sTheta = 0;
-	float gTrans = 0;
+	float graphT = 0;
+	float cloudsize = 1;
+
+	// camera data
+	float theta = DEF_ANGLE; // "A" or "D" changes the theta camera angle
+	float phi = DEF_ANGLE;  // "W" or "S" changes the phi cmaera angle
+	float r = 1;     // "Q" or "E" changes the radius from the origin
+	float xtrans = 0;
+	float ytrans = 0;
+	float ztrans = 0;
+
+	const float speed = 0.02; // sensitivity variable, in degrees per press
+	double lastx = 0; // used in mouse controls
+	double lasty = 0; // used in mouse controls
+	// key detections while pressed. 
+	bool keys[GLFW_KEY_LAST] = {false};
+	bool mousePressed = false;
+	double posX, posY;
 
 	void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
@@ -55,12 +78,16 @@ public:
 		{
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
-		if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-			gTrans -= 0.2;
+
+		if (action == GLFW_PRESS)
+		{
+			keys[key] = true;
 		}
-		if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-			gTrans += 0.2;
+		else if (action == GLFW_RELEASE)
+		{
+			keys[key] = false;
 		}
+
 		if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
 			glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 		}
@@ -71,12 +98,17 @@ public:
 
 	void mouseCallback(GLFWwindow *window, int button, int action, int mods)
 	{
-		double posX, posY;
-
 		if (action == GLFW_PRESS)
 		{
-			 glfwGetCursorPos(window, &posX, &posY);
-			 cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+			mousePressed = true;
+			glfwGetCursorPos(window, &posX, &posY);
+			lastx = posX;
+			lasty = posY;
+			cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+		}
+		if (action == GLFW_RELEASE) 
+		{
+			mousePressed = false;
 		}
 	}
 
@@ -118,48 +150,42 @@ public:
 		solidColorProg->addAttribute("vertNor");
 	}
 
+	/**
+	 * Define what Mesh objects we have and where their resources are called.  
+	*/
 	void initGeom(const std::string& resourceDirectory)
 	{
+		objects["bunny"] = make_shared<Object>(Object(resourceDirectory, "bunny.obj"));
+		objects["dummy"] = make_shared<Object>(Object(resourceDirectory, "dummy.obj"));
+		objects["sphere"] = make_shared<Object>(Object(resourceDirectory, "SmoothSphere.obj"));
+		objects["cloud"] = make_shared<Object>(Object(resourceDirectory, "cloud.obj"));
 
-		//EXAMPLE set up to read one shape from one obj file - convert to read several
-		// Initialize mesh
-		// Load geometry
- 		// Some obj files contain material information.We'll ignore them for this assignment.
- 		vector<tinyobj::shape_t> TOshapes;
- 		vector<tinyobj::material_t> objMaterials;
- 		string errStr;
-		//load in the mesh and make the shape(s)
- 		bool rc = tinyobj::LoadObj(TOshapes, objMaterials, errStr, (resourceDirectory + "/SmoothSphere.obj").c_str());
-		
-		if (!rc) {
-			cerr << errStr << endl;
-		} else {
-			//for now all our shapes will not have textures - change in later labs
-			mesh = make_shared<Shape>(false);
-			mesh->createShape(TOshapes[0]);
-			mesh->measure();
-			mesh->init();
-		}
+		// use DESMOS or any other 3d graphing software to plot this out for yourself!
+		funcToObj(
+			resourceDirectory, 
+			"graph.obj",
+			100,
+			[](float x, float y) { return 10 * exp(-abs(x)) * exp(-abs(y)) * sin(x) * sin(y); },
+			-3.0, 
+			3.0, 
+			-3.0, 
+			3.0
+		);
+		objects["graph"] = make_shared<Object>(Object(resourceDirectory, "graph.obj"));
 
-		//load in another mesh and make the shape(s)
-		vector<tinyobj::shape_t> TOshapes2;
- 		rc = tinyobj::LoadObj(TOshapes2, objMaterials, errStr, (resourceDirectory + "/bunny.obj").c_str());
-		
-		if (!rc) {
-			cerr << errStr << endl;
-		} else {
-			//for now all our shapes will not have textures - change in later labs
-			bunny = make_shared<Shape>(false);
-			bunny->createShape(TOshapes2[0]);
-			bunny->measure();
-			bunny->init();
-		}
-
-		//read out information stored in the shape about its size - something like this...
-		//then do something with that information.....
-		gMin.x = mesh->min.x;
-		gMin.y = mesh->min.y;
+		funcToObj(
+			resourceDirectory,
+			"plane.obj",
+			5, 
+			[](float x, float y) { return 0; },
+			-1.0, 
+			1.0, 
+			-1.0, 
+			1.0
+		);
+		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj"));
 	}
+
 
 	/* helper for sending top of the matrix strack to GPU */
 	void setModel(std::shared_ptr<Program> prog, std::shared_ptr<MatrixStack>M) {
@@ -188,7 +214,7 @@ public:
 		//Use the matrix stack for Lab 6
 		float aspect = width/(float)height;
 
-		// Create the matrix stacks - please leave these alone for now
+		// Create the matrix stacks 
 		auto Projection = make_shared<MatrixStack>();
 		auto View = make_shared<MatrixStack>();
 		auto Model = make_shared<MatrixStack>();
@@ -200,85 +226,111 @@ public:
 		// View is global translation along negative z for now
 		View->pushMatrix();
 			View->loadIdentity();
-			View->translate(vec3(0, 0, -5));
+			View->translate(vec3(0,0,-5));
+			
 
-		// Draw a solid colored sphere
+		Model->loadIdentity();
+
 		solidColorProg->bind();
 		//send the projetion and view for solid shader
 		glUniformMatrix4fv(solidColorProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
 		glUniformMatrix4fv(solidColorProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
 		//send in the color to use
 		glUniform3f(solidColorProg->getUniform("solidColor"), 0.1, 0.2, 0.5);
-
-		//use helper function that uses glm to create some transform matrices
-		setModel(prog, vec3(-1.7, -1.7, 0), 0, 0, 0.5);
-		mesh->draw(prog);
-
 		solidColorProg->unbind();
 
 		// Draw base Hierarchical person
 		prog->bind();
 		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
 		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 
-		//use helper function that uses glm to create some transform matrices
-		setModel(prog, vec3(1.7, -1.7, 0), 0, 0, 0.5);
-		bunny->draw(prog);
+		// define world manipulations below. 
+		Model->translate(vec3(xtrans, ytrans, ztrans));
+		Model->rotate(theta, vec3(0,1,0)); // theta rotates around our y-axis
+		Model->rotate(phi, vec3(1,0,0)); // phi is around the x-axis
+		Model->scale(vec3(r, r, r)); // r is the radius we need to scale our world by.
 
+		// define initial geometry placement here...
 
-		// draw hierarchical mesh using matrix stack
-		Model->pushMatrix();
-			Model->loadIdentity();
-			Model->translate(vec3(gTrans, 0, 0));
-			/* draw top cube - aka head */
-			Model->pushMatrix();
-				Model->translate(vec3(0, 1.4, 0));
-				Model->scale(vec3(0.5, 0.5, 0.5));
-				setModel(prog, Model);
-				mesh->draw(prog);
-			Model->popMatrix();
-			//draw the torso with these transforms
-			Model->pushMatrix();
-			  Model->scale(vec3(1.25, 1.35, 1.25));
-			  setModel(prog, Model);
-			  mesh->draw(prog);
-			Model->popMatrix();
-			// draw the upper 'arm' - relative 
-			//note you must change this to include 3 components!
-			Model->pushMatrix();
-			  //place at shoulder
-			  Model->translate(vec3(0.8, 0.8, 0));
-			  //rotate shoulder joint
-			  Model->rotate(sTheta, vec3(0, 0, 1));
-			  //move to shoulder joint
-			  Model->translate(vec3(0.8, 0, 0));
-	
-			    //now draw lower arm - this is INCOMPLETE and you will add a 3rd component
-			  	//right now this is in the SAME place as the upper arm
-			  	Model->pushMatrix();
-			      Model->scale(vec3(0.8, 0.25, 0.25));
-			  	  setModel(prog, Model);
-			  	  mesh->draw(prog);
-			  	Model->popMatrix();
-
-			  //Do final scale ONLY to upper arm then draw
-			  //non-uniform scale
-			  Model->scale(vec3(0.8, 0.25, 0.25));
-			  setModel(prog, Model);
-			  mesh->draw(prog);
-			Model->popMatrix();
+		objects["dummy"]->add_transform(scale(mat4(1.0f), vec3(0.5, 0.5, 0.5)));
+		// objects["graph"]->add_subobj(objects["dummy"]);
+		// objects["dummy"]->add_transform(rotate(mat4(1.0f), -M_PI_2f, vec3(1,0,0)));
+		objects["dummy"]->add_transform(rotate(mat4(1.0f), sTheta, vec3(0,0,1)));
+		// objects["graph"]->add_transform(rotate(mat4(1.0f), -1.0f * M_PI_2f, vec3(1,0,0)));
+		objects["plane"]->add_transform(rotate(mat4(1.0f), M_PI_4f, vec3(0,0,1)));
+		objects["plane"]->add_transform(translate(mat4(1.0f), vec3(0.0, 0.0, -2.0f)));
+		objects["cloud"]->add_transform(scale(mat4(1.0f), vec3(cloudsize, cloudsize, cloudsize)));
+		objects["cloud"]->add_transform(translate(mat4(1.0f), vec3(-1.5, -1.5, 5.0)));
+		objects["cloud"]->add_subobj(objects["cloud"]->copy());
+		objects["cloud"]->sub_objs[0]->add_transform(translate(mat4(1.0f), vec3(1.5, 1.5, 0.0)));
+		objects["graph"]->add_transform(rotate(mat4(1.0f), M_PI_4f, vec3(0,0,1)));
 		
-		Model->popMatrix();
 
+		// Draw Objects in an order here. 
+		objects["graph"]->draw(Model, prog);
 		prog->unbind();
+		solidColorProg->bind();
+		SETCOLOR(0.0, 0.2, 0.8);
+		objects["dummy"]->draw(Model, solidColorProg);
+		SETCOLOR(0.0, 0.0, 0.0);
+		objects["plane"]->draw(Model, solidColorProg);
+		SETCOLOR(1.0, 1.0, 1.0);
+		objects["cloud"]->draw(Model, solidColorProg);
+		solidColorProg->unbind();
 
-		//animation update example
+		//animation update
 		sTheta = sin(glfwGetTime());
+		cloudsize = 1 + 0.35 * sin(1 / (M_E * M_PIf) * glfwGetTime());
+		graphT += 0.02;
+
+		// update our values based on keys held. 
+		if (keys[GLFW_KEY_A]) {
+			theta -= M_PI * speed;
+		}
+		if (keys[GLFW_KEY_D]) {
+			theta += M_PI * speed;
+		}
+		if (keys[GLFW_KEY_W] ) {
+			phi += M_PI * speed;
+		}
+		if (keys[GLFW_KEY_S]) {
+			phi -= M_PI * speed;
+		}
+		if (keys[GLFW_KEY_Q]) {
+			r /= 1 + speed;
+		}
+		if (keys[GLFW_KEY_E]) {
+			r *= 1 + speed;
+		}
+		if (keys[GLFW_KEY_LEFT]) {
+			xtrans -= speed;
+		}
+		if (keys[GLFW_KEY_RIGHT]) {
+			xtrans += speed;
+		}
+		if (keys[GLFW_KEY_UP]) {
+			ytrans += speed;
+		}
+		if (keys[GLFW_KEY_DOWN]) {
+			ytrans -= speed;
+		}
+		if (keys[GLFW_KEY_R]) {
+			theta = DEF_ANGLE;
+			phi = DEF_ANGLE;
+			r = 1;
+			xtrans = 0;
+			ytrans = 0;
+			ztrans = 0;
+		}
 
 		// Pop matrix stacks.
 		Projection->popMatrix();
 		View->popMatrix();
 
+		for(std::map<std::string, shared_ptr<Object>>::iterator it = objects.begin(); it != objects.end(); ++it) {
+			it->second->flush();
+		}
 	}
 };
 
