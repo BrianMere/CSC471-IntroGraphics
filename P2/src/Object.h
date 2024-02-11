@@ -20,15 +20,26 @@ private:
     std::vector<glm::mat4> transformations;
     std::vector<glm::mat4> solo_transformations;
     glm::mat4 resizeMat; // matrix using the bounding box to resize everything.
+    std::shared_ptr<Program> shader;
 public:
 
     std::vector<std::shared_ptr<Object>> sub_objs;
 
-    Object(const std::string &resourceDirectory, const std::string &filename) : 
+    Object(const std::string &resourceDirectory, const std::string &filename,std::shared_ptr<Program> shader) : 
         my_mesh(MeshContainer(resourceDirectory, filename)), 
         transformations(std::vector<glm::mat4>()),
         solo_transformations(std::vector<glm::mat4>()),
-        sub_objs(std::vector<std::shared_ptr<Object>>())
+        sub_objs(std::vector<std::shared_ptr<Object>>()),
+        shader(shader)
+    {
+        calcResize();
+    };
+    ~Object() {}
+
+    /**
+     * Calculates and stores this object's resize matrix based on internal data. 
+    */
+    void calcResize()
     {
         // calculate bounding box and store internally
         glm::vec3 mins, maxs;
@@ -50,8 +61,7 @@ public:
         // Scale down by 2/largest extent (handled above to save cycles)
         this->resizeMat = glm::scale(glm::mat4(1.0f), glm::vec3(largest_extent, largest_extent, largest_extent));
         this->resizeMat = this->resizeMat * glm::translate(glm::mat4(1.0f), mid * -1.0f);
-    };
-    ~Object() {}
+    }
 
     /**
      * Add a transform from the MatrixStack to a local tracker of transformations in order.
@@ -91,41 +101,62 @@ public:
         this->sub_objs.push_back(obj);
     }
 
-    
-
     /**
      * Draw all objects, and all subobjects, of this object.
      * 
      * It is assumed that Model will change over the course of this call, but on 
      * return it should be back to the same state.  
     */
-    void draw(std::shared_ptr<MatrixStack>, std::shared_ptr<Program>);
+    void draw(std::shared_ptr<MatrixStack>);
 
     /* helper for sending top of the matrix strack to GPU */
-	void setModel(std::shared_ptr<Program> prog, std::shared_ptr<MatrixStack>M) {
-		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(M->topMatrix()));
+	void setModel(Program & prog, std::shared_ptr<MatrixStack>M) {
+		glUniformMatrix4fv(prog.getUniform("M"), 1, GL_FALSE, value_ptr(M->topMatrix()));
    };
 
 	/* helper function to set model trasnforms */
-  	void setModel(std::shared_ptr<Program> curS, glm::vec3 trans, float rotY, float rotX, float sc) {
+  	void setModel(Program & curS, glm::vec3 trans, float rotY, float rotX, float sc) {
   		glm::mat4 Trans = glm::translate( glm::mat4(1.0f), trans);
   		glm::mat4 RotX = glm::rotate( glm::mat4(1.0f), rotX, glm::vec3(1, 0, 0));
   		glm::mat4 RotY = glm::rotate( glm::mat4(1.0f), rotY, glm::vec3(0, 1, 0));
   		glm::mat4 ScaleS = glm::scale(glm::mat4(1.0f), glm::vec3(sc));
   		glm::mat4 ctm = Trans*RotX*RotY*ScaleS;
-  		glUniformMatrix4fv(curS->getUniform("M"), 1, GL_FALSE, value_ptr(ctm));
+  		glUniformMatrix4fv(curS.getUniform("M"), 1, GL_FALSE, value_ptr(ctm));
   	};
 
     /** Clone this Object into new data. */
     std::shared_ptr<Object> copy() 
     { 
         std::shared_ptr<Object> n = std::make_shared<Object>(*this); 
-        n->flush();
+        n->my_mesh = this->my_mesh.copy();
+        n->solo_transformations.clear();
+        // clone copies of each subobject into the new object, as they are pointer based. 
+        for(auto obj : this->sub_objs)
+        {
+            n->sub_objs.push_back(obj->copy());
+        }
+        n->calcResize();
+        
         return n;
     };
+
+    /** Set this Object's shader. */
+    void setShader(std::shared_ptr<Program> newShader)
+    {
+        this->shader = newShader;
+    }
+
+    /** Copies the transformations of the passed Object to move_to said object */
+    void move_to(std::shared_ptr<Object> o_obj)
+    {
+        for(auto transform : o_obj->transformations)
+        {
+            this->add_transform(transform);
+        }
+    }
 };
 
-void Object::draw(std::shared_ptr<MatrixStack> Model, std::shared_ptr<Program> prog)
+void Object::draw(std::shared_ptr<MatrixStack> Model)
 {
 
     Model->pushMatrix();
@@ -146,7 +177,7 @@ void Object::draw(std::shared_ptr<MatrixStack> Model, std::shared_ptr<Program> p
     Model->pushMatrix();
     for(auto obj : this->sub_objs)
     {
-        obj->draw(Model, prog);
+        obj->draw(Model);
     }
     Model->popMatrix();
 
@@ -160,8 +191,8 @@ void Object::draw(std::shared_ptr<MatrixStack> Model, std::shared_ptr<Program> p
     }
 
     // Now we can draw our main object. 
-    setModel(prog, Model);
-    this->my_mesh.draw(prog);
+    setModel(*(this->shader), Model);
+    this->my_mesh.draw(std::make_shared<Program>(*(this->shader)));
 
     Model->popMatrix();
 

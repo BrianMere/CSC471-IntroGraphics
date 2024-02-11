@@ -9,6 +9,9 @@ class MeshContainer
 private:
     std::vector<tinyobj::shape_t> TOshapes;
  	std::vector<tinyobj::material_t> objMaterials;
+
+    std::string resourceDirectory;
+    std::string filename;
     std::string errStr;
 public:
     // the Shape mesh of this object. Get this whenever. 
@@ -26,6 +29,11 @@ public:
     // Use this for internal calls to mesh
     inline std::shared_ptr<Shape> getMesh(size_t i) { return this->meshes[i]; };
     inline std::vector<std::shared_ptr<Shape>> getMeshes() { return this->meshes; };
+
+    MeshContainer copy() 
+    {
+        return MeshContainer(this->resourceDirectory, this->filename);
+    }
 };
 
 /**
@@ -40,6 +48,9 @@ MeshContainer::MeshContainer(const std::string& resourceDirectory, const std::st
     // Initialize mesh
     // Load geometry
     // Some obj files contain material information.We'll ignore them for this assignment.
+
+    this->resourceDirectory = resourceDirectory;
+    this->filename = filename;
     this->meshes = std::vector<std::shared_ptr<Shape>>();
     bool rc = tinyobj::LoadObj(TOshapes, objMaterials, errStr, (resourceDirectory + "/" + filename).c_str());
 

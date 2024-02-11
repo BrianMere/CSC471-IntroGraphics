@@ -27,7 +27,8 @@
 #include "Object.h"
 #include "function_generator.h"
 
-#define DEF_ANGLE 0.0f // M_PIf / 6.0f
+#define DEF_ANGLETHETA 0.0f // M_PIf / 6.0f
+#define DEF_ANGLEPHI -1 *  M_PI_2f + 0.25f
 #define SETCOLOR(r, g, b) (glUniform3f(solidColorProg->getUniform("solidColor"), r, g, b))
 
 using namespace std;
@@ -57,8 +58,8 @@ public:
 	float cloudsize = 1;
 
 	// camera data
-	float theta = DEF_ANGLE; // "A" or "D" changes the theta camera angle
-	float phi = DEF_ANGLE;  // "W" or "S" changes the phi cmaera angle
+	float theta = DEF_ANGLETHETA; // "A" or "D" changes the theta camera angle
+	float phi = DEF_ANGLEPHI;  // "W" or "S" changes the phi cmaera angle
 	float r = 1;     // "Q" or "E" changes the radius from the origin
 	float xtrans = 0;
 	float ytrans = 0;
@@ -155,10 +156,10 @@ public:
 	*/
 	void initGeom(const std::string& resourceDirectory)
 	{
-		objects["bunny"] = make_shared<Object>(Object(resourceDirectory, "bunny.obj"));
-		objects["dummy"] = make_shared<Object>(Object(resourceDirectory, "dummy.obj"));
-		objects["sphere"] = make_shared<Object>(Object(resourceDirectory, "SmoothSphere.obj"));
-		objects["cloud"] = make_shared<Object>(Object(resourceDirectory, "cloud.obj"));
+		objects["bunny"] = make_shared<Object>(Object(resourceDirectory, "bunny.obj", prog));
+		objects["dummy"] = make_shared<Object>(Object(resourceDirectory, "dummy.obj", solidColorProg));
+		objects["sphere"] = make_shared<Object>(Object(resourceDirectory, "SmoothSphere.obj", prog));
+		objects["cloud"] = make_shared<Object>(Object(resourceDirectory, "cloud.obj", solidColorProg));
 
 		// use DESMOS or any other 3d graphing software to plot this out for yourself!
 		funcToObj(
@@ -171,7 +172,7 @@ public:
 			-3.0, 
 			3.0
 		);
-		objects["graph"] = make_shared<Object>(Object(resourceDirectory, "graph.obj"));
+		objects["graph"] = make_shared<Object>(Object(resourceDirectory, "graph.obj", prog));
 
 		funcToObj(
 			resourceDirectory,
@@ -183,7 +184,7 @@ public:
 			-1.0, 
 			1.0
 		);
-		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj"));
+		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj", solidColorProg));
 	}
 
 
@@ -226,7 +227,10 @@ public:
 		// View is global translation along negative z for now
 		View->pushMatrix();
 			View->loadIdentity();
-			View->translate(vec3(0,0,-5));
+
+			// My Scene View Defaults. No rotate here please for user control. 
+			View->translate(vec3(0,1,-5));
+			View->scale(vec3(2,2,2));
 			
 
 		Model->loadIdentity();
@@ -253,35 +257,68 @@ public:
 
 		// define initial geometry placement here...
 
-		objects["dummy"]->add_transform(scale(mat4(1.0f), vec3(0.5, 0.5, 0.5)));
-		// objects["graph"]->add_subobj(objects["dummy"]);
-		// objects["dummy"]->add_transform(rotate(mat4(1.0f), -M_PI_2f, vec3(1,0,0)));
+		const unsigned int num_dummies = 6;
+
+		// Dummies and their placement
+		objects["dummy"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
 		objects["dummy"]->add_transform(rotate(mat4(1.0f), sTheta, vec3(0,0,1)));
-		// objects["graph"]->add_transform(rotate(mat4(1.0f), -1.0f * M_PI_2f, vec3(1,0,0)));
-		objects["plane"]->add_transform(rotate(mat4(1.0f), M_PI_4f, vec3(0,0,1)));
-		objects["plane"]->add_transform(translate(mat4(1.0f), vec3(0.0, 0.0, -2.0f)));
+
+		objects["plane"]->add_transform(translate(mat4(1.0f), vec3(0,0,-1)));
+
+		objects["tempdummy"] = objects["dummy"]->copy();
+		objects["tempdummy"]->setShader(solidColorProg);
+		objects["tempdummy"]->move_to(objects["plane"]);
+
+		objects["tempdummy"]->add_transform(rotate(mat4(1.0f), sin(sTheta), vec3(0,1,0)));
+		objects["dummy"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,sin(sTheta) * 100)));
+
+		for(size_t n = 0; n < num_dummies; ++n)
+		{	
+			std::string newDummyName = "dummy" + std::to_string(n);
+			objects[newDummyName] = objects["tempdummy"]->copy();
+			objects[newDummyName]->add_transform(translate(mat4(1.0f), vec3(50, 0, 0)));
+			objects[newDummyName]->add_transform(rotate(mat4(1.0f), n * M_PIf * 2 / num_dummies + sTheta, vec3(0,0,1)));
+
+		}
+		objects["highdummy"] = objects["dummy"]->copy();
+		objects["highdummy"]->setShader(prog);
+
+		objects["cloud"]->add_transform(scale(mat4(1.0f), vec3(0.5, 0.5, 0.5)));
 		objects["cloud"]->add_transform(scale(mat4(1.0f), vec3(cloudsize, cloudsize, cloudsize)));
-		objects["cloud"]->add_transform(translate(mat4(1.0f), vec3(-1.5, -1.5, 5.0)));
-		objects["cloud"]->add_subobj(objects["cloud"]->copy());
-		objects["cloud"]->sub_objs[0]->add_transform(translate(mat4(1.0f), vec3(1.5, 1.5, 0.0)));
+		objects["cloud"]->add_solo_transform(translate(mat4(1.0f), vec3(-0.5, -0.5, 650.0)));
+		objects["cloud2"] = objects["cloud"]->copy();
+		objects["cloud2"]->add_solo_transform(rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1)));
+		objects["cloud2"]->add_solo_transform(translate(mat4(1.0f), vec3(-1000, 0, 0)));
+		objects["cloud3"] = objects["cloud"]->copy();
+		objects["cloud3"]->add_solo_transform(rotate(mat4(1.0f), - M_PI_2f, vec3(0,0,1)));
+		objects["cloud3"]->add_solo_transform(translate(mat4(1.0f), vec3(1000, 0, 0)));
+
 		objects["graph"]->add_transform(rotate(mat4(1.0f), M_PI_4f, vec3(0,0,1)));
-		
+		objects["highdummy"]->move_to(objects["graph"]);
+		objects["highdummy"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,400)));
 
 		// Draw Objects in an order here. 
-		objects["graph"]->draw(Model, prog);
+		objects["graph"]->draw(Model);
+		objects["highdummy"]->draw(Model);
 		prog->unbind();
+
 		solidColorProg->bind();
-		SETCOLOR(0.0, 0.2, 0.8);
-		objects["dummy"]->draw(Model, solidColorProg);
+		SETCOLOR(1.0, 0.2, 0.0);
+		for(size_t i = 0; i < num_dummies; ++i)
+			objects["dummy" + std::to_string(i)]->draw(Model);
+		SETCOLOR(sin(sTheta), cos(sTheta), sin(sTheta) * cos(sTheta));
+		objects["dummy"]->draw(Model);
 		SETCOLOR(0.0, 0.0, 0.0);
-		objects["plane"]->draw(Model, solidColorProg);
+		objects["plane"]->draw(Model);
 		SETCOLOR(1.0, 1.0, 1.0);
-		objects["cloud"]->draw(Model, solidColorProg);
+		objects["cloud"]->draw(Model);
+		objects["cloud2"]->draw(Model);
+		objects["cloud3"]->draw(Model);
 		solidColorProg->unbind();
 
 		//animation update
-		sTheta = sin(glfwGetTime());
-		cloudsize = 1 + 0.35 * sin(1 / (M_E * M_PIf) * glfwGetTime());
+		sTheta = glfwGetTime();
+		cloudsize = 1 + 0.005 * sin((M_E * M_PIf) * glfwGetTime());
 		graphT += 0.02;
 
 		// update our values based on keys held. 
@@ -316,8 +353,8 @@ public:
 			ytrans -= speed;
 		}
 		if (keys[GLFW_KEY_R]) {
-			theta = DEF_ANGLE;
-			phi = DEF_ANGLE;
+			theta = DEF_ANGLETHETA;
+			phi = DEF_ANGLEPHI;
 			r = 1;
 			xtrans = 0;
 			ytrans = 0;
