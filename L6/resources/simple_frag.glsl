@@ -19,11 +19,15 @@ void main()
 	vec3 normal = normalize(fragNor);
 	vec3 light = normalize(lightDir);
 
+	//vec3 V = normalize(-1 * EPos);
+	vec3 V = normalize(-1 * EPos);
+	vec3 H = normalize(V + light);
+
 	float dC = max(dot(normal, light), 0);
-	// float sC = max(dot(normal, ));
+	float sC = pow(max(dot(normal, H), 0), MatShine);
 
 	// note that color.a is our opacity, which we need to be 1!!!
 	color = dC * vec4(MatDif, 0.0); // diffuse light
-	color += MatShine * vec4(MatSpec, 0.0); // specular light
+	color += sC * vec4(MatSpec, 0.0); // specular light
 	color += vec4(MatAmb, 1.0); // ambient light
 }
