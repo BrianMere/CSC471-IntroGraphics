@@ -200,9 +200,9 @@ public:
 	void initGeom(const std::string& resourceDirectory)
 	{
 		objects["bunny"] = make_shared<Object>(Object(resourceDirectory, "bunny.obj", prog));
-		objects["dummy"] = make_shared<Object>(Object(resourceDirectory, "dummy.obj", solidColorProg));
+		objects["dummy"] = make_shared<Object>(Object(resourceDirectory, "dummy.obj", prog));
 		objects["sphere"] = make_shared<Object>(Object(resourceDirectory, "SmoothSphere.obj", prog));
-		objects["cloud"] = make_shared<Object>(Object(resourceDirectory, "cloud.obj", solidColorProg));
+		objects["cloud"] = make_shared<Object>(Object(resourceDirectory, "cloud.obj", prog));
 
 		// use DESMOS or any other 3d graphing software to plot this out for yourself!
 		funcToObj(
@@ -227,7 +227,9 @@ public:
 			-1.0, 
 			1.0
 		);
-		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj", solidColorProg));
+		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj", prog));
+
+		objects["sphereNoNorm"] = make_shared<Object>(Object(resourceDirectory, "icoNoNormals.obj", prog));
 	}
 
 	typedef enum {
@@ -248,7 +250,7 @@ public:
     	switch (material) {
     		case shiny:
     			glUniform3f(curS->getUniform("MatAmb"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatDif"), 0.96 * color.x, 0.96 * color.y, 0.96 * color.z);
+    			glUniform3f(curS->getUniform("MatDif"), 0.96, 0.96, 0.96);
     			glUniform3f(curS->getUniform("MatSpec"), 1.0, 1.0, 1.0);
     			glUniform1f(curS->getUniform("MatShine"), 120.0);
     		break;
@@ -260,13 +262,13 @@ public:
     		break;
     		case metalic:
     			glUniform3f(curS->getUniform("MatAmb"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatDif"), 0.96 * color.x, 0.96 * color.y, 0.96 * color.z);
+    			glUniform3f(curS->getUniform("MatDif"), 0.46 * color.x, 0.46 * color.y, 0.46 * color.z);
     			glUniform3f(curS->getUniform("MatSpec"),0.6 * color.x, 0.6 * color.y, 0.6 * color.z);
     			glUniform1f(curS->getUniform("MatShine"), 27.0);
     		break;
 			case gold:
 				glUniform3f(curS->getUniform("MatAmb"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatDif"), 0.96 * color.x, 0.96 * color.y, 0.96 * color.z);
+    			glUniform3f(curS->getUniform("MatDif"), 0.46 * color.x, 0.46 * color.y, 0.46 * color.z);
     			glUniform3f(curS->getUniform("MatSpec"),0.6 * color.y, 0.6 * color.x, 0.6 * color.z);
     			glUniform1f(curS->getUniform("MatShine"), 27.0);
     		break;
@@ -345,7 +347,6 @@ public:
 			objects[newDummyName] = objects["tempdummy"]->copy();
 			objects[newDummyName]->add_transform(translate(mat4(1.0f), vec3(50, 0, 0)));
 			objects[newDummyName]->add_transform(rotate(mat4(1.0f), n * M_PIf * 2 / num_dummies + sTheta, vec3(0,0,1)));
-
 		}
 		objects["highdummy"] = objects["dummy"]->copy();
 		objects["highdummy"]->setShader(prog);
@@ -364,38 +365,45 @@ public:
 		objects["highdummy"]->move_to(objects["graph"]);
 		objects["highdummy"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,400)));
 
-		objects["sphere"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
-		objects["sphere"]->add_transform(translate(mat4(1.0f), vec3(-2.0 + lightPos, 2.0, 0.0)));
+		objects["sphereNoNorm"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
+		objects["sphereNoNorm"]->add_transform(translate(mat4(1.0f), vec3(-2.0 + lightPos, 2.0, 0.0)));
 
 		// Draw Objects in an order here. 
 		// alternate the graph to go from shiny to plastic... 
 		if(keys[GLFW_KEY_M])
 			SetMaterial(prog, shiny, vec3(0.0, 0.7, 0.7));
 		else
-			SetMaterial(prog, plastic, vec3(0.2, 0.0, 0.2));
+			SetMaterial(prog, gold, vec3(0.8, 0.8, 0.0));
 		objects["graph"]->draw(Model);
 
 		SetMaterial(prog, gold, vec3(0.8, 0.8, 0.0));
 		objects["highdummy"]->draw(Model);
 
 		SetMaterial(prog, metalic, vec3(0.4, 0.5, 0.0));
-		objects["sphere"]->draw(Model);
+		objects["sphereNoNorm"]->draw(Model);
 
-		prog->unbind();
-
-		solidColorProg->bind();
-		SETCOLOR(1.0, 0.2, 0.0);
+		//prog->unbind();
+		//solidColorProg->bind();
+		
+		
 		for(size_t i = 0; i < num_dummies; ++i)
+		{
+			SetMaterial(prog, shiny, vec3((float)i / num_dummies, (float)i / num_dummies, (float)i / num_dummies));
 			objects["dummy" + std::to_string(i)]->draw(Model);
-		SETCOLOR(sin(sTheta), cos(sTheta), sin(sTheta) * cos(sTheta));
+		}
+		
+		SetMaterial(prog, gold, vec3(sin(sTheta), cos(sTheta), sin(sTheta) * cos(sTheta)));
 		objects["dummy"]->draw(Model);
-		SETCOLOR(0.0, 0.0, 0.0);
+
+		SetMaterial(prog, shiny, vec3(0,0,0));
 		objects["plane"]->draw(Model);
-		SETCOLOR(1.0, 1.0, 1.0);
+
+		SetMaterial(prog, plastic, vec3(1.0, 1.0, 1.0));
 		objects["cloud"]->draw(Model);
 		objects["cloud2"]->draw(Model);
 		objects["cloud3"]->draw(Model);
-		solidColorProg->unbind();
+		
+		// solidColorProg->unbind();
 
 		//animation update
 		sTheta = glfwGetTime();
