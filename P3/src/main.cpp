@@ -11,6 +11,8 @@
 
 #include "GLSL.h"
 #include "Program.h"
+#include "Texture.h"
+#include "TextureObject.h"
 #include "Shape.h"
 #include "MatrixStack.h"
 #include "WindowManager.h"
@@ -46,11 +48,17 @@ public:
 	std::shared_ptr<Program> prog;
 	// Our shader program
 	std::shared_ptr<Program> solidColorProg;
+	// Our texture shader program
+	std::shared_ptr<Program> texProg;
+
+	std::shared_ptr<Texture> texture0, texture1;
 
 	/* Define Mesh and Object file memories here... */
 
 	// Shape to be used (from  file) - modify to support multiple
 	std::map<std::string, shared_ptr<Object>> objects;
+	std::map<std::string, shared_ptr<TextureObject>> texobjects;
+
 
 	//animation data
 	float sTheta = 0;
@@ -192,6 +200,39 @@ public:
 		solidColorProg->addUniform("solidColor");
 		solidColorProg->addAttribute("vertPos");
 		solidColorProg->addAttribute("vertNor");
+
+		// Initialize the GLSL program that we will use for texture mapping
+		texProg = make_shared<Program>();
+		texProg->setVerbose(true);
+		texProg->setShaderNames(resourceDirectory + "/tex_vert.glsl", resourceDirectory + "/tex_frag.glsl");
+		texProg->init();
+		texProg->addUniform("P");
+		texProg->addUniform("V");
+		texProg->addUniform("M");
+		texProg->addUniform("Texture0");
+		texProg->addAttribute("vertPos");
+		texProg->addAttribute("vertNor");
+		texProg->addAttribute("vertTex");
+		// lighting for textures
+		texProg->addUniform("MatAmb");
+		texProg->addUniform("lightPos");
+		texProg->addUniform("MatDif");
+		texProg->addUniform("MatSpec");
+		texProg->addUniform("MatShine");
+
+
+		//read in a load the texture
+		texture0 = make_shared<Texture>();
+  		texture0->setFilename(resourceDirectory + "/lol.jpg");
+  		texture0->init();
+  		texture0->setUnit(0);
+  		texture0->setWrapModes(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+
+		texture1 = make_shared<Texture>();
+  		texture1->setFilename(resourceDirectory + "/grass.jpg");
+  		texture1->init();
+  		texture1->setUnit(0);
+  		texture1->setWrapModes(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 	}
 
 	/**
@@ -220,16 +261,19 @@ public:
 		funcToObj(
 			resourceDirectory,
 			"plane.obj",
-			5, 
+			2,
 			[](float x, float y) { return 0; },
 			-1.0, 
 			1.0, 
 			-1.0, 
 			1.0
 		);
-		objects["plane"] = make_shared<Object>(Object(resourceDirectory, "plane.obj", prog));
+		texobjects["plane"] = make_shared<TextureObject>(TextureObject(resourceDirectory, "plane.obj", texProg, texture1));
 
 		objects["sphereNoNorm"] = make_shared<Object>(Object(resourceDirectory, "icoNoNormals.obj", prog));
+
+		//objects["sphereTex"] = make_shared<Object>(Object(resourceDirectory, "sphereWTex.obj", prog));
+		texobjects["sphereTex"] = make_shared<TextureObject>(TextureObject(resourceDirectory, "sphereWTex.obj", texProg, texture0));
 	}
 
 	typedef enum {
@@ -309,20 +353,31 @@ public:
 
 		Model->loadIdentity();
 
+		glm::vec3 lightPosition = vec3(-2.0 + lightPos, 2.0, 1.0);
+
 		solidColorProg->bind();
 		//send the projetion and view for solid shader
 		glUniformMatrix4fv(solidColorProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
 		glUniformMatrix4fv(solidColorProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
+		glUniformMatrix4fv(solidColorProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 		//send in the color to use
 		glUniform3f(solidColorProg->getUniform("solidColor"), 0.1, 0.2, 0.5);
 		solidColorProg->unbind();
+
+		texProg->bind();
+		glUniformMatrix4fv(texProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
+		glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
+		glUniformMatrix4fv(texProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
+		glUniform3f(texProg->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
+
+		texProg->unbind();
 
 		// Draw base Hierarchical person
 		prog->bind();
 		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
 		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
 		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-		glUniform3f(prog->getUniform("lightPos"), -2.0 + lightPos, 2.0, 0.0);
+		glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
 
 		// define initial geometry placement here...
 
@@ -332,11 +387,11 @@ public:
 		objects["dummy"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
 		objects["dummy"]->add_transform(rotate(mat4(1.0f), sTheta, vec3(0,0,1)));
 
-		objects["plane"]->add_transform(translate(mat4(1.0f), vec3(0,0,-1)));
+		texobjects["plane"]->add_transform(translate(mat4(1.0f), vec3(0,0,-1)));
 
 		objects["tempdummy"] = objects["dummy"]->copy();
 		objects["tempdummy"]->setShader(solidColorProg);
-		objects["tempdummy"]->move_to(objects["plane"]);
+		objects["tempdummy"]->move_to(texobjects["plane"]);
 
 		objects["tempdummy"]->add_transform(rotate(mat4(1.0f), sin(sTheta), vec3(0,1,0)));
 		objects["dummy"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,sin(sTheta) * 100)));
@@ -365,22 +420,20 @@ public:
 		objects["highdummy"]->move_to(objects["graph"]);
 		objects["highdummy"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,400)));
 
-		objects["sphereNoNorm"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
-		objects["sphereNoNorm"]->add_transform(translate(mat4(1.0f), vec3(-2.0 + lightPos, 2.0, 0.0)));
+		texobjects["sphereTex"]->add_transform(scale(mat4(1.0f), vec3(0.25, 0.25, 0.25)));
+		texobjects["sphereTex"]->add_transform(rotate(mat4(1.0f), M_PI_2f, vec3(1,0,0)));
+		texobjects["sphereTex"]->add_transform(translate(mat4(1.0f), lightPosition));
 
 		// Draw Objects in an order here. 
 		// alternate the graph to go from shiny to plastic... 
 		if(keys[GLFW_KEY_M])
 			SetMaterial(prog, shiny, vec3(0.0, 0.7, 0.7));
 		else
-			SetMaterial(prog, gold, vec3(0.8, 0.8, 0.0));
+			SetMaterial(prog, gold, vec3(0.0, 0.7, 0.7));
 		objects["graph"]->draw(Model);
 
 		SetMaterial(prog, gold, vec3(0.8, 0.8, 0.0));
 		objects["highdummy"]->draw(Model);
-
-		SetMaterial(prog, metalic, vec3(0.4, 0.5, 0.0));
-		objects["sphereNoNorm"]->draw(Model);
 
 		//prog->unbind();
 		//solidColorProg->bind();
@@ -395,15 +448,21 @@ public:
 		SetMaterial(prog, gold, vec3(sin(sTheta), cos(sTheta), sin(sTheta) * cos(sTheta)));
 		objects["dummy"]->draw(Model);
 
-		SetMaterial(prog, shiny, vec3(0,0,0));
-		objects["plane"]->draw(Model);
-
-		SetMaterial(prog, plastic, vec3(1.0, 1.0, 1.0));
+		SetMaterial(prog, plastic, vec3(0.5, 0.5, 0.5));
 		objects["cloud"]->draw(Model);
 		objects["cloud2"]->draw(Model);
 		objects["cloud3"]->draw(Model);
 		
-		// solidColorProg->unbind();
+		prog->unbind();
+		texProg->bind();
+
+		SetMaterial(texProg, gold, vec3(0.0,0.2,0));
+		texobjects["plane"]->draw(Model);
+
+		SetMaterial(texProg, shiny, vec3(1.0, 1.0, 0.0));
+		texobjects["sphereTex"]->draw(Model);
+
+		texProg->unbind();
 
 		//animation update
 		sTheta = glfwGetTime();
@@ -417,6 +476,9 @@ public:
 		View->popMatrix();
 
 		for(std::map<std::string, shared_ptr<Object>>::iterator it = objects.begin(); it != objects.end(); ++it) {
+			it->second->flush();
+		}
+		for(std::map<std::string, shared_ptr<TextureObject>>::iterator it = texobjects.begin(); it != texobjects.end(); ++it) {
 			it->second->flush();
 		}
 	}

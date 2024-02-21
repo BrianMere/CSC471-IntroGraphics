@@ -115,7 +115,7 @@ void Shape::init()
 			glm::vec3 e2 = v3 - v1;
 
 			// calculate the unit normal
-			glm::vec3 normal = glm::normalize(glm::cross(e1, e2));
+			glm::vec3 normal = glm::normalize(glm::cross(e2, e1));
 
 			// add normal data for EACH vertex for our face. 
 			// note we += here since we want to find the AVERAGE normal for all normals adjacent to some vertex

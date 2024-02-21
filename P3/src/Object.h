@@ -1,3 +1,6 @@
+#ifndef _OBJECT_H
+#define _OBJECT_H
+
 #include "MeshContainer.h"
 #include "MatrixStack.h"
 #include "Program.h"
@@ -15,7 +18,7 @@
 */
 class Object
 {
-private:
+protected:
     MeshContainer my_mesh;
     std::vector<glm::mat4> transformations;
     std::vector<glm::mat4> solo_transformations;
@@ -107,7 +110,7 @@ public:
      * It is assumed that Model will change over the course of this call, but on 
      * return it should be back to the same state.  
     */
-    void draw(std::shared_ptr<MatrixStack>);
+    virtual void draw(std::shared_ptr<MatrixStack>);
 
     /* helper for sending top of the matrix strack to GPU */
 	void setModel(Program & prog, std::shared_ptr<MatrixStack>M) {
@@ -197,3 +200,5 @@ void Object::draw(std::shared_ptr<MatrixStack> Model)
     Model->popMatrix();
 
 }
+
+#endif

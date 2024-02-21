@@ -21,7 +21,7 @@ public:
 	void draw(const std::shared_ptr<Program> prog) const;
 	glm::vec3 min;
 	glm::vec3 max;
-	
+
 private:
 	std::vector<unsigned int> eleBuf;
 	std::vector<float> posBuf;
@@ -31,7 +31,7 @@ private:
 	unsigned posBufID;
 	unsigned norBufID;
 	unsigned texBufID;
-    unsigned vaoID;
+	unsigned vaoID;
 	bool texOff;
 };
 

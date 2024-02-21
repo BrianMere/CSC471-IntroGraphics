@@ -47,7 +47,6 @@ void funcToObj(
 
     // Sample the function and write vertices to OBJ file
     unsigned int count = 0;
-    unsigned int ncount = 0;
     for (int i = 0; i < numSamplesDir; ++i) {
         for (int j = 0; j < numSamplesDir; ++j) {
 
@@ -81,22 +80,40 @@ void funcToObj(
             objFile << "v " << tl.x << " " << tl.y << " " << tl.z << std::endl;
             objFile << "v " << tr.x << " " << tr.y << " " << tr.z << std::endl;
 
-            // Calculate Normal at this vertex and add normals to list.
-            glm::vec3 normal = glm::normalize(glm::cross(tl - bl, br - bl));
-            
-            objFile << "vn " << normal.x << " " << normal.y << " " << normal.z << std::endl;  
+            // Support texture coordinates
+            objFile << "vt " << std::to_string((float) i / numSamplesDir) 
+                    << " " << std::to_string((float) j / numSamplesDir) 
+                    << std::endl;
 
-            objFile << "f " << std::to_string(count + 1) << "//" << std::to_string(ncount + 1) << " "
-                            << std::to_string(count + 2) << "//" << std::to_string(ncount + 1) << " "
-                            << std::to_string(count + 3) << "//" << std::to_string(ncount + 1) << " "
+            objFile << "vt " << std::to_string((float) (i+1) / numSamplesDir) 
+                    << " " << std::to_string((float) (j) / numSamplesDir) 
+                    << std::endl;
+
+            objFile << "vt " << std::to_string((float) (i) / numSamplesDir) 
+                    << " " << std::to_string((float) (j+1) / numSamplesDir) 
+                    << std::endl;
+
+            objFile << "vt " << std::to_string((float) (i+1) / numSamplesDir) 
+                    << " " << std::to_string((float) (j+1) / numSamplesDir) 
+                    << std::endl;
+
+            objFile << "f " << std::to_string(count + 1) << "/"
+                            << std::to_string(count + 1) << " "
+                            << std::to_string(count + 2) << "/"
+                            << std::to_string(count + 2) << " "
+                            << std::to_string(count + 3) << "/"
+                            << std::to_string(count + 3) << " "
                             << std::endl;
 
-            objFile << "f " << std::to_string(count + 2) << "//" << std::to_string(ncount + 1) << " "
-                            << std::to_string(count + 3) << "//" << std::to_string(ncount + 1) << " "
-                            << std::to_string(count + 4) << "//" << std::to_string(ncount + 1) << " "
+            objFile << "f " << std::to_string(count + 2) << "/"
+                            << std::to_string(count + 2) << " "
+                            << std::to_string(count + 3) << "/"
+                            << std::to_string(count + 3) << " "
+                            << std::to_string(count + 4) << "/"
+                            << std::to_string(count + 4) << " "
                             << std::endl;
+
             count += 4;
-            ++ncount;
         }
     }
 
