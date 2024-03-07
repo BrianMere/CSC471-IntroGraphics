@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/gcc  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include -g -o CMakeFiles/FBOBase.dir/ext/glad/src/glad.c.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/src/glad.c",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/src/glad.c",
+  "output": "CMakeFiles/FBOBase.dir/ext/glad/src/glad.c.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/ext/tiny_obj_loader/tiny_obj_loader.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/tiny_obj_loader/tiny_obj_loader.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/tiny_obj_loader/tiny_obj_loader.cpp",
+  "output": "CMakeFiles/FBOBase.dir/ext/tiny_obj_loader/tiny_obj_loader.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/GLSL.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/GLSL.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/GLSL.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/GLSL.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/GLTextureWriter.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/GLTextureWriter.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/GLTextureWriter.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/GLTextureWriter.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/MatrixStack.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/MatrixStack.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/MatrixStack.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/MatrixStack.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/Program.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Program.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Program.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/Program.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/Shape.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Shape.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Shape.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/Shape.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/Texture.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Texture.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/Texture.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/Texture.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/WindowManager.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/WindowManager.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/WindowManager.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/WindowManager.cpp.o"
+},
+{
+  "directory": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/build",
+  "command": "/usr/bin/g++  -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext -I/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/ext/glad/include  -std=c++0x -Wall -pedantic -g -o CMakeFiles/FBOBase.dir/src/main.cpp.o -c /home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/main.cpp",
+  "file": "/home/brianm/Documents/Repositories/CSC471-IntroGraphics/SunnyBunnyBase/src/main.cpp",
+  "output": "CMakeFiles/FBOBase.dir/src/main.cpp.o"
+}
+]

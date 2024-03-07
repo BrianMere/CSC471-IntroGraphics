@@ -18,10 +18,10 @@
 #include "GLSL.h"
 #include "Program.h"
 #include "Texture.h"
-#include "TextureObject.h"
 #include "Shape.h"
 #include "MatrixStack.h"
 #include "WindowManager.h"
+#include "Spline.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader/tiny_obj_loader.h>
@@ -35,7 +35,8 @@
 #include "MeshContainer.h"
 #include "Object.h"
 #include "Camera.h"
-#include "Spline.h"
+#include "VectorObj.h"
+#include "TextureObject.h"
 #include "function_generator.h"
 
 #define SET_MODE(x) (glUniform1f(texProg->getUniform("mode"), x) )
@@ -300,7 +301,6 @@ public:
 	 	// init splines up and down
        	splinepath[0] = Spline(glm::vec3(-1,0.5,1), glm::vec3(-0.5,1,1), glm::vec3(0.5, 0 , 1), glm::vec3(1,0.5,1), 5);
        	splinepath[1] = Spline(glm::vec3(1,0.5,1), glm::vec3(0.66, 0.66,1), glm::vec3(0.33, 0.33, 1), glm::vec3(0,0,1), 5);
-
 	}
 
 	typedef enum {
@@ -422,13 +422,25 @@ public:
 
 		texobjects["SmoothSphere"]->add_transform(scale(mat4(1.0f), vec3(2.0, 2.0, 2.0)));
 		texobjects["SmoothSphere"]->add_transform(translate(mat4(1.0f), vec3(1.0, 1.0, 1.0)));
-		texobjects["CompanionCube"]->add_transform(translate(mat4(1.0f), vec3(-1, 1, 2)));
-		texobjects["CompanionCube"]->move_to(texobjects["SmoothSphere"]);
 
-		if(sin(glfwGetTime()) > 0)
-		{
-			texobjects["CompanionCube"]->move_to(vec3(-1,-1,1));
-		}
+		if(texobjects.count("CompanionCube2") == 0)
+			texobjects["CompanionCube2"] = texobjects["CompanionCube"]->copy();
+
+		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
+
+		texobjects["SmoothSphere"]->add_subobj(texobjects["CompanionCube2"]);
+		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
+
+		texobjects["CompanionCube2"]->add_transform(translate(mat4(1.0f), vec3(1, 1, -2)));
+		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
+
+		texobjects["CompanionCube2"]->move_to(texobjects["SmoothSphere"]);
+		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
+
+
+		texobjects["CompanionCube"]->add_transform(rotate(mat4(1.0f), M_PI_2f, vec3(1,1,1)));
+
+		
 
 		// draw objects here... 
 		texProg->bind();
@@ -446,6 +458,10 @@ public:
 			//texobjects["PlanePortalable"]->draw(Model);
 			texobjects["CompanionCube"]->draw(Model);
 		texProg->unbind();
+
+		solidColorProg->bind();
+			//VectorObj(resourceDirector).parentObj->draw(Model);
+		solidColorProg->unbind();
 
 		//animation update
 		sTheta = glfwGetTime();

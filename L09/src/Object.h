@@ -9,6 +9,7 @@
 
 #include "GLSL.h"
 #include <iostream>
+#include <memory>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <functional>
@@ -18,7 +19,7 @@
  * itself. This is made to abstract away the matrix stack while 
  * still being high in performance. 
 */
-class Object
+class Object : public std::enable_shared_from_this< Object >
 {
 protected:
     MeshContainer my_mesh;
@@ -28,6 +29,8 @@ protected:
     std::shared_ptr<Program> shader;
 
     glm::vec3 mid; // midpoint in coordinates of the obj, before any coordinates are tranformed
+
+    std::shared_ptr<Object> parentCenter; // Parent relation. Helps to get the parent's relative position in the world.  
 
    
 public:
@@ -42,9 +45,19 @@ public:
         shader(shader)
     {
         calcResize();
+        parentCenter = nullptr;
     };
     
     ~Object() {}
+
+    /**
+     * Sets the relative position of the parent in world space (if this is a subobj). 
+    */
+    void setParentCenter(std::shared_ptr<Object> o)
+    {
+        if(o.get() != this)
+            this->parentCenter = o;
+    }
 
     /**
      * Calculates and stores this object's resize matrix based on internal data. 
@@ -74,7 +87,7 @@ public:
         this->resizeMat = this->resizeMat * glm::translate(glm::mat4(1.0f), mid * -1.0f);
 
         // lastly, convert mid from obj coordinates (space) to world coordinates (since we always multiply by our resize anyways)
-        this->mid = (this->resizeMat * glm::vec4(this->mid, 1.0)).xyz();
+        this->mid = glm::vec3(this->resizeMat * glm::vec4(this->mid, 1.0));
     }
 
     /**
@@ -109,10 +122,13 @@ public:
 
     /**
      * Add an object as a child with transformations relative to this object
+     * 
+     * Transformations on subobjects subsequently occurs in PARENT space, or in the coordinate space relative to their parent.
     */
     inline void add_subobj(std::shared_ptr<Object> obj)
     {
         this->sub_objs.push_back(obj);
+        obj->setParentCenter(shared_from_this());
     }
 
     /**
@@ -161,15 +177,12 @@ public:
     }
 
     /** Copies the transformations of the passed Object to move_to said object 
-     * 
-     * If include_transformations is true, all transformations (non-solo ones)
-     * applied on o_obj will be copied to this object. 
     */
     void move_to(std::shared_ptr<Object> o_obj)
-    {
+    {   
         this->add_transform(translate(
             glm::mat4(1.0f), 
-            o_obj->getCenterPoint() - this->getCenterPoint()
+            o_obj->getWorldCenterPoint() - this->getWorldCenterPoint()
         ));
     }
 
@@ -180,18 +193,26 @@ public:
     {
         this->add_transform(translate(
             glm::mat4(1.0f),
-            -this->getCenterPoint()
+            v - this->getWorldCenterPoint()
         ));
     }
 
     /**
      * Get the center coordinates of the object currently in world coordinates.
     */
-   glm::vec3 getCenterPoint()
+   glm::vec3 getWorldCenterPoint()
    {
         MatrixStack M = MatrixStack();
+        glm::vec3 relPoint = glm::vec3(0,0,0);
 
         M.loadIdentity();
+
+        // get the transformations that lead up to this moment from the parent
+        // otherwise just use the origin of the world (base case)
+        if(this->parentCenter != nullptr)
+        {
+            relPoint = this->parentCenter->getWorldCenterPoint();
+        }
 
         for (
             auto it = this->transformations.rbegin(); 
@@ -210,7 +231,7 @@ public:
             M.multMatrix(*it);
         }
 
-        return (M.topMatrix() * glm::vec4(this->mid, 1.0f)).xyz();
+        return relPoint + glm::vec3(M.topMatrix() * glm::vec4(this->mid, 1.0f));
    }
 };
 
