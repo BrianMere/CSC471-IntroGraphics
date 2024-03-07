@@ -1,6 +1,8 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H
 
+#define GLM_FORCE_SWIZZLE
+
 #include "MeshContainer.h"
 #include "MatrixStack.h"
 #include "Program.h"
@@ -25,11 +27,12 @@ protected:
     glm::mat4 resizeMat; // matrix using the bounding box to resize everything.
     std::shared_ptr<Program> shader;
 
+    glm::vec3 mid; // midpoint in coordinates of the obj, before any coordinates are tranformed
+
    
 public:
 
     std::vector<std::shared_ptr<Object>> sub_objs;
-    glm::vec3 mid; // midpoint in coordinates of the obj
 
     Object(const std::string &resourceDirectory, const std::string &filename,std::shared_ptr<Program> shader) : 
         my_mesh(MeshContainer(resourceDirectory, filename)), 
@@ -69,6 +72,9 @@ public:
         // Scale down by 2/largest extent (handled above to save cycles)
         this->resizeMat = glm::scale(glm::mat4(1.0f), glm::vec3(largest_extent, largest_extent, largest_extent));
         this->resizeMat = this->resizeMat * glm::translate(glm::mat4(1.0f), mid * -1.0f);
+
+        // lastly, convert mid from obj coordinates (space) to world coordinates (since we always multiply by our resize anyways)
+        this->mid = (this->resizeMat * glm::vec4(this->mid, 1.0)).xyz();
     }
 
     /**
@@ -154,28 +160,64 @@ public:
         this->shader = newShader;
     }
 
-    /** Copies the transformations of the passed Object to move_to said object */
+    /** Copies the transformations of the passed Object to move_to said object 
+     * 
+     * If include_transformations is true, all transformations (non-solo ones)
+     * applied on o_obj will be copied to this object. 
+    */
     void move_to(std::shared_ptr<Object> o_obj)
     {
-        for(auto transform : o_obj->transformations)
-        {
-            this->add_transform(transform);
-        }
-        for(auto transform : o_obj->solo_transformations)
-        {
-            this->add_solo_transform(transform);
-        }
-        this->add_transform(translate(glm::mat4(1.0f), -o_obj->mid));
+        this->add_transform(translate(
+            glm::mat4(1.0f), 
+            o_obj->getCenterPoint() - this->getCenterPoint()
+        ));
     }
+
+    /**
+     * Move to a point in world space
+    */
+    void move_to(glm::vec3 v)
+    {
+        this->add_transform(translate(
+            glm::mat4(1.0f),
+            -this->getCenterPoint()
+        ));
+    }
+
+    /**
+     * Get the center coordinates of the object currently in world coordinates.
+    */
+   glm::vec3 getCenterPoint()
+   {
+        MatrixStack M = MatrixStack();
+
+        M.loadIdentity();
+
+        for (
+            auto it = this->transformations.rbegin(); 
+            it != this->transformations.rend(); 
+            ++it
+            ) 
+        {
+            M.multMatrix(*it);
+        }
+        for (
+            auto it = this->solo_transformations.rbegin(); 
+            it != this->solo_transformations.rend(); 
+            ++it
+            ) 
+        {
+            M.multMatrix(*it);
+        }
+
+        return (M.topMatrix() * glm::vec4(this->mid, 1.0f)).xyz();
+   }
 };
 
 void Object::draw(std::shared_ptr<MatrixStack> Model)
 {
 
     Model->pushMatrix();
-
-    // First normalize the object. 
-    Model->multMatrix(this->resizeMat); // 
 
     // Put all our transformations into Model (need to go reverse of the order we added)
     for (
@@ -202,6 +244,9 @@ void Object::draw(std::shared_ptr<MatrixStack> Model)
     ) {
         Model->multMatrix(*it);
     }
+
+    // "First" normalize the object. 
+    Model->multMatrix(this->resizeMat);
 
     // Now we can draw our main object. 
     setModel(*(this->shader), Model);
