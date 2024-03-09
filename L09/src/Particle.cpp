@@ -25,8 +25,8 @@ Particle::Particle(vec3 start) :
 	v(0.0f, 0.0f, 0.0f),
 	lifespan(1.0f),
 	tEnd(0.0f),
-	scale(1.0f),
-	color(1.0f, 1.0f, 1.0f, 1.0f)
+	color(1.0f, 1.0f, 1.0f, 1.0f),
+	start(start)
 {
 }
 
@@ -34,39 +34,33 @@ Particle::~Particle()
 {
 }
 
-void Particle::load(vec3 start)
+void Particle::load()
 {
 	// Random initialization
-	rebirth(0.0f, start);
+	rebirth(0.0f);
 }
 
 /* all particles born at the origin */
-void Particle::rebirth(float t, vec3 start)
+void Particle::rebirth(float t)
 {
 	charge = randFloat(0.0f, 1.0f) < 0.5 ? -1.0f : 1.0f;	
 	m = 1.0f;
   	d = randFloat(0.0f, 0.02f);
 	x = start;
-	v.x = randFloat(-0.27f, 0.3f);
-	v.y = randFloat(-0.1f, 0.9f);
-	v.z = randFloat(-0.3f, 0.27f);
+
 	lifespan = randFloat(100.0f, 200.0f); 
 	tEnd = t + lifespan;
-	scale = randFloat(0.2, 1.0f);
-   	color.r = randFloat(0.0f, 0.1f);
-   	color.g = randFloat(0.0f, 0.1f);
-   	color.b = randFloat(0.25f, 0.5f);
-	color.a = 1.0f;
 }
 
-void Particle::update(float t, float h, const vec3 &g, const vec3 start)
+void Particle::update(float t, float h, const vec3 &g)
 {
 	if(t > tEnd) {
-		rebirth(t, start);
+		rebirth(t);
 	}
 
 	//very simple update
-	x += h*v;
-	//To do - how do you want to update the forces?
-	color.a = (tEnd-t)/lifespan;
+	x += h*v; // update the position based on velocity
+	v += h*g / m; // update the velocity based on forces, over their mass (for their actual acceleration)
+
+	color.a = (tEnd-t)/lifespan; // let this particle "die out"
 }

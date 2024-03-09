@@ -46,11 +46,6 @@ public:
 
 	bool keyToggles[256] = { false };
 
-	//some particle variables
-	float t = 0.0f; //reset in init
-	float h = 0.01f;
-
-	glm::vec3 g = glm::vec3(0.0f, -0.01f, 0.0f);
 	float camRot;
 
 	void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)

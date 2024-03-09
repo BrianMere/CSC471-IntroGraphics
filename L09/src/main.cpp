@@ -54,10 +54,12 @@ public:
 
 	// Our shader program
 	std::shared_ptr<Program> prog;
-	// Our shader program
+	// Our shader program, no lighting
 	std::shared_ptr<Program> solidColorProg;
 	// Our texture shader program
 	std::shared_ptr<Program> texProg;
+	// Particle shader
+	std::shared_ptr<Program> partProg;
 
 	/* Define Mesh and Object file memories here... */
 
@@ -66,9 +68,10 @@ public:
 	std::map<std::string, shared_ptr<TextureObject>> texobjects;
 	std::map<std::string, shared_ptr<Bobject<>>> VoidBobjects;
 
-	//animation data
-	float sTheta = 0;
-	float graphT = 0;
+	std::map<std::string, shared_ptr<Texture>> miscTextures;
+
+	// Particle System
+	particleSys *thePartSystem;
 
 	// camera data
 	Camera sceneCamera = Camera();
@@ -137,9 +140,13 @@ public:
 		GLSL::checkVersion();
 
 		// Set background color.
-		glClearColor(.12f, .34f, .56f, 1.0f);
+		CHECKED_GL_CALL(glClearColor(.12f, .34f, .56f, 1.0f));
+
 		// Enable z-buffer test.
-		glEnable(GL_DEPTH_TEST);
+		CHECKED_GL_CALL(glEnable(GL_DEPTH_TEST));
+		CHECKED_GL_CALL(glEnable(GL_BLEND));
+		CHECKED_GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		CHECKED_GL_CALL(glPointSize(24.0f));
 
 		// Initialize the GLSL program.
 		prog = make_shared<Program>();
@@ -189,6 +196,63 @@ public:
 		texProg->addUniform("MatSpec");
 		texProg->addUniform("MatShine");
 		texProg->addUniform("mode");
+
+		// Initialize the GLSL program.
+		partProg = make_shared<Program>();
+		partProg->setVerbose(true);
+		partProg->setShaderNames(
+			resourceDirectory + "/particle_vert.glsl",
+			resourceDirectory + "/particle_frag.glsl");
+		if (! partProg->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
+		partProg->addUniform("P");
+		partProg->addUniform("M");
+		partProg->addUniform("V");
+		partProg->addAttribute("pColor");
+		partProg->addUniform("alphaTexture");
+		partProg->addAttribute("vertPos");
+
+		// Initialize the particle system...
+		thePartSystem = new particleSys();
+		thePartSystem->setForce(
+			[](glm::vec3 v, Particle p) {
+				// the unit perp vector field
+				glm::vec3 re = glm::vec3(
+					v.y,
+					-2.0f * v.x,
+					0
+				) / sqrt(v.x * v.x + v.y * v.y);
+
+				return (p.charge > 0) ? re : -re;
+			}
+		);
+		thePartSystem->setDist(
+			[](float t) {
+				return glm::vec3(
+					cos(M_PIf * 2 * t), 
+					2*sin(M_PIf * 2 * t), 
+					-5
+				);
+			}
+		);
+		thePartSystem->setColorDist(
+			[](float t) {
+				return glm::vec3(
+					0,
+					0.1*t, 
+					0.9*t
+				);
+			}
+		);
+
+		thePartSystem->gpuSetup();
+
+		// init splines up and down
+       	splinepath[0] = Spline(glm::vec3(-1,0.5,1), glm::vec3(-0.5,1,1), glm::vec3(0.5, 0 , 1), glm::vec3(1,0.5,1), 5);
+       	splinepath[1] = Spline(glm::vec3(1,0.5,1), glm::vec3(0.66, 0.66,1), glm::vec3(0.33, 0.33, 1), glm::vec3(0,0,1), 5);
 	}
 
 	/**
@@ -320,9 +384,12 @@ public:
 		));
 		VoidBobjects["V3"]->init();
 
-	 	// init splines up and down
-       	splinepath[0] = Spline(glm::vec3(-1,0.5,1), glm::vec3(-0.5,1,1), glm::vec3(0.5, 0 , 1), glm::vec3(1,0.5,1), 5);
-       	splinepath[1] = Spline(glm::vec3(1,0.5,1), glm::vec3(0.66, 0.66,1), glm::vec3(0.33, 0.33, 1), glm::vec3(0,0,1), 5);
+		// Textures
+		miscTextures["Particle"] = make_shared<Texture>(Texture());
+		miscTextures["Particle"]->setFilename(resourceDirectory +"/particles" + "/alpha.bmp");
+		miscTextures["Particle"]->init();
+		miscTextures["Particle"]->setUnit(0);
+		miscTextures["Particle"]->setWrapModes(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 	}
 
 	typedef enum {
@@ -399,6 +466,8 @@ public:
 		glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
 		glViewport(0, 0, width, height);
 
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 		// Clear framebuffer.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -420,42 +489,49 @@ public:
 			View->loadIdentity();
 			View->multMatrix(sceneCamera.getLookAtMatrix());
 
+			thePartSystem->setCamera(View->topMatrix());
+
 		Model->loadIdentity();
 
 		glm::vec3 lightPosition = vec3(2.0, 2.0, -4.0); // center a light really far away super high...
 
+		// Initialize Shader Values...
+
 		solidColorProg->bind();
-		//send the projetion and view for solid shader
-		glUniformMatrix4fv(solidColorProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
-		glUniformMatrix4fv(solidColorProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
-		glUniformMatrix4fv(solidColorProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-		//send in the color to use
-		glUniform3f(solidColorProg->getUniform("solidColor"), 0.1, 0.2, 0.5);
+			CHECKED_GL_CALL(glUniformMatrix4fv(solidColorProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(solidColorProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(solidColorProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
+			CHECKED_GL_CALL(glUniform3f(solidColorProg->getUniform("solidColor"), 0.1, 0.2, 0.5));
 		solidColorProg->unbind();
 
 		texProg->bind();
-		glUniformMatrix4fv(texProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
-		glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
-		glUniformMatrix4fv(texProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-		glUniform3f(texProg->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
-		SET_MODE(0);
+			CHECKED_GL_CALL(glUniformMatrix4fv(texProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(texProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
+			CHECKED_GL_CALL(glUniform3f(texProg->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z));
+			SET_MODE(0);
 		texProg->unbind();
 
 		prog->bind();
-		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
-		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
-		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-		glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
+			CHECKED_GL_CALL(glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
+			CHECKED_GL_CALL(glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z));
 		prog->unbind();
+
+		partProg->bind();
+			miscTextures["Particle"]->bind(partProg->getUniform("alphaTexture"));
+			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
+			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
+		partProg->unbind();
 
 		// Define World Geometry Here!
 		texobjects["BluePortal"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
-		texobjects["PlanePortalable"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
+		texobjects["BluePortal"]->add_transform(translate(mat4(1.0f), vec3(0,0,-5)));
+		texobjects["BluePortal"]->add_subobj(texobjects["PlanePortalable"]);
 
-		texobjects["PlanePortalable"]->add_transform(translate(mat4(1.0f), vec3(0,0,-5)));
-
-		texobjects["BluePortal"]->move_to(texobjects["PlanePortalable"]);
-		texobjects["BluePortal"]->add_transform(translate(mat4(1.0f), vec3(0,0,0.01)));
+		texobjects["BluePortal"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,0.01)));
 
 		objects["SmoothSphere"]->move_to(lightPosition);
 
@@ -473,13 +549,22 @@ public:
 		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,1,0)));
 		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
+		// update our particle system's origin
+		thePartSystem->setOrigin(texobjects["BluePortal"]->getWorldCenterPoint());
+
 		// draw objects here... 
+
+		partProg->bind();
+			thePartSystem->update();
+			thePartSystem->drawMe(partProg);
+		partProg->unbind();
+
 		texProg->bind();
 
 			SET_MODE(0); // lighting and shading 
 
 			SetMaterial(texProg, material_t::plastic, vec3(0.1,0.1,0.1));
-			texobjects["PlanePortalable"]->draw(Model);
+			//texobjects["PlanePortalable"]->draw(Model);
 
 			SET_MODE(1); // Removing very black pixels from the textures, reserved for portals or other similar textures
 
@@ -506,11 +591,7 @@ public:
 			objects["SmoothSphere"]->draw(Model);
 		prog->unbind();
 
-		//animation update
-		sTheta = glfwGetTime();
-		graphT += 0.02;
-
-
+		// Camera Updates
 		sceneCamera.rotSpeed = 0.02f;
 		sceneCamera.transSpeed = 0.04f;
 		if (keys[GLFW_KEY_W]) {
@@ -527,12 +608,14 @@ public:
 		}
 		if (keys[GLFW_KEY_R]) {
 			sceneCamera.resetCamera();
+			thePartSystem->reSet();
 		}
 
 		// Pop matrix stacks.
 		Projection->popMatrix();
 		View->popMatrix();
 
+		// Flush current transformations.
 		for(std::map<std::string, shared_ptr<Object>>::iterator it = objects.begin(); it != objects.end(); ++it) {
 			it->second->flush();
 		}

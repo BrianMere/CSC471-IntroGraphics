@@ -16,34 +16,52 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+
 using namespace glm;
 
-class MatrixStack;
-class Program;
-class Texture;
+float randFloat(float l, float h);
 
 class Particle
 {
 public:
-	Particle(vec3 pos);
-	virtual ~Particle();
-	void load(vec3 start);
-	void rebirth(float t, vec3 start);
-	void update(float t, float h, const glm::vec3 &g, const vec3 start);
-	const vec3 &getPosition() const { return x; };
-	const vec3 &getVelocity() const { return v; };
-	const vec4 &getColor() const { return color; };
-	
-private:
+
+	// public characteristics of our particle
 	float charge; // +1 or -1
 	float m; // mass
 	float d; // viscous damping
+
+	Particle(vec3 pos);
+	virtual ~Particle();
+	void load();
+	void rebirth(float t);
+	void update(float t, float h, const glm::vec3 &g);
+	const vec3 &getPosition() const { return x; };
+	const vec3 &getVelocity() const { return v; };
+	const vec4 &getColor() const { return color; };
+
+	inline void setStartingVelocity(glm::vec3 velocity)
+	{
+		this->v = velocity;
+	}
+
+	inline void setColor(glm::vec3 color)
+	{
+		this->color = glm::vec4(color.x, color.y, color.z, 1.0f);
+	}
+
+	inline glm::vec4 getColor()
+	{
+		return this->color;
+	}
+	
+private:
+
 	vec3 x; // position
 	vec3 v; // velocity
 	float lifespan; // how long this particle lives
 	float tEnd;     // time this particle dies
-	float scale;
 	vec4 color;
+	vec3 start; // starting position.
 };
 
 #endif // LAB471_PARTICLE_H_INCLUDED
