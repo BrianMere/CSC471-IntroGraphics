@@ -25,14 +25,30 @@ public:
         {};
     ~Bobject() {};
 
+    /**
+     * Initialize your files and objects in this->objs here...
+     * 
+     * Arbitrary arguments are allowed here, 
+    */
     virtual void init(ArgsPrime... args) = 0; // allow for arguments to be passed into an object like this.
+
+    /**
+     * Initialize your transforms for the sake of rendering.
+    */
+    virtual void init_transforms() = 0;
 
     // Method to call a specified method on all objects in the list
     template<typename T, typename... Args>
-    inline void CallMethodOnAll(void(T::*method)(T&, Args...), Args... args) {
-        for(std::map<std::string, std::shared_ptr<Object>>::iterator it = this->objs.begin(); it != this->objs.end(); ++it) {
-			it->second->*method(args...);
-		}
+    inline void CallMethodOnAll(void(T::*method)(Args...), Args... args) {
+        for (const auto& pair : objs) {
+            T* object = dynamic_cast<T*>(pair.second.get());
+            if (object) {
+                (object->*method)(args...);
+            } else {
+                // Handle the case where the cast fails
+                // This object is not of the correct type
+            }
+    }
     }
 };
 

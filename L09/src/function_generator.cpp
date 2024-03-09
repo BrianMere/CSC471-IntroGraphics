@@ -123,3 +123,11 @@ void funcToObj(
     std::cout << "OBJ file generated successfully." << std::endl;
 
 }
+
+/**
+ * Generate an obj for a given function of three floats. We plot g(x,y,z) = 0.
+ * 
+ * For instance, if you give g(x,y,z) = x^2 + y^2 + z^2 then we use the equation:
+ * 
+ * x^2 + y^2 + z^2 = 0
+*/

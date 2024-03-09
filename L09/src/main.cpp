@@ -38,6 +38,7 @@
 #include "VectorObj.h"
 
 #define SET_MODE(x) (glUniform1f(texProg->getUniform("mode"), x) )
+#define SET_SOLIDCOLOR(x, y, z) (glUniform3f(solidColorProg->getUniform("solidColor"), x, y, z))
 
 
 using namespace std;
@@ -305,6 +306,19 @@ public:
 			resourceDirectory, 
 			solidColorProg
 		));
+		VoidBobjects["V1"]->init();
+
+		VoidBobjects["V2"] = make_shared<VectorObj>(VectorObj(
+			resourceDirectory, 
+			solidColorProg
+		));
+		VoidBobjects["V2"]->init();
+
+		VoidBobjects["V3"] = make_shared<VectorObj>(VectorObj(
+			resourceDirectory, 
+			solidColorProg
+		));
+		VoidBobjects["V3"]->init();
 
 	 	// init splines up and down
        	splinepath[0] = Spline(glm::vec3(-1,0.5,1), glm::vec3(-0.5,1,1), glm::vec3(0.5, 0 , 1), glm::vec3(1,0.5,1), 5);
@@ -434,6 +448,7 @@ public:
 		glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
 		prog->unbind();
 
+		// Define World Geometry Here!
 		texobjects["BluePortal"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
 		texobjects["PlanePortalable"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
 
@@ -443,6 +458,20 @@ public:
 		texobjects["BluePortal"]->add_transform(translate(mat4(1.0f), vec3(0,0,0.01)));
 
 		objects["SmoothSphere"]->move_to(lightPosition);
+
+		// x-axis
+		VoidBobjects["V1"]->init_transforms();
+		VoidBobjects["V1"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
+
+		// y-axis
+		VoidBobjects["V2"]->init_transforms();
+		VoidBobjects["V2"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1)));
+		VoidBobjects["V2"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
+
+		// z-axis
+		VoidBobjects["V3"]->init_transforms();
+		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,1,0)));
+		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
 		// draw objects here... 
 		texProg->bind();
@@ -462,7 +491,14 @@ public:
 		texProg->unbind();
 
 		solidColorProg->bind();
-			//...
+			SET_SOLIDCOLOR(0.5, 0, 0);
+			VoidBobjects["V1"]->CallMethodOnAll(&Object::draw, Model);
+
+			SET_SOLIDCOLOR(0, 0.5, 0);
+			VoidBobjects["V2"]->CallMethodOnAll(&Object::draw, Model);
+
+			SET_SOLIDCOLOR(0,0,0.5);
+			VoidBobjects["V3"]->CallMethodOnAll(&Object::draw, Model);
 		solidColorProg->unbind();
 
 		prog->bind();
@@ -502,6 +538,9 @@ public:
 		}
 		for(std::map<std::string, shared_ptr<TextureObject>>::iterator it = texobjects.begin(); it != texobjects.end(); ++it) {
 			it->second->flush();
+		}
+		for(std::map<std::string, shared_ptr<Bobject<>>>::iterator it = VoidBobjects.begin(); it != VoidBobjects.end(); ++it) {
+			it->second->CallMethodOnAll(&Object::flush);
 		}
 
 		// Debugging: Print out our current position

@@ -28,6 +28,7 @@ public:
     ~VectorObj() {};
 
     void init() override;
+    void init_transforms() override;
 };
 
 #endif
