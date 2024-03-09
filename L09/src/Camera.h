@@ -1,3 +1,6 @@
+#ifndef MY_CAMERA_H
+#define MY_CAMERA_H
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <sstream>
@@ -92,7 +95,7 @@ public:
     /**
      * Print out the contents of this camera's data
     */
-    inline std::string toString() 
+    std::string toString() 
     {
       std::stringstream out;
 
@@ -113,4 +116,6 @@ public:
     }
 
 };
+
+#endif
 

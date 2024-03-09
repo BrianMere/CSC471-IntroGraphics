@@ -1,3 +1,6 @@
+#ifndef MY_TEXTUREOBJ_H
+#define MY_TEXTUREOBJ_H
+
 #include "Object.h"
 #include "Texture.h"
 #include "MatrixStack.h"
@@ -82,3 +85,5 @@ std::shared_ptr<TextureObject> TextureObject::copy()
     ));
     return n;
 }
+
+#endif

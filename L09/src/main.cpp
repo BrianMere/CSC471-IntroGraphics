@@ -8,8 +8,6 @@
 	#define _USE_GNU
 #endif 
 
-#define GLM_ENABLE_EXPERIMENTAL // for string functions..
-
 #include <iostream>
 #include <glad/glad.h>
 #include <functional>
@@ -22,6 +20,7 @@
 #include "MatrixStack.h"
 #include "WindowManager.h"
 #include "Spline.h"
+#include "particleSys.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader/tiny_obj_loader.h>
@@ -29,15 +28,14 @@
 // value_ptr for glm
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp> // for string casts
 
 // my own graphics classes
 #include "MeshContainer.h"
 #include "Object.h"
 #include "Camera.h"
-#include "VectorObj.h"
 #include "TextureObject.h"
 #include "function_generator.h"
+#include "VectorObj.h"
 
 #define SET_MODE(x) (glUniform1f(texProg->getUniform("mode"), x) )
 
@@ -65,8 +63,7 @@ public:
 	// Shape to be used (from  file) - modify to support multiple
 	std::map<std::string, shared_ptr<Object>> objects;
 	std::map<std::string, shared_ptr<TextureObject>> texobjects;
-	std::map<std::string, shared_ptr<Texture>> textures;
-	std::map<std::string, shared_ptr<Object>> copied_objs; // store any copy() objects here to save on memory. 
+	std::map<std::string, shared_ptr<Bobject<>>> VoidBobjects;
 
 	//animation data
 	float sTheta = 0;
@@ -290,12 +287,23 @@ public:
 			texProg, 
 			"/ar_lunacy.jpg"
 		));
+		// add another test object
+		objects["SmoothSphere"] = make_shared<Object>(Object(
+			resourceDirectory + "/misc",
+			"sphereWTex.obj",
+			prog
+		));
 
 		texobjects["SkyBox"] = make_shared<TextureObject>(TextureObject(
 			resourceDirectory + "/misc",
 			"cube.obj",
 			texProg, 
 			"/ar_lunacy.jpg"
+		));
+
+		VoidBobjects["V1"] = make_shared<VectorObj>(VectorObj(
+			resourceDirectory, 
+			solidColorProg
 		));
 
 	 	// init splines up and down
@@ -307,7 +315,8 @@ public:
 		shiny,
 		plastic, 
 		metalic,
-		gold
+		gold,
+		ethereal
 	} material_t;
 
 	/**
@@ -320,19 +329,19 @@ public:
 
     	switch (material) {
     		case shiny:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.5 * color.x, 0.5 * color.y, 0.5 * color.z);
+    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
     			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
     			glUniform3f(curS->getUniform("MatSpec"), 0.9, 0.9, 0.9);
     			glUniform1f(curS->getUniform("MatShine"), 120.0);
     		break;
     		case plastic:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.3 * color.x, 0.3 * color.y, 0.3 * color.z);
+    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
     			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
     			glUniform3f(curS->getUniform("MatSpec"), 0.1 , 0.1, 0.1);
     			glUniform1f(curS->getUniform("MatShine"), 4.0);
     		break;
     		case metalic:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.2 * color.x, 0.2 * color.y, 0.2 * color.z);
+    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
     			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
     			glUniform3f(curS->getUniform("MatSpec"), 0.3, 0.3, 0.3);
     			glUniform1f(curS->getUniform("MatShine"), 27.0);
@@ -342,6 +351,11 @@ public:
     			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
     			glUniform3f(curS->getUniform("MatSpec"), 0.6 * color.y, 0.6 * color.x, 0.6 * color.z);
     			glUniform1f(curS->getUniform("MatShine"), 27.0);
+			case ethereal: // high ambient color (near white), no diffusion, high specular
+				glUniform3f(curS->getUniform("MatAmb"), 1.1 * color.x, 1.1 * color.y, 0.8 * color.z);
+    			glUniform3f(curS->getUniform("MatDif"), 0.0, 0.0, 0.0);
+    			glUniform3f(curS->getUniform("MatSpec"), 0.3 * color.x, 0.3 * color.y, 0.3 * color.z);
+    			glUniform1f(curS->getUniform("MatShine"), 120.0);
     		break;
   		}
 	}
@@ -394,7 +408,7 @@ public:
 
 		Model->loadIdentity();
 
-		glm::vec3 lightPosition = vec3(0.0, 1.0, 0.0); // center a light really far away super high...
+		glm::vec3 lightPosition = vec3(2.0, 2.0, -4.0); // center a light really far away super high...
 
 		solidColorProg->bind();
 		//send the projetion and view for solid shader
@@ -420,48 +434,41 @@ public:
 		glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
 		prog->unbind();
 
-		texobjects["SmoothSphere"]->add_transform(scale(mat4(1.0f), vec3(2.0, 2.0, 2.0)));
-		texobjects["SmoothSphere"]->add_transform(translate(mat4(1.0f), vec3(1.0, 1.0, 1.0)));
+		texobjects["BluePortal"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
+		texobjects["PlanePortalable"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
 
-		if(texobjects.count("CompanionCube2") == 0)
-			texobjects["CompanionCube2"] = texobjects["CompanionCube"]->copy();
+		texobjects["PlanePortalable"]->add_transform(translate(mat4(1.0f), vec3(0,0,-5)));
 
-		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
+		texobjects["BluePortal"]->move_to(texobjects["PlanePortalable"]);
+		texobjects["BluePortal"]->add_transform(translate(mat4(1.0f), vec3(0,0,0.01)));
 
-		texobjects["SmoothSphere"]->add_subobj(texobjects["CompanionCube2"]);
-		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
-
-		texobjects["CompanionCube2"]->add_transform(translate(mat4(1.0f), vec3(1, 1, -2)));
-		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
-
-		texobjects["CompanionCube2"]->move_to(texobjects["SmoothSphere"]);
-		cout << glm::to_string(texobjects["CompanionCube2"]->getWorldCenterPoint()) << std::endl;
-
-
-		texobjects["CompanionCube"]->add_transform(rotate(mat4(1.0f), M_PI_2f, vec3(1,1,1)));
-
-		
+		objects["SmoothSphere"]->move_to(lightPosition);
 
 		// draw objects here... 
 		texProg->bind();
 
 			SET_MODE(0); // lighting and shading 
-			
-			
 
-			SET_MODE(1); // remove lighting while removing very black pixels, reserved for portals or other similar textures
+			SetMaterial(texProg, material_t::plastic, vec3(0.1,0.1,0.1));
+			texobjects["PlanePortalable"]->draw(Model);
+
+			SET_MODE(1); // Removing very black pixels from the textures, reserved for portals or other similar textures
+
+			SetMaterial(texProg, material_t::ethereal, vec3(0,0,0.1));
+			texobjects["BluePortal"]->draw(Model);
 
 			SET_MODE(2); // textured while unlit
-
-			SetMaterial(texProg, plastic, vec3(0.1, 0.1, 0.1));
-			texobjects["SmoothSphere"]->draw(Model);
-			//texobjects["PlanePortalable"]->draw(Model);
-			texobjects["CompanionCube"]->draw(Model);
+			
 		texProg->unbind();
 
 		solidColorProg->bind();
-			//VectorObj(resourceDirector).parentObj->draw(Model);
+			//...
 		solidColorProg->unbind();
+
+		prog->bind();
+			SetMaterial(prog, material_t::gold, vec3(1, 1, 0));
+			objects["SmoothSphere"]->draw(Model);
+		prog->unbind();
 
 		//animation update
 		sTheta = glfwGetTime();
