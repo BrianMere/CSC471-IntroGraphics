@@ -22,6 +22,8 @@
 #include "Spline.h"
 #include "particleSys.h"
 
+#define GLM_SWIZZLE
+
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader/tiny_obj_loader.h>
 
@@ -217,33 +219,51 @@ public:
 
 		// Initialize the particle system...
 		thePartSystem = new particleSys();
-		thePartSystem->setForce(
-			[](glm::vec3 v, Particle p) {
-				// the unit perp vector field
-				glm::vec3 re = glm::vec3(
-					v.y,
-					-2.0f * v.x,
-					0
-				) / sqrt(v.x * v.x + v.y * v.y);
 
-				return (p.charge > 0) ? re : -re;
+
+		thePartSystem->setInitialVelocityFunc(
+			[](glm::vec3 v, Particle p) {
+				return 0.1f * (1/glm::distance(v, vec3(0,0,0))) * glm::normalize(glm::vec3(glm::vec4(v, 1.0f) * rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1))));
+			}
+		);
+
+		thePartSystem->setForce(
+			[](glm::vec3 x, Particle p) {
+				// the unit perp vector field
+
+				double comp = pow(x.x, 2) + pow(x.y, 2)/4.0;
+				comp = (float) comp;
+				if(comp == 1) // on the ellipse
+				{
+					return -4 * M_PIf * x;
+				}
+				glm::vec3 re = (float)(1 - comp) * x;
+				if (comp > 1) // outside of the ellipse
+				{
+					re = (float)(comp-1) * (glm::vec4(re, 1.0f) * rotate(mat4(1.0f), 0.1f, vec3(0.0f,0.0f,1.0f))); // rotate just a little bit CCW to edge into the ellipse
+				}
+				else { // inside of the ellipse
+					re = (float)(1-comp) * (glm::vec4(re, 1.0f) * rotate(mat4(1.0f), 0.1f, vec3(0.0f,0.0f,1.0f))); // rotate just a little bit CW to edge into ellipse
+				}
+				re.z = -x.z;
+				return re * p.m;
 			}
 		);
 		thePartSystem->setDist(
-			[](float t) {
+			[](float t, float a, float b) {
 				return glm::vec3(
-					cos(M_PIf * 2 * t), 
-					2*sin(M_PIf * 2 * t), 
-					-5
+					(0.9f + (a / 2.5f)) * cos(M_PIf * 2 * t), 
+					2*(0.9f + (b / 2.5f)) * sin(M_PIf * 2 * t), 
+					a > 0 ? (b * 0.1) : (-b * 0.1)
 				);
 			}
 		);
 		thePartSystem->setColorDist(
-			[](float t) {
+			[](float t, float a, float b) {
 				return glm::vec3(
 					0,
-					0.1*t, 
-					0.9*t
+					0.5*t + 0.4, 
+					0.8*t + 0.4
 				);
 			}
 		);
@@ -549,6 +569,8 @@ public:
 		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,1,0)));
 		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
+		std::cout << glm::to_string(texobjects["BluePortal"]->getWorldCenterPoint()) << std::endl;
+
 		// update our particle system's origin
 		thePartSystem->setOrigin(texobjects["BluePortal"]->getWorldCenterPoint());
 
@@ -608,6 +630,8 @@ public:
 		}
 		if (keys[GLFW_KEY_R]) {
 			sceneCamera.resetCamera();
+		}
+		if (keys[GLFW_KEY_P]) {
 			thePartSystem->reSet();
 		}
 

@@ -59,8 +59,9 @@ void Particle::update(float t, float h, const vec3 &g)
 	}
 
 	//very simple update
-	x += h*v; // update the position based on velocity
 	v += h*g / m; // update the velocity based on forces, over their mass (for their actual acceleration)
+	x += h*v; // update the position based on velocity
+	
 
 	color.a = (tEnd-t)/lifespan; // let this particle "die out"
 }

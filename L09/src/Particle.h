@@ -53,6 +53,16 @@ public:
 	{
 		return this->color;
 	}
+
+	inline void setPosition(glm::vec3 newPos)
+	{
+		this->x = newPos;
+	}
+
+	inline void setStart(glm::vec3 newStart)
+	{
+		this->start = newStart;
+	}
 	
 private:
 

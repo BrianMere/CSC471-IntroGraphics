@@ -12,12 +12,13 @@ using namespace std;
 
 particleSys::particleSys() {
 
-	numP = 300;	
+	numP = NUMP;	
 	t = 0.0f;
 	h = 0.01f;
 	F = 0;
   dist = 0;
-  colorDist = [](float t){ return glm::vec3(1.0, 1.0, 1.0); };
+  V = 0;
+  colorDist = [](float t, float g, float y){ return glm::vec3(1.0, 1.0, 1.0); };
 	theCamera = glm::mat4(1.0);
 }
 
@@ -26,14 +27,19 @@ void particleSys::setForce(force_t Force)
   F = Force;
 }
 
+void particleSys::setInitialVelocityFunc(force_t VelocityFunc)
+{
+  this->V = VelocityFunc;
+}
+
 void particleSys::gpuSetup() {
 
 	for (int i=0; i < numP; i++) {
-    glm::vec3 startingPoint = this->start + this->dist(randFloat(0.0f, 1.0f));
+    glm::vec3 startingPoint = this->start + this->dist(randFloat(0.0f, 1.0f), randFloat(0.0f, 1.0f), randFloat(0.0f, 1.0f));
     auto particle = make_shared<Particle>(startingPoint);
-		glm::vec3 startingColor = this->colorDist(randFloat(0.0f, 1.0f));
+		glm::vec3 startingColor = this->colorDist(randFloat(0.0f, 1.0f), randFloat(0.0f, 1.0f), randFloat(0.0f, 1.0f));
 
-    particle->setStartingVelocity(F(startingPoint, *particle));
+    particle->setStartingVelocity(V(startingPoint, *particle));
     particle->setColor(startingColor);
 
     points[i*3+0] = startingPoint.x;
@@ -114,7 +120,7 @@ void particleSys::update() {
 
   //update the particles
   for(auto particle : particles) {
-    glm::vec3 new_force = F(particle->getPosition(), *particle);
+    glm::vec3 new_force = F(particle->getPosition() - this->start, *particle);
     particle->update(t, h, new_force);
   }
   t += h;
@@ -160,10 +166,13 @@ void particleSys::setOrigin(glm::vec3 source)
 {
   if(source != start)
   {
+    glm::vec3 change = source - start;
     this->start = source;
     for(auto particle : this->particles)
     {
-      particle->rebirth(t);
+      particle->setPosition(particle->getPosition() + change);
+      particle->setStart(change);
+      //this->reSet();
     }
   }
 }

@@ -68,6 +68,6 @@ void Particle::update(float t, float h, const vec3 &g, const vec3 start)
 	//very simple update
 	x += h*v;
 	//To do - how do you want to update the forces?
-	v += t*g;
+	v += h*g;
 	color.a = (tEnd-t)/lifespan;
 }

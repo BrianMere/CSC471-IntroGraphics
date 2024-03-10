@@ -8,10 +8,12 @@
 #include "Particle.h"
 #include "Program.h"
 
+#define NUMP 300
+
 using namespace glm;
 using namespace std;
 using force_t = glm::vec3(*)(glm::vec3, Particle);
-using dist_t = glm::vec3(*)(float);
+using dist_t = glm::vec3(*)(float, float, float);
 
 class ParticleSorter {
 public:
@@ -36,14 +38,15 @@ private:
 	force_t F; //force function
 	dist_t dist; // distribution function (of particles)
 	dist_t colorDist; // distribution function for color
+	force_t V; // velocity function
 
 	float t, h; //?
 	int numP;
 	vec3 start;
 	ParticleSorter sorter;
 	//this is not great that this is hard coded - you can make it better
-	GLfloat points[900];
-	GLfloat pointColors[1200];
+	GLfloat points[3*NUMP];
+	GLfloat pointColors[4*NUMP];
 
 	mat4 theCamera;
 	unsigned vertArrObj;
@@ -81,6 +84,11 @@ public:
 	 * Sets the color distribution function.
 	*/
 	void setColorDist(dist_t color_Dist);
+
+	/**
+	 * Sets the initial velocity function
+	*/
+	void setInitialVelocityFunc(force_t VelocityFunc);
 };
 
 
