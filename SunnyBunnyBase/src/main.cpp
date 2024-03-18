@@ -39,7 +39,7 @@ class Application : public EventCallbacks
 public:
 	WindowManager * windowManager = nullptr;
 
-	shared_ptr<Program> prog, tex_prog;
+	shared_ptr<Program> prog, vertical, horizontal, gaussian;
 	shared_ptr<Shape> bunny;
 
 	shared_ptr<Texture> texture0;
@@ -54,8 +54,8 @@ public:
 	int FirstTime = 1;
 
   //global reference to texture FBO
-  GLuint frameBuf[2];
-  GLuint texBuf[2];
+  GLuint frameBuf[3];
+  GLuint texBuf[3];
   GLuint depthBuf;
 
 	float g_Camtrans = -2.5;
@@ -77,6 +77,63 @@ public:
 	static void error_callback(int error, const char *description) {
 		cerr << description << endl;
 	}
+
+  void mouseCallback(GLFWwindow *window, int button, int action, int mods) {
+    double posX, posY;
+
+    if (action == GLFW_PRESS)
+    {
+       glfwGetCursorPos(window, &posX, &posY);
+       cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+    }
+  }
+
+  void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+  float speed = 0.2;
+
+  if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+    g_eye -= speed*strafe;
+    g_lookAt -= speed*strafe;
+  }
+  if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+    g_eye += speed*strafe;
+    g_lookAt += speed*strafe;
+  }
+  if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+    g_eye -= speed*view;
+    g_lookAt -= speed*view;
+  }
+  if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+    g_eye += speed*view;
+    g_lookAt += speed*view;
+  }
+  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+    g_light.x += 0.25;
+  if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    g_light.x -= 0.25;
+  if (key == GLFW_KEY_M && action == GLFW_PRESS)
+    g_Camtrans += 0.25;
+  if (key == GLFW_KEY_N && action == GLFW_PRESS)
+    g_Camtrans -= 0.25;
+  if (key == GLFW_KEY_L && action == GLFW_PRESS)
+    DEBUG_LIGHT = !DEBUG_LIGHT;
+
+   if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
+    if (key == GLFW_KEY_Z && action == GLFW_RELEASE) {
+      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
+  }
+
+  void scroll_callback(GLFWwindow* window, double deltaX, double deltaY) {
+  //  vec3 diff, newV;
+  //  //camera stuff
+  }
+
+  void resizeCallback(GLFWwindow *window, int width, int height) {
+    glViewport(0, 0, width, height);
+  }
 
   /*
   Helper function to create the framebuffer object and associated texture to write to
@@ -108,21 +165,21 @@ public:
   /* Process Texture on the specificed texture  - could vary what it does based on
       shader  - works on inTex - runs shaders and output to textured quad */
   /* TODO: fill in with call to appropriate shader(s) to complete the texture processding */
-  void ProcessDrawTex(GLuint inTex) {
+  void ProcessDrawTex(shared_ptr<Program> shader, GLuint inTex) {
 
     //set up inTex as my input texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, inTex);
     //example applying of 'drawing' the FBO texture
     //this shader just draws right now
-    tex_prog->bind();
-      glUniform1i(tex_prog->getUniform("texBuf"), 0);
+    shader->bind();
+      glUniform1i(shader->getUniform("texBuf"), 0); // 0
       glEnableVertexAttribArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
       glDrawArrays(GL_TRIANGLES, 0, 6);
       glDisableVertexAttribArray(0);
-    tex_prog->unbind();  
+    shader->unbind();  
   }
 
   void init(const std::string& resourceDirectory) {
@@ -154,17 +211,37 @@ public:
 
     //set up the shaders to blur the FBO decomposed just a placeholder pass thru now
     //TODO - modify and possibly add other shaders to complete blur
-    tex_prog = make_shared<Program>();
-    tex_prog->setVerbose(true);
-    tex_prog->setShaderNames(resourceDirectory + "/pass_vert.glsl", resourceDirectory + "/tex_frag.glsl");
-    tex_prog->init();
-    tex_prog->addUniform("texBuf");
-    tex_prog->addAttribute("vertPos");
+    vertical = make_shared<Program>();
+    vertical->setVerbose(true);
+    vertical->setShaderNames(resourceDirectory + "/pass_vert.glsl", resourceDirectory + "/tex_vertical.glsl");
+    vertical->init();
+    vertical->addUniform("texBuf");
+    vertical->addAttribute("vertPos");
+    vertical->addUniform("texWidth");
+    vertical->addUniform("texHeight");
+
+    horizontal = make_shared<Program>();
+    horizontal->setVerbose(true);
+    horizontal->setShaderNames(resourceDirectory + "/pass_vert.glsl", resourceDirectory + "/tex_horizontal.glsl");
+    horizontal->init();
+    horizontal->addUniform("texBuf");
+    horizontal->addAttribute("vertPos");
+    horizontal->addUniform("texWidth");
+    horizontal->addUniform("texHeight");
+
+    gaussian = make_shared<Program>();
+    gaussian->setVerbose(true);
+    gaussian->setShaderNames(resourceDirectory + "/pass_vert.glsl", resourceDirectory + "/gaussian.glsl");
+    gaussian->init();
+    gaussian->addUniform("texBuf");
+    gaussian->addAttribute("vertPos");
+    gaussian->addUniform("texWidth");
+    gaussian->addUniform("texHeight");
 
     //create two frame buffer objects to toggle between
     //make two FBOs and two textures
-    glGenFramebuffers(2, frameBuf);
-    glGenTextures(2, texBuf);
+    glGenFramebuffers(3, frameBuf);
+    glGenTextures(3, texBuf);
     glGenRenderbuffers(1, &depthBuf);
 
     //create one FBO
@@ -182,6 +259,8 @@ public:
     //create another FBO so we can swap back and forth
     createFBO(frameBuf[1], texBuf[1]);
     //this one doesn't need depth - its just an image to process into
+
+    createFBO(frameBuf[2], texBuf[2]);
   }
 
   /* let's draw */
@@ -191,6 +270,16 @@ public:
     int width, height;
     glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
     glViewport(0, 0, width, height);
+
+    vertical->bind();
+      glUniform1i(vertical->getUniform("texWidth"), width);
+      glUniform1i(vertical->getUniform("texHeight"), height);
+    vertical->unbind();
+
+    horizontal->bind();
+      glUniform1i(horizontal->getUniform("texWidth"), width);
+      glUniform1i(horizontal->getUniform("texHeight"), height);
+    horizontal->unbind();
 
     //set up to render to first FBO stored in array position 0
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuf[0]);
@@ -204,21 +293,32 @@ public:
       SetMaterial((gMat+1)%4); 
       drawScene(prog);
     prog->unbind();
-
-    /* code to write out the FBO (texture) just once  - this is for debugging*/
-    /* Note that texBuf[0] corresponds to frameBuf[0] */
-    if (FirstTime) {
-      assert(GLTextureWriter::WriteImage(texBuf[0],"Texture_output.png"));
-      FirstTime = 0;
-    }
   	
-    //regardless NOW set up to render to the screen = 0
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // set framebuffer to intermediary buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuf[1]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     /* now draw the actual output  to the default framebuffer - ie display */ 
     /* note the current base code is just using one FBO and texture - will need
       to change that  - we pass in texBuf[0] right now */
-    ProcessDrawTex(texBuf[0]);
+    ProcessDrawTex(vertical, texBuf[0]);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuf[2]);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ProcessDrawTex(horizontal, texBuf[1]);
+
+    /* code to write out the FBO (texture) just once  - this is for debugging*/
+    /* Note that texBuf[0] corresponds to frameBuf[0] */
+    if (FirstTime) {
+      assert(GLTextureWriter::WriteImage(texBuf[0],"Texture_output0.png"));
+      assert(GLTextureWriter::WriteImage(texBuf[1],"Texture_output1.png"));
+      assert(GLTextureWriter::WriteImage(texBuf[2],"Texture_output2.png"));
+      FirstTime = 0;
+    }
+
+    // now show the screen (we don't output the image of texBuf[2] here, we're just saving it. )
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ProcessDrawTex(horizontal, texBuf[1]);
   }
 
   /* heler to draw the geometry */
@@ -388,63 +488,6 @@ public:
         glUniform3f(prog->getUniform("MatDif"), 0.7038, 0.27048, 0.0828);
       break;
     }
-  }
-
-  void mouseCallback(GLFWwindow *window, int button, int action, int mods) {
-    double posX, posY;
-
-    if (action == GLFW_PRESS)
-    {
-       glfwGetCursorPos(window, &posX, &posY);
-       cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
-    }
-  }
-
-  void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-  float speed = 0.2;
-
-  if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-    g_eye -= speed*strafe;
-    g_lookAt -= speed*strafe;
-  }
-  if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-    g_eye += speed*strafe;
-    g_lookAt += speed*strafe;
-  }
-  if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-    g_eye -= speed*view;
-    g_lookAt -= speed*view;
-  }
-  if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-    g_eye += speed*view;
-    g_lookAt += speed*view;
-  }
-  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-    g_light.x += 0.25;
-  if (key == GLFW_KEY_E && action == GLFW_PRESS)
-    g_light.x -= 0.25;
-  if (key == GLFW_KEY_M && action == GLFW_PRESS)
-    g_Camtrans += 0.25;
-  if (key == GLFW_KEY_N && action == GLFW_PRESS)
-    g_Camtrans -= 0.25;
-  if (key == GLFW_KEY_L && action == GLFW_PRESS)
-    DEBUG_LIGHT = !DEBUG_LIGHT;
-
-   if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    }
-    if (key == GLFW_KEY_Z && action == GLFW_RELEASE) {
-      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    }
-  }
-
-  void scroll_callback(GLFWwindow* window, double deltaX, double deltaY) {
-   vec3 diff, newV;
-   //camera stuff
-  }
-
-  void resizeCallback(GLFWwindow *window, int width, int height) {
-    glViewport(0, 0, width, height);
   }
   
 };
