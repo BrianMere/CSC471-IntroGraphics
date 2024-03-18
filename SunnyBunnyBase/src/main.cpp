@@ -57,6 +57,9 @@ public:
   GLuint frameBuf[3];
   GLuint texBuf[3];
   GLuint depthBuf;
+  // gaussian blur thing
+  GLuint fBufGaus[2];
+  GLuint tBufGaus[2];
 
 	float g_Camtrans = -2.5;
 	vec3 g_light = vec3(1, 1, 1);
@@ -244,6 +247,9 @@ public:
     glGenTextures(3, texBuf);
     glGenRenderbuffers(1, &depthBuf);
 
+    glGenFramebuffers(2, fBufGaus);
+    glGenTextures(2, tBufGaus);
+
     //create one FBO
     createFBO(frameBuf[0], texBuf[0]);
 
@@ -261,6 +267,10 @@ public:
     //this one doesn't need depth - its just an image to process into
 
     createFBO(frameBuf[2], texBuf[2]);
+
+    // initialize FBOs for Gaussian Textures
+    createFBO(fBufGaus[0], tBufGaus[0]);
+    createFBO(fBufGaus[1], tBufGaus[1]);
   }
 
   /* let's draw */
@@ -280,6 +290,12 @@ public:
       glUniform1i(horizontal->getUniform("texWidth"), width);
       glUniform1i(horizontal->getUniform("texHeight"), height);
     horizontal->unbind();
+
+    gaussian->bind();
+      glUniform1i(gaussian->getUniform("texWidth"), width);
+      glUniform1i(gaussian->getUniform("texHeight"), height);
+    gaussian->unbind();
+
 
     //set up to render to first FBO stored in array position 0
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuf[0]);
@@ -306,6 +322,26 @@ public:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ProcessDrawTex(horizontal, texBuf[1]);
 
+    // Gaussian Blur...
+    glBindFramebuffer(GL_FRAMEBUFFER, fBufGaus[0]);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ProcessDrawTex(gaussian, texBuf[0]);
+
+    // alternate between framebuffers to do blur on-top of blur...
+    for(unsigned int i = 0; i < 30; ++i)
+    {
+      glBindFramebuffer(GL_FRAMEBUFFER, fBufGaus[(i + 1) % 2]);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      ProcessDrawTex(gaussian, tBufGaus[i % 2]);
+
+      if(FirstTime)
+      {
+        assert(GLTextureWriter::WriteImage(tBufGaus[i % 2], "GBlur_output" + std::to_string(i) + ".png"));
+      }
+    }
+
+
+
     /* code to write out the FBO (texture) just once  - this is for debugging*/
     /* Note that texBuf[0] corresponds to frameBuf[0] */
     if (FirstTime) {
@@ -318,7 +354,7 @@ public:
     // now show the screen (we don't output the image of texBuf[2] here, we're just saving it. )
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ProcessDrawTex(horizontal, texBuf[1]);
+    ProcessDrawTex(gaussian, fBufGaus[1]);
   }
 
   /* heler to draw the geometry */

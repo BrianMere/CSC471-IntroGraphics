@@ -196,7 +196,9 @@
 				23,
 				24,
 				25,
-				26
+				26,
+				27,
+				28
 			]
 		}
 	],
@@ -329,6 +331,11 @@
 		},
 		{
 			"backtrace" : 1,
+			"path" : "resources/gaussian.glsl",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
 			"path" : "resources/pass_vert.glsl",
 			"sourceGroupIndex" : 2
 		},
@@ -344,7 +351,12 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "resources/tex_frag.glsl",
+			"path" : "resources/tex_horizontal.glsl",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "resources/tex_vertical.glsl",
 			"sourceGroupIndex" : 2
 		}
 	],
