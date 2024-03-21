@@ -1,0 +1,62 @@
+\doxysection{Spline.\+h}
+\hypertarget{Spline_8h_source}{}\label{Spline_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Spline.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Spline.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ From\ D.\ McGirr\ (into\ the\ CG-\/verse\ previz\ 2019)}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*\ This\ is\ a\ spline\ implementation\ that\ uses\ low\ order\ Bezier\ }}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ curves\ (one\ or\ two\ control\ points)\ to\ create\ a\ path\ for\ objects}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ or\ cameras\ to\ follow.\ Specify\ start\ and\ finish\ points,\ control}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ point(s),\ and\ a\ duration\ of\ time\ that\ you\ want\ the\ path\ to\ take,}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ in\ seconds.}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Call\ update(deltaTime)\ with\ the\ amount\ of\ time\ that\ has\ elapsed\ since\ the\ }}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ last\ update.\ Call\ getPosition()\ to\ get\ the\ currently\ calculated\ }}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ position\ along\ the\ spline\ path.\ Call\ isDone()\ to\ see\ when\ the\ path\ }}
+\DoxyCodeLine{00011\ \textcolor{comment}{*\ has\ been\ completed.\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifndef\ SPLINE\_H}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ SPLINE\_H}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}Bezier.h"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ ORDER2\ 2}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ORDER3\ 3}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSpline}{Spline}}}
+\DoxyCodeLine{00023\ \{}
+\DoxyCodeLine{00024\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{float}\ t;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{int}\ order;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ done;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{float}\ duration;}
+\DoxyCodeLine{00029\ \ \ \ \ glm::vec3\ start;}
+\DoxyCodeLine{00030\ \ \ \ \ glm::vec3\ end;}
+\DoxyCodeLine{00031\ \ \ \ \ glm::vec3\ control1;\ }
+\DoxyCodeLine{00032\ \ \ \ \ glm::vec3\ control2;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classSpline}{Spline}}()\ \{\}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ order\ 2\ Bezier\ spline}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classSpline}{Spline}}(glm::vec3\ start,\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ control,\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ end,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ duration);\ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ order\ 3\ Bezier\ spline}}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classSpline}{Spline}}(glm::vec3\ start,\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ control1,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ control2,\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ end,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ duration);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classSpline}{\string~Spline}}();}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ update(\textcolor{keywordtype}{float}\ deltaTime);}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ isDone();}
+\DoxyCodeLine{00053\ \ \ \ \ glm::vec3\ getPosition();}
+\DoxyCodeLine{00054\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SPLINE\_H}}
+
+\end{DoxyCode}

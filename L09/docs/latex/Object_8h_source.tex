@@ -1,0 +1,176 @@
+\doxysection{Object.\+h}
+\hypertarget{Object_8h_source}{}\label{Object_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Object.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Object.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_OBJECT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_OBJECT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ GLM\_FORCE\_SWIZZLE}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ GLM\_ENABLE\_EXPERIMENTAL\ }\textcolor{comment}{//\ for\ string\ functions..}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}MeshContainer.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}MatrixStack.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}GLSL.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <glm/gtx/string\_cast.hpp>}\ \textcolor{comment}{//\ for\ string\ casts}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classObject}{Object}}\ :\ \textcolor{keyword}{public}\ std::enable\_shared\_from\_this<\ Object\ >}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classMeshContainer}{MeshContainer}}\ my\_mesh;}
+\DoxyCodeLine{00029\ \ \ \ \ std::vector<glm::mat4>\ transformations;}
+\DoxyCodeLine{00030\ \ \ \ \ std::vector<glm::mat4>\ solo\_transformations;}
+\DoxyCodeLine{00031\ \ \ \ \ glm::mat4\ resizeMat;\ \textcolor{comment}{//\ matrix\ using\ the\ bounding\ box\ to\ resize\ everything.}}
+\DoxyCodeLine{00032\ \ \ \ \ std::shared\_ptr<Program>\ shader;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ glm::vec3\ mid;\ \textcolor{comment}{//\ midpoint\ in\ coordinates\ of\ the\ obj,\ before\ any\ coordinates\ are\ tranformed}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::shared\_ptr<Object>\ parentCenter;\ \textcolor{comment}{//\ Parent\ relation.\ Helps\ to\ get\ the\ parent's\ relative\ position\ in\ the\ world.\ \ }}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ std::vector<std::shared\_ptr<Object>>\ sub\_objs;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classObject}{Object}}(\textcolor{keyword}{const}\ std::string\ \&resourceDirectory,\ \textcolor{keyword}{const}\ std::string\ \&filename,std::shared\_ptr<Program>\ shader)\ :\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ my\_mesh(\mbox{\hyperlink{classMeshContainer}{MeshContainer}}(resourceDirectory,\ filename)),\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ transformations(std::vector<glm::mat4>()),}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ solo\_transformations(std::vector<glm::mat4>()),}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ sub\_objs(std::vector<std::shared\_ptr<Object>>()),}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ shader(shader)}
+\DoxyCodeLine{00049\ \ \ \ \ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}{calcResize}}();}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ parentCenter\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00052\ \ \ \ \ \};}
+\DoxyCodeLine{00053\ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classObject}{\string~Object}}()\ \{\}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a4260041188d83812b924434c8b0300b9}{setParentCenter}}(std::shared\_ptr<Object>\ o)}
+\DoxyCodeLine{00060\ \ \ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(o.get()\ !=\ \textcolor{keyword}{this})}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>parentCenter\ =\ o;}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}{calcResize}}()}
+\DoxyCodeLine{00069\ \ \ \ \ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ calculate\ bounding\ box\ and\ store\ internally}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ glm::vec3\ mins,\ maxs;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ mins\ =\ glm::vec3(std::numeric\_limits<float>::max());}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ maxs\ =\ glm::vec3(std::numeric\_limits<float>::min());}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ mesh\ :\ this-\/>my\_mesh.getMeshes())}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ mins\ =\ glm::min(mins,\ mesh-\/>min);}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ maxs\ =\ glm::max(maxs,\ mesh-\/>max);}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ glm::vec3\ mid\ =\ maxs\ *\ 0.5f\ +\ mins\ *\ 0.5f;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ this-\/>mid\ =\ mid;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ glm::vec3\ temp\ =\ maxs\ -\/\ mins;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ largest\_extent\ =\ glm::max(glm::max(temp.x,\ temp.y),\ temp.z);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ largest\_extent\ =\ 2.0f\ /\ largest\_extent;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ need\ to:}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Translate\ -\/mid\ direction}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scale\ down\ by\ 2/largest\ extent\ (handled\ above\ to\ save\ cycles)}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ this-\/>resizeMat\ =\ glm::scale(glm::mat4(1.0f),\ glm::vec3(largest\_extent,\ largest\_extent,\ largest\_extent));}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ this-\/>resizeMat\ =\ this-\/>resizeMat\ *\ glm::translate(glm::mat4(1.0f),\ mid\ *\ -\/1.0f);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ lastly,\ convert\ mid\ from\ obj\ coordinates\ (space)\ to\ world\ coordinates\ (since\ we\ always\ multiply\ by\ our\ resize\ anyways)}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ this-\/>mid\ =\ glm::vec3(this-\/>resizeMat\ *\ glm::vec4(this-\/>mid,\ 1.0));}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\_transform}}(glm::mat4\ matrix)}
+\DoxyCodeLine{00102\ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ this-\/>transformations.push\_back(matrix);}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_ab4acbf895d5a713a249208fe282ce3d0}{add\_solo\_transform}}(glm::mat4\ matrix)}
+\DoxyCodeLine{00112\ \ \ \ \ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ this-\/>solo\_transformations.push\_back(matrix);}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a6e0f5df76266c347c53234d7ccbdde3f}{flush}}()\ }
+\DoxyCodeLine{00120\ \ \ \ \ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ this-\/>transformations.clear();}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ this-\/>solo\_transformations.clear();}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ this-\/>sub\_objs.clear();}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_af59b9a88274d9718e8edc9e1f935fd23}{add\_subobj}}(std::shared\_ptr<Object>\ obj)}
+\DoxyCodeLine{00132\ \ \ \ \ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ this-\/>sub\_objs.push\_back(obj);}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ obj-\/>setParentCenter(shared\_from\_this());}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a94875c5f54d87e783284c63affb68b06}{draw}}(std::shared\_ptr<MatrixStack>);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{/*\ helper\ for\ sending\ top\ of\ the\ matrix\ strack\ to\ GPU\ */}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}\ setModel(\mbox{\hyperlink{classProgram}{Program}}\ \&\ prog,\ std::shared\_ptr<MatrixStack>M)\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ glUniformMatrix4fv(prog.getUniform(\textcolor{stringliteral}{"{}M"{}}),\ 1,\ GL\_FALSE,\ value\_ptr(M-\/>topMatrix()));}
+\DoxyCodeLine{00148\ \ \ \ \};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{/*\ helper\ function\ to\ set\ model\ trasnforms\ */}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ setModel(\mbox{\hyperlink{classProgram}{Program}}\ \&\ curS,\ glm::vec3\ trans,\ \textcolor{keywordtype}{float}\ rotY,\ \textcolor{keywordtype}{float}\ rotX,\ \textcolor{keywordtype}{float}\ sc)\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ glm::mat4\ Trans\ =\ glm::translate(\ glm::mat4(1.0f),\ trans);}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ glm::mat4\ RotX\ =\ glm::rotate(\ glm::mat4(1.0f),\ rotX,\ glm::vec3(1,\ 0,\ 0));}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ glm::mat4\ RotY\ =\ glm::rotate(\ glm::mat4(1.0f),\ rotY,\ glm::vec3(0,\ 1,\ 0));}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ glm::mat4\ ScaleS\ =\ glm::scale(glm::mat4(1.0f),\ glm::vec3(sc));}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ glm::mat4\ ctm\ =\ Trans*RotX*RotY*ScaleS;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ glUniformMatrix4fv(curS.getUniform(\textcolor{stringliteral}{"{}M"{}}),\ 1,\ GL\_FALSE,\ value\_ptr(ctm));}
+\DoxyCodeLine{00158\ \ \ \ \ \};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00161\ \ \ \ \ std::shared\_ptr<Object>\ \mbox{\hyperlink{classObject_af1d1202a01eb04faa00b89a621237cdd}{copy}}()\ }
+\DoxyCodeLine{00162\ \ \ \ \ \{\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ std::shared\_ptr<Object>\ n\ =\ std::make\_shared<Object>(*\textcolor{keyword}{this});\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ n-\/>my\_mesh\ =\ this-\/>my\_mesh.copy();}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ n-\/>solo\_transformations.clear();}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ clone\ copies\ of\ each\ subobject\ into\ the\ new\ object,\ as\ they\ are\ pointer\ based.\ }}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ obj\ :\ this-\/>sub\_objs)}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ n-\/>sub\_objs.push\_back(obj-\/>copy());}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ n-\/>calcResize();}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ n;}
+\DoxyCodeLine{00174\ \ \ \ \ \};}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a7b0249227a712763d10936ead0b6b7d4}{setShader}}(std::shared\_ptr<Program>\ newShader)}
+\DoxyCodeLine{00178\ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ this-\/>shader\ =\ newShader;}
+\DoxyCodeLine{00180\ \ \ \ \ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a7b0ea53220dbf71881336d031235a992}{move\_to}}(std::shared\_ptr<Object>\ o\_obj)}
+\DoxyCodeLine{00185\ \ \ \ \ \{\ \ \ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\_transform}}(translate(}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ glm::mat4(1.0f),\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ o\_obj-\/>getWorldCenterPoint()\ -\/\ this-\/>getWorldCenterPoint()}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a86fb7b563788f7d7589c91f99fe378c2}{move\_to}}(glm::vec3\ v)}
+\DoxyCodeLine{00196\ \ \ \ \ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\_transform}}(translate(}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ glm::mat4(1.0f),}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ v\ -\/\ this-\/>\mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{getWorldCenterPoint}}()}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00201\ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00206\ \ \ \ \ glm::vec3\ \mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{getWorldCenterPoint}}();}
+\DoxyCodeLine{00207\ \ \ \ }
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classObject_a2ecedd20173af63984395821bd2a6a6d}{printCenter}}()}
+\DoxyCodeLine{00213\ \ \ \ \ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ std::cout\ <<\ glm::to\_string(this-\/>\mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{getWorldCenterPoint}}())\ <<\ std::endl;}
+\DoxyCodeLine{00215\ \ \ \ \ \}}
+\DoxyCodeLine{00216\ \};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

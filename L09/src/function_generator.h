@@ -17,7 +17,8 @@ void funcToObj(
     const float xmin, 
     const float xmax, 
     const float ymin, 
-    const float ymax
+    const float ymax,
+    const std::function<bool (float, float)> = [](float x, float y) {return true;}
 );
 
 #endif 

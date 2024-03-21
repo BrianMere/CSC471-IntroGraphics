@@ -93,6 +93,17 @@ public:
     }
 
     /**
+     * Sets the camera rotation to a set value
+     * Useful for setting something given a known normal vector
+    */
+    inline void setRotation(glm::vec3 newNorm)
+    {
+      this->cameraRot.x = glm::length(newNorm);
+      this->cameraRot.y = atan(-1 * newNorm.z / newNorm.x);
+      this->cameraRot.z = atan(newNorm.y / sqrt(newNorm.x * newNorm.x + newNorm.z * newNorm.z));
+    }
+
+    /**
      * Print out the contents of this camera's data
     */
     std::string toString() 

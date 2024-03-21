@@ -1,0 +1,108 @@
+\doxysection{Texture\+Object Class Reference}
+\hypertarget{classTextureObject}{}\label{classTextureObject}\index{TextureObject@{TextureObject}}
+Inheritance diagram for Texture\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classTextureObject}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classTextureObject_a1ecc091fdb66e2a7b3c086e20e67f765}\label{classTextureObject_a1ecc091fdb66e2a7b3c086e20e67f765} 
+{\bfseries Texture\+Object} (const std\+::string \&resource\+Directory, const std\+::string \&filename, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader, const std\+::string \&texture\+Picture\+Location)
+\item 
+\Hypertarget{classTextureObject_a021f1c9e1326a5eb646b08e280c7f6cf}\label{classTextureObject_a021f1c9e1326a5eb646b08e280c7f6cf} 
+{\bfseries Texture\+Object} (const \mbox{\hyperlink{classObject}{Object}} obj, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTexture}{Texture}} $>$ tex)
+\item 
+void \mbox{\hyperlink{classTextureObject_a842efe9b573450851f98370432a8be8d}{draw}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$) override
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ \mbox{\hyperlink{classTextureObject_ada3d59836e85c321b1eb26de4dfc0853}{copy}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} (const std\+::string \&resource\+Directory, const std\+::string \&filename, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader)
+\item 
+void \mbox{\hyperlink{classObject_a4260041188d83812b924434c8b0300b9}{set\+Parent\+Center}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o)
+\item 
+void \mbox{\hyperlink{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}{calc\+Resize}} ()
+\item 
+void \mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_ab4acbf895d5a713a249208fe282ce3d0}{add\+\_\+solo\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_a6e0f5df76266c347c53234d7ccbdde3f}{flush}} ()
+\item 
+void \mbox{\hyperlink{classObject_af59b9a88274d9718e8edc9e1f935fd23}{add\+\_\+subobj}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ obj)
+\item 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&prog, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$M)
+\item 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&curS, glm\+::vec3 trans, float rotY, float rotX, float sc)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ \mbox{\hyperlink{classObject_af1d1202a01eb04faa00b89a621237cdd}{copy}} ()
+\item 
+void \mbox{\hyperlink{classObject_a7b0249227a712763d10936ead0b6b7d4}{set\+Shader}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ new\+Shader)
+\item 
+void \mbox{\hyperlink{classObject_a7b0ea53220dbf71881336d031235a992}{move\+\_\+to}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o\+\_\+obj)
+\item 
+void \mbox{\hyperlink{classObject_a86fb7b563788f7d7589c91f99fe378c2}{move\+\_\+to}} (glm\+::vec3 v)
+\item 
+glm\+::vec3 \mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{get\+World\+Center\+Point}} ()
+\item 
+void \mbox{\hyperlink{classObject_a2ecedd20173af63984395821bd2a6a6d}{print\+Center}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classTextureObject_aa1fdd730245ebcbd062ea7a32a5bab0c}\label{classTextureObject_aa1fdd730245ebcbd062ea7a32a5bab0c} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTexture}{Texture}} $>$ {\bfseries my\+Tex}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMeshContainer}{Mesh\+Container}} {\bfseries my\+\_\+mesh}
+\item 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries transformations}
+\item 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries solo\+\_\+transformations}
+\item 
+glm\+::mat4 {\bfseries resize\+Mat}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries shader}
+\item 
+glm\+::vec3 {\bfseries mid}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ {\bfseries parent\+Center}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries sub\+\_\+objs}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classTextureObject_ada3d59836e85c321b1eb26de4dfc0853}\label{classTextureObject_ada3d59836e85c321b1eb26de4dfc0853} 
+\index{TextureObject@{TextureObject}!copy@{copy}}
+\index{copy@{copy}!TextureObject@{TextureObject}}
+\doxysubsubsection{\texorpdfstring{copy()}{copy()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ Texture\+Object\+::copy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Clone this \doxylink{classObject}{Object} into new data. \Hypertarget{classTextureObject_a842efe9b573450851f98370432a8be8d}\label{classTextureObject_a842efe9b573450851f98370432a8be8d} 
+\index{TextureObject@{TextureObject}!draw@{draw}}
+\index{draw@{draw}!TextureObject@{TextureObject}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Texture\+Object\+::draw (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Note, this method uses the shader\textquotesingle{}s "{}\+Texture0"{} uniform parameter. Make sure you\textquotesingle{}ve set this up correctly. 
+
+Reimplemented from \mbox{\hyperlink{classObject_a94875c5f54d87e783284c63affb68b06}{Object}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Texture\+Object.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Texture\+Object.\+cpp\end{DoxyCompactItemize}

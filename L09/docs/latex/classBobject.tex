@@ -1,0 +1,76 @@
+\doxysection{Bobject\texorpdfstring{$<$}{<} Args\+Prime \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classBobject}{}\label{classBobject}\index{Bobject$<$ ArgsPrime $>$@{Bobject$<$ ArgsPrime $>$}}
+
+
+{\ttfamily \#include $<$Bobject.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBobject_a2df8e70d798652498cea3ab48a5cbf87}\label{classBobject_a2df8e70d798652498cea3ab48a5cbf87} 
+{\bfseries Bobject} (const std\+::string \&resource\+Dir, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog)
+\item 
+virtual void \mbox{\hyperlink{classBobject_ad7ce3e5da3513b3b780104252f471674}{init}} (Args\+Prime... args)=0
+\item 
+virtual void \mbox{\hyperlink{classBobject_a253bd2daf40edfd0bbb501cbe1344c51}{init\+\_\+transforms}} ()=0
+\item 
+\Hypertarget{classBobject_ae645b6beeb42f98f059cdcdf7c9b05be}\label{classBobject_ae645b6beeb42f98f059cdcdf7c9b05be} 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\void {\bfseries Call\+Method\+On\+All\+Objs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\item 
+\Hypertarget{classBobject_a03f3db1b3da1d127697dfd98bec3e3be}\label{classBobject_a03f3db1b3da1d127697dfd98bec3e3be} 
+{\footnotesize template$<$typename T , typename... Args$>$ }\\void {\bfseries Call\+Method\+On\+All\+Texobjs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBobject_abbe4f6b0700c13c08b7429588ce1ec85}\label{classBobject_abbe4f6b0700c13c08b7429588ce1ec85} 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBObject}{FBObject}} $>$ $>$ {\bfseries fbobjs}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBobject_aca27913e4aa2a0fdad368ebe3221e49e}\label{classBobject_aca27913e4aa2a0fdad368ebe3221e49e} 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries objs}
+\item 
+\Hypertarget{classBobject_ab34d7411065f8b3b1a318fdfd4cec9a0}\label{classBobject_ab34d7411065f8b3b1a318fdfd4cec9a0} 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ $>$ {\bfseries texobjs}
+\item 
+\Hypertarget{classBobject_a6cab58e690bb150ee1693d034c155a1f}\label{classBobject_a6cab58e690bb150ee1693d034c155a1f} 
+std\+::string {\bfseries resource\+Dir}
+\item 
+\Hypertarget{classBobject_a9708260a5f536aa83122b0d5b9f8f143}\label{classBobject_a9708260a5f536aa83122b0d5b9f8f143} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries prog}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename... Args\+Prime$>$\newline
+class Bobject$<$ Args\+Prime $>$}
+Defines a bucket object, hence the name. The template Args\+Prime defines the parameters needed for the init virtual function which gets called on construction. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classBobject_ad7ce3e5da3513b3b780104252f471674}\label{classBobject_ad7ce3e5da3513b3b780104252f471674} 
+\index{Bobject$<$ ArgsPrime $>$@{Bobject$<$ ArgsPrime $>$}!init@{init}}
+\index{init@{init}!Bobject$<$ ArgsPrime $>$@{Bobject$<$ ArgsPrime $>$}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily template$<$typename... Args\+Prime$>$ \\
+virtual void \mbox{\hyperlink{classBobject}{Bobject}}$<$ Args\+Prime $>$\+::init (\begin{DoxyParamCaption}\item[{Args\+Prime...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Initialize your files and objects in this-\/\texorpdfstring{$>$}{>}objs here...
+
+Arbitrary arguments are allowed here, \Hypertarget{classBobject_a253bd2daf40edfd0bbb501cbe1344c51}\label{classBobject_a253bd2daf40edfd0bbb501cbe1344c51} 
+\index{Bobject$<$ ArgsPrime $>$@{Bobject$<$ ArgsPrime $>$}!init\_transforms@{init\_transforms}}
+\index{init\_transforms@{init\_transforms}!Bobject$<$ ArgsPrime $>$@{Bobject$<$ ArgsPrime $>$}}
+\doxysubsubsection{\texorpdfstring{init\_transforms()}{init\_transforms()}}
+{\footnotesize\ttfamily template$<$typename... Args\+Prime$>$ \\
+virtual void \mbox{\hyperlink{classBobject}{Bobject}}$<$ Args\+Prime $>$\+::init\+\_\+transforms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Initialize your transforms for the sake of rendering. 
+
+Implemented in \mbox{\hyperlink{classPortalObj_aed68dc432ea938846a5a96f8e38f5a69}{Portal\+Obj}}, and \mbox{\hyperlink{classVectorObj_aa055f5c854d210a9be2973e0a78d974f}{Vector\+Obj}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Bobject.\+h\end{DoxyCompactItemize}

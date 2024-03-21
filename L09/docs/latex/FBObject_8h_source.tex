@@ -1,0 +1,140 @@
+\doxysection{FBObject.\+h}
+\hypertarget{FBObject_8h_source}{}\label{FBObject_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/FBObject.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/FBObject.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ FBO\_OBJ\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ FBO\_OBJ\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}TextureObject.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}FBO.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classFBObject}{FBObject}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classObject}{Object}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00014\ \ \ \ \ std::shared\_ptr<FBO>\ myFBO;}
+\DoxyCodeLine{00015\ \ \ \ \ glm::vec3\ normalVector;}
+\DoxyCodeLine{00016\ \ \ \ \ glm::vec3\ startingPoint;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ std::shared\_ptr<MatrixStack>\ prevView;}
+\DoxyCodeLine{00019\ \ \ \ \ std::shared\_ptr<MatrixStack>\ prevModel;}
+\DoxyCodeLine{00020\ \ \ \ \ std::shared\_ptr<Program>\ fboShader;\ \textcolor{comment}{//\ you\ want\ the\ Object\ to\ have\ the\ texture\ shader,\ not\ this\ shader...}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classFBObject}{FBObject}}(}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&resourceDirectory,\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&filename,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ std::shared\_ptr<Program>\ shader,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ std::shared\_ptr<Program>\ fboShader,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isDepth,\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ width,\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ height}
+\DoxyCodeLine{00030\ \ \ \ \ )\ :\ \mbox{\hyperlink{classObject}{Object}}(resourceDirectory,\ filename,\ shader),}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ fboShader(fboShader)}
+\DoxyCodeLine{00032\ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ this-\/>myFBO\ =\ std::make\_shared<FBO>(isDepth,width,height);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ normalVector\ =\ glm::vec3(0,0,1);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ startingPoint\ =\ glm::vec3(0,0,0);}
+\DoxyCodeLine{00036\ \ \ \ \ \};}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classFBObject}{FBObject}}(}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classObject}{Object}}\ obj,\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<FBO>\ i\_FBO}
+\DoxyCodeLine{00040\ \ \ \ \ )\ :}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classObject}{Object}}(obj),\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ myFBO(i\_FBO),}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ normalVector(0.0,0.0,1.0),}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ startingPoint(0,0,0)}
+\DoxyCodeLine{00045\ \ \ \ \ \{\};}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classFBObject}{\string~FBObject}}()\ \{\};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBObject_a83cdc35e7c3a23e42b0c4af9171b3f1b}{update}}(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height)}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ this-\/>myFBO-\/>init(width,\ height);}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBObject_a4fea46f7fcacd2145b66c5c876bae370}{draw}}(std::shared\_ptr<MatrixStack>)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ std::shared\_ptr<FBObject>\ \mbox{\hyperlink{classFBObject_a8c4a3cbfcc6ee5ed7e2e68f40faebf4d}{copy}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBObject_a34172a50324917470d2a861a9f331548}{renderFBO}}(}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ std::shared\_ptr<MatrixStack>\ Model,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ std::vector<std::shared\_ptr<Program>>\ listOfShadersToUpdate}
+\DoxyCodeLine{00072\ \ \ \ \ )}
+\DoxyCodeLine{00073\ \ \ \ \ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ this-\/>shader-\/>bind();}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classFBObject_a4fea46f7fcacd2145b66c5c876bae370}{draw}}(Model);}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ this-\/>shader-\/>bind();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(this-\/>prevView\ !=\ NULL\ \&\&\ this-\/>prevModel\ !=\ NULL)}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ shader\ :\ listOfShadersToUpdate)}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shader-\/>bind();}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHECKED\_GL\_CALL(glUniformMatrix4fv(shader-\/>getUniform(\textcolor{stringliteral}{"{}V"{}}),\ 1,\ GL\_FALSE,\ glm::value\_ptr(this-\/>prevView-\/>topMatrix())));}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHECKED\_GL\_CALL(glUniformMatrix4fv(shader-\/>getUniform(\textcolor{stringliteral}{"{}M"{}}),\ 1,\ GL\_FALSE,\ glm::value\_ptr(this-\/>prevModel-\/>topMatrix())));}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shader-\/>unbind();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>prevView\ =\ NULL;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>prevModel\ =\ NULL;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBObject_a9904ea6393fd0772414b8a6cd9b41e56}{setupFBO}}(}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ std::shared\_ptr<MatrixStack>\ prevView,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ std::shared\_ptr<MatrixStack>\ Model,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ std::vector<std::shared\_ptr<Program>>\ listOfShadersToUpdate}
+\DoxyCodeLine{00099\ \ \ \ \ )}
+\DoxyCodeLine{00100\ \ \ \ \ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ this-\/>myFBO-\/>ProcessDrawTex(this-\/>shader);}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMatrixStack}{MatrixStack}}\ M\ =\ \mbox{\hyperlink{classMatrixStack}{MatrixStack}}();}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMatrixStack}{MatrixStack}}\ V\ =\ \mbox{\hyperlink{classMatrixStack}{MatrixStack}}();}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ M.loadIdentity();}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ V.loadIdentity();}
+\DoxyCodeLine{00107\ \ \ \ \ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCamera}{Camera}}\ c\ =\ \mbox{\hyperlink{classCamera}{Camera}}();}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ the\ model\ matrix\ for\ this\ FBObject...}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ this-\/>transformations.rbegin();\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ it\ !=\ this-\/>transformations.rend();\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ ++it}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ M.multMatrix(*it);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ this-\/>solo\_transformations.rbegin();\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ it\ !=\ this-\/>solo\_transformations.rend();\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ ++it}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ M.multMatrix(*it);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{classCamera_a4d2c15659569234a37b4a957d877a217}{setPosition}}(M.topMatrix()\ *\ glm::vec4(this-\/>startingPoint,\ 1));}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{classCamera_adc3284d29a2a6d71bebe2d0f205db47b}{setRotation}}(glm::vec3(M.topMatrix()\ *\ glm::vec4(this-\/>normalVector,\ 1.0)));}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ V.multMatrix(c.\mbox{\hyperlink{classCamera_a106cea54efcfe579a08fcd1f204f1eb9}{getLookAtMatrix}}());}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ this-\/>prevModel\ =\ Model;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ this-\/>prevView\ =\ prevView;}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ shader\ :\ listOfShadersToUpdate)}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ shader-\/>bind();}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHECKED\_GL\_CALL(glUniformMatrix4fv(shader-\/>getUniform(\textcolor{stringliteral}{"{}V"{}}),\ 1,\ GL\_FALSE,\ glm::value\_ptr(V.topMatrix())));}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHECKED\_GL\_CALL(glUniformMatrix4fv(shader-\/>getUniform(\textcolor{stringliteral}{"{}M"{}}),\ 1,\ GL\_FALSE,\ glm::value\_ptr(M.topMatrix())));}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ shader-\/>unbind();}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00140\ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ writeImageFile(\textcolor{keyword}{const}\ std::string\ filename)}
+\DoxyCodeLine{00143\ \ \ \ \ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ this-\/>myFBO-\/>writeImageFile(filename);}
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ \};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,28 +1,41 @@
-# Explanation of Scene
+# Overview/Introduction
 
-This idea actually came up from one of my math professors here at Cal Poly.
+Welcome to my brief demonstration on what I've done for my final project in CSC 471, Winter 2024. 
 
-The story is of a people called the "vector people". They are but an ordinary group of fellows like you and I, only except they merely live in the second dimension. They can live, breathe, eat, and talk like us, but they can never fully comprehend the 3rd dimension like us humans. Only with the power of mathematics, and the power of the lifting matrix, can they begin to comprehend the beatuy of higher dimensions. 
+I've done a project here on the idea of Portals, from the hit game Portal made by Valve Software. I wanted 
+to recreate the look and feel of the portals as much as I could within the given time limits.
 
-I chose this scene because it really does express my love for mathematics. There's always a hidden beauty behind it that people seem to misconstrue, likely because they find math boring or very tedious in terms of calculation. The more simpler ideas that come from mathematics tend to be the ones that are the most beautiful. Like with the vector people, there's more than just meets what we see and observe. In our eyes, there could be some unseeable 4th dimension that we just can't comprehend. But that doesn't stop us from using mathematics to try to understand it better. 
+My project requirements that I wanted to hit include:
+- Recreate the shimmering particle blue/orange particle effect on the border of the portal
+- Recreate the "look-through" effect of the portals
+- Create the physics/collision effects of going through portals 
+- Create a level showing off these portal effects
 
-# Complexity of the Scene
+Looking back at this, this was way, way too much to ask for in a week. But I did get some things done...
 
-While this scene is pretty bare bones in terms of presentation, I actually had to do a lot in making many of the materials:
-- The "dummy.obj" was my multimesh object, which I had to support drawing
-- The "graph.obj" that gets generated on a run is a custom obj designed by yours truly. It *actually* generates the two dimensional surface $f(x,y)$ given in it's construction call. The one demoed for you is the function $f(x,y) = 10e^{-|x| - |y|}\sin(x)\sin(y)$, which is constructed by sampling points in such a surface and creating vertices/faces from it. 
-- The "plane.obj" is also constructed by just using a simple $f(x,y) = 0$ surface.
+# Results
 
-I could've actually constructed some other objects, for instance a "vector.obj" was in the works where it's composed of a cylinder (the surface $z^2 + x^2 = 0$) and a right-angle cone ($z = x^2 + y^2$) on one end of the cylinder; however, this was scrapped mid development. 
+While I didn't get my final project working in time up to how I wanted to, I'm really proud as to how organized and 
+readible my code is. Feel free to look around the classes I've made on this webpage to see how I organized things like 
+the `MatrixStack`, as well as shaders and whatnot. 
 
-Another thing is that I also wanted to try automating the matrix stack for related animations. Hence, the `MeshContainer.h` and `Object.h` files automate both the loading of objs as well as the placing and transforming of components. Things included in these files include:
-- Having multiples of the same object within the same scene, with choice of importing or removing imported transformations
-- Importing transformations from one object to another.
-- Copying an objects transformations
-- ... 
+![Portals With Particles!](./docs/images/image.png)
 
-In short, the idea of the matrix stack is actually contained in the `Object.h` file, and I had to make sure that that worked on a small group of objects before building my scene. 
+Furthermore, as shown above, I've gotten particles working! Specifically, I've helped developed a particle-field definition for 
+what forces particles experience relative to some origin. 
 
-# Reflection
+Lastly, I've gotten FBO's, developed for use for the rendered textures on top of the portals, implemented, but not working. This
+was the thing that broke my program, as I had extreme difficulties importing a known working version of FBOs into my 
+"classified" graphics program. 
 
-Looking for .objs, I noticed that there definitely wasn't a set standard. I needed some cloud.objs and looking for specifically low poly ones to save on memory was a bit hard. Sometimes certain objs aren't in the right format, or aren't quite exactly what you are looking for in terms of design. 
+A final demo recording of the project is shown below:
+
+[Demo Video](https://youtu.be/C36byGD5ZLc)
+
+
+# More References
+
+I took notes on what references I used to begin looking at ideas for this project. If you're curious, I would 
+recommend taking a look at my notes page on:
+
+https://obsidian-school-notes.vercel.app/year3/winter2024/csc-471-comp-graphics/final-project-sketch/

@@ -1,0 +1,43 @@
+\doxysection{GLSL.\+h}
+\hypertarget{GLSL_8h_source}{}\label{GLSL_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/GLSL.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/GLSL.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ \ \ \ Many\ useful\ helper\ functions\ for\ GLSL\ shaders\ -\/\ gleaned\ from\ various\ sources\ including\ orange\ book}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ \ \ \ Created\ by\ zwood\ on\ 2/21/10.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ \ \ \ Modified\ by\ sueda\ 10/15/15.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ LAB471\_GLSL\_H\_INCLUDED}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ LAB471\_GLSL\_H\_INCLUDED}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }GLSL}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ printOpenGLErrors(\textcolor{keywordtype}{char}\ \textcolor{keyword}{const}\ *\ \textcolor{keyword}{const}\ Function,\ \textcolor{keywordtype}{char}\ \textcolor{keyword}{const}\ *\ \textcolor{keyword}{const}\ File,\ \textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ Line);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ checkError(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str\ =\ 0);}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ printProgramInfoLog(GLuint\ program);}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ printShaderInfoLog(GLuint\ shader);}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ checkVersion();}
+\DoxyCodeLine{00023\ \ \ \ \ GLint\ getAttribLocation(\textcolor{keyword}{const}\ GLuint\ program,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ varname[],\ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00024\ \ \ \ \ GLint\ getUniformLocation(\textcolor{keyword}{const}\ GLuint\ program,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ varname[],\ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ enableVertexAttribArray(\textcolor{keyword}{const}\ GLint\ handle);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ disableVertexAttribArray(\textcolor{keyword}{const}\ GLint\ handle);}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ vertexAttribPointer(\textcolor{keyword}{const}\ GLint\ handle,\ GLint\ size,\ GLenum\ type,\ GLboolean\ normalized,\ GLsizei\ stride,\ \textcolor{keyword}{const}\ GLvoid\ *pointer);}
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ DISABLE\_OPENGL\_ERROR\_CHECKS}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ CHECKED\_GL\_CALL(x)\ do\ \{\ GLSL::printOpenGLErrors("{}\{\{BEFORE\}\}\ "{}\#x,\ \_\_FILE\_\_,\ \_\_LINE\_\_);\ (x);\ GLSL::printOpenGLErrors(\#x,\ \_\_FILE\_\_,\ \_\_LINE\_\_);\ \}\ while\ (0)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ CHECKED\_GL\_CALL(x)\ (x)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LAB471\_GLSL\_H\_INCLUDED}}
+
+\end{DoxyCode}

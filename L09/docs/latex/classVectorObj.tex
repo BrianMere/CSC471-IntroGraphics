@@ -1,0 +1,75 @@
+\doxysection{Vector\+Obj Class Reference}
+\hypertarget{classVectorObj}{}\label{classVectorObj}\index{VectorObj@{VectorObj}}
+
+
+{\ttfamily \#include $<$Vector\+Obj.\+h$>$}
+
+Inheritance diagram for Vector\+Obj\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classVectorObj}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classVectorObj_afb9249dbda65259322569b8c2bdf293b}\label{classVectorObj_afb9249dbda65259322569b8c2bdf293b} 
+{\bfseries Vector\+Obj} (const std\+::string \&resource\+Dir, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog)
+\item 
+\Hypertarget{classVectorObj_a5aad122e80f4ba875073ed32f73b0a5c}\label{classVectorObj_a5aad122e80f4ba875073ed32f73b0a5c} 
+void {\bfseries init} () override
+\item 
+void \mbox{\hyperlink{classVectorObj_aa055f5c854d210a9be2973e0a78d974f}{init\+\_\+transforms}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Bobject} (const std\+::string \&resource\+Dir, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog)
+\item 
+virtual void \mbox{\hyperlink{classBobject_ad7ce3e5da3513b3b780104252f471674}{init}} (Args\+Prime... args)=0
+\item 
+void {\bfseries Call\+Method\+On\+All\+Objs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\item 
+void {\bfseries Call\+Method\+On\+All\+Texobjs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBObject}{FBObject}} $>$ $>$ {\bfseries fbobjs}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries objs}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ $>$ {\bfseries texobjs}
+\item 
+std\+::string {\bfseries resource\+Dir}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries prog}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+My own implementation of a vector object in open\+GL.
+
+This object contains the cylinder part. The other hiearchial parts are the cylinder part. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classVectorObj_aa055f5c854d210a9be2973e0a78d974f}\label{classVectorObj_aa055f5c854d210a9be2973e0a78d974f} 
+\index{VectorObj@{VectorObj}!init\_transforms@{init\_transforms}}
+\index{init\_transforms@{init\_transforms}!VectorObj@{VectorObj}}
+\doxysubsubsection{\texorpdfstring{init\_transforms()}{init\_transforms()}}
+{\footnotesize\ttfamily void Vector\+Obj\+::init\+\_\+transforms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Initialize your transforms for the sake of rendering. 
+
+Implements \mbox{\hyperlink{classBobject_a253bd2daf40edfd0bbb501cbe1344c51}{Bobject$<$$>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Vector\+Obj.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Vector\+Obj.\+cpp\end{DoxyCompactItemize}

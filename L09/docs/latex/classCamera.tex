@@ -1,0 +1,101 @@
+\doxysection{Camera Class Reference}
+\hypertarget{classCamera}{}\label{classCamera}\index{Camera@{Camera}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCamera_aed5fec1e22fbdf05655e0f9c0d80363d}\label{classCamera_aed5fec1e22fbdf05655e0f9c0d80363d} 
+{\bfseries Camera} (glm\+::vec3 initial\+Position, glm\+::vec3 initial\+Rotation, float rot\+Speed, float trans\+Speed, float neck\+Rads)
+\item 
+void \mbox{\hyperlink{classCamera_a38c93f4b605889e185fff19c24ce8684}{recalc\+View\+Vector}} ()
+\item 
+void \mbox{\hyperlink{classCamera_a3c749083b1e54b70edf2e24a2e0d712c}{rotate\+Camera}} (double deltaX, double deltaY)
+\item 
+void \mbox{\hyperlink{classCamera_ab3e70a6bd2c3f641afc2cbbf0d506243}{translate\+Camera}} (int deltaW, int deltaD)
+\item 
+glm\+::mat4 \mbox{\hyperlink{classCamera_a106cea54efcfe579a08fcd1f204f1eb9}{get\+Look\+At\+Matrix}} ()
+\item 
+void \mbox{\hyperlink{classCamera_aee8027b5309a5dc77db956d27924c387}{reset\+Camera}} ()
+\item 
+glm\+::vec3 \mbox{\hyperlink{classCamera_a520c5a7413b3e704f2f442288db17bcf}{get\+Position}} ()
+\item 
+void \mbox{\hyperlink{classCamera_a4d2c15659569234a37b4a957d877a217}{set\+Position}} (glm\+::vec3 new\+Pos)
+\item 
+void \mbox{\hyperlink{classCamera_adc3284d29a2a6d71bebe2d0f205db47b}{set\+Rotation}} (glm\+::vec3 new\+Norm)
+\item 
+std\+::string \mbox{\hyperlink{classCamera_a16c1a7f57530a37b4f30aee4f62aaab5}{to\+String}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCamera_a17f21c17d75e6aa2cba48d4358f350dd}\label{classCamera_a17f21c17d75e6aa2cba48d4358f350dd} 
+float {\bfseries rot\+Speed}
+\item 
+\Hypertarget{classCamera_aa6e80e6894c077d56cf4e2e583cbefb2}\label{classCamera_aa6e80e6894c077d56cf4e2e583cbefb2} 
+float {\bfseries trans\+Speed}
+\item 
+\Hypertarget{classCamera_aabb48167df2d634b88b336b838ad7712}\label{classCamera_aabb48167df2d634b88b336b838ad7712} 
+float {\bfseries neck\+Rads}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCamera_a106cea54efcfe579a08fcd1f204f1eb9}\label{classCamera_a106cea54efcfe579a08fcd1f204f1eb9} 
+\index{Camera@{Camera}!getLookAtMatrix@{getLookAtMatrix}}
+\index{getLookAtMatrix@{getLookAtMatrix}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{getLookAtMatrix()}{getLookAtMatrix()}}
+{\footnotesize\ttfamily glm\+::mat4 Camera\+::get\+Look\+At\+Matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the look\+At Matrix for this \doxylink{classCamera}{Camera} \Hypertarget{classCamera_a520c5a7413b3e704f2f442288db17bcf}\label{classCamera_a520c5a7413b3e704f2f442288db17bcf} 
+\index{Camera@{Camera}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily glm\+::vec3 Camera\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Getter for camera position in (x,y,z) \Hypertarget{classCamera_a38c93f4b605889e185fff19c24ce8684}\label{classCamera_a38c93f4b605889e185fff19c24ce8684} 
+\index{Camera@{Camera}!recalcViewVector@{recalcViewVector}}
+\index{recalcViewVector@{recalcViewVector}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{recalcViewVector()}{recalcViewVector()}}
+{\footnotesize\ttfamily void Camera\+::recalc\+View\+Vector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Recalculates the view vector of this object \Hypertarget{classCamera_aee8027b5309a5dc77db956d27924c387}\label{classCamera_aee8027b5309a5dc77db956d27924c387} 
+\index{Camera@{Camera}!resetCamera@{resetCamera}}
+\index{resetCamera@{resetCamera}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{resetCamera()}{resetCamera()}}
+{\footnotesize\ttfamily void Camera\+::reset\+Camera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Reset camera to 0\textquotesingle{}s and default values \Hypertarget{classCamera_a3c749083b1e54b70edf2e24a2e0d712c}\label{classCamera_a3c749083b1e54b70edf2e24a2e0d712c} 
+\index{Camera@{Camera}!rotateCamera@{rotateCamera}}
+\index{rotateCamera@{rotateCamera}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{rotateCamera()}{rotateCamera()}}
+{\footnotesize\ttfamily void Camera\+::rotate\+Camera (\begin{DoxyParamCaption}\item[{double}]{deltaX,  }\item[{double}]{deltaY }\end{DoxyParamCaption})}
+
+Calculates and applies how much to rotate based on screen input, delta is radians per div \Hypertarget{classCamera_a4d2c15659569234a37b4a957d877a217}\label{classCamera_a4d2c15659569234a37b4a957d877a217} 
+\index{Camera@{Camera}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily void Camera\+::set\+Position (\begin{DoxyParamCaption}\item[{glm\+::vec3}]{new\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the camera position to a set value. Useful for teleporting or otherwise strictly controlling the camera. \Hypertarget{classCamera_adc3284d29a2a6d71bebe2d0f205db47b}\label{classCamera_adc3284d29a2a6d71bebe2d0f205db47b} 
+\index{Camera@{Camera}!setRotation@{setRotation}}
+\index{setRotation@{setRotation}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{setRotation()}{setRotation()}}
+{\footnotesize\ttfamily void Camera\+::set\+Rotation (\begin{DoxyParamCaption}\item[{glm\+::vec3}]{new\+Norm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the camera rotation to a set value Useful for setting something given a known normal vector \Hypertarget{classCamera_a16c1a7f57530a37b4f30aee4f62aaab5}\label{classCamera_a16c1a7f57530a37b4f30aee4f62aaab5} 
+\index{Camera@{Camera}!toString@{toString}}
+\index{toString@{toString}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Camera\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Print out the contents of this camera\textquotesingle{}s data \Hypertarget{classCamera_ab3e70a6bd2c3f641afc2cbbf0d506243}\label{classCamera_ab3e70a6bd2c3f641afc2cbbf0d506243} 
+\index{Camera@{Camera}!translateCamera@{translateCamera}}
+\index{translateCamera@{translateCamera}!Camera@{Camera}}
+\doxysubsubsection{\texorpdfstring{translateCamera()}{translateCamera()}}
+{\footnotesize\ttfamily void Camera\+::translate\+Camera (\begin{DoxyParamCaption}\item[{int}]{deltaW,  }\item[{int}]{deltaD }\end{DoxyParamCaption})}
+
+Translate our camera object in the camera\textquotesingle{}s relative forward position (dollying) via deltaW, and strafe in the positive deltaD direction. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Camera.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Camera.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,100 @@
+\doxysection{Portal\+Obj Class Reference}
+\hypertarget{classPortalObj}{}\label{classPortalObj}\index{PortalObj@{PortalObj}}
+
+
+{\ttfamily \#include $<$Portal\+Object.\+h$>$}
+
+Inheritance diagram for Portal\+Obj\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPortalObj}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPortalObj_a068ae9cf46e0f1319309ba7f1932b92a}\label{classPortalObj_a068ae9cf46e0f1319309ba7f1932b92a} 
+{\bfseries Portal\+Obj} (const std\+::string \&resource\+Dir, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog, glm\+::vec3 color)
+\item 
+\Hypertarget{classPortalObj_aab0194e7860dffa959bc8760fcb8917d}\label{classPortalObj_aab0194e7860dffa959bc8760fcb8917d} 
+void {\bfseries init} () override
+\item 
+void \mbox{\hyperlink{classPortalObj_aed68dc432ea938846a5a96f8e38f5a69}{init\+\_\+transforms}} () override
+\item 
+void \mbox{\hyperlink{classPortalObj_a1cc5c1ff7e13d73bf4960af4ce1550f6}{draw\+Me}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Bobject} (const std\+::string \&resource\+Dir, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog)
+\item 
+virtual void \mbox{\hyperlink{classBobject_ad7ce3e5da3513b3b780104252f471674}{init}} (Args\+Prime... args)=0
+\item 
+void {\bfseries Call\+Method\+On\+All\+Objs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\item 
+void {\bfseries Call\+Method\+On\+All\+Texobjs} (void(T\+::\texorpdfstring{$\ast$}{*}method)(Args...), Args... args)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPortalObj_a89b738c208293b1b818b66e78f9c9b6d}\label{classPortalObj_a89b738c208293b1b818b66e78f9c9b6d} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries part\+Prog}
+\item 
+\Hypertarget{classPortalObj_ad8488dd974913acad5a5ad005803fe01}\label{classPortalObj_ad8488dd974913acad5a5ad005803fe01} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries pass\+Prog}
+\item 
+\Hypertarget{classPortalObj_ac949b20b34594012ca2ad652c49e07c3}\label{classPortalObj_ac949b20b34594012ca2ad652c49e07c3} 
+\mbox{\hyperlink{classparticleSys}{particle\+Sys}} \texorpdfstring{$\ast$}{*} {\bfseries the\+Part\+System}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBObject}{FBObject}} $>$ $>$ {\bfseries fbobjs}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classBobject}{Bobject$<$$>$}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries objs}
+\item 
+std\+::map$<$ std\+::string, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ $>$ {\bfseries texobjs}
+\item 
+std\+::string {\bfseries resource\+Dir}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries prog}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+My own collective implementation of a portal object!
+
+This object includes\+:
+\begin{DoxyItemize}
+\item The portal effects (particles)
+\item The portal FBOs and Math to calculate them...
+\item Misc. static textured objs 
+\end{DoxyItemize}
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classPortalObj_a1cc5c1ff7e13d73bf4960af4ce1550f6}\label{classPortalObj_a1cc5c1ff7e13d73bf4960af4ce1550f6} 
+\index{PortalObj@{PortalObj}!drawMe@{drawMe}}
+\index{drawMe@{drawMe}!PortalObj@{PortalObj}}
+\doxysubsubsection{\texorpdfstring{drawMe()}{drawMe()}}
+{\footnotesize\ttfamily void Portal\+Obj\+::draw\+Me (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model }\end{DoxyParamCaption})}
+
+Draw this object, with whatever texture is in the \doxylink{classFBO}{FBO} currently. \Hypertarget{classPortalObj_aed68dc432ea938846a5a96f8e38f5a69}\label{classPortalObj_aed68dc432ea938846a5a96f8e38f5a69} 
+\index{PortalObj@{PortalObj}!init\_transforms@{init\_transforms}}
+\index{init\_transforms@{init\_transforms}!PortalObj@{PortalObj}}
+\doxysubsubsection{\texorpdfstring{init\_transforms()}{init\_transforms()}}
+{\footnotesize\ttfamily void Portal\+Obj\+::init\+\_\+transforms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Initialize your transforms for the sake of rendering. 
+
+Implements \mbox{\hyperlink{classBobject_a253bd2daf40edfd0bbb501cbe1344c51}{Bobject$<$$>$}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Portal\+Object.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Portal\+Object.\+cpp\end{DoxyCompactItemize}

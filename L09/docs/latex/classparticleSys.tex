@@ -1,0 +1,69 @@
+\doxysection{particle\+Sys Class Reference}
+\hypertarget{classparticleSys}{}\label{classparticleSys}\index{particleSys@{particleSys}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classparticleSys_a0a98527846e1143e78924fa35f86a43a}\label{classparticleSys_a0a98527846e1143e78924fa35f86a43a} 
+void {\bfseries draw\+Me} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ prog)
+\item 
+\Hypertarget{classparticleSys_a7c2644a0a86bdd297941ab71e81e9dc0}\label{classparticleSys_a7c2644a0a86bdd297941ab71e81e9dc0} 
+void {\bfseries gpu\+Setup} ()
+\item 
+\Hypertarget{classparticleSys_ae3e9309177fb61bcc04b79d586cc640e}\label{classparticleSys_ae3e9309177fb61bcc04b79d586cc640e} 
+void {\bfseries update} ()
+\item 
+\Hypertarget{classparticleSys_a4b88cd50b73f09679deb612068aec8e5}\label{classparticleSys_a4b88cd50b73f09679deb612068aec8e5} 
+void {\bfseries re\+Set} ()
+\item 
+\Hypertarget{classparticleSys_a44807e0de221a60f763dcf3a274844cf}\label{classparticleSys_a44807e0de221a60f763dcf3a274844cf} 
+void {\bfseries set\+Camera} (mat4 inC)
+\item 
+void \mbox{\hyperlink{classparticleSys_ab1ee16d7efddcaccad409399737e5797}{set\+Origin}} (glm\+::vec3 source)
+\item 
+void \mbox{\hyperlink{classparticleSys_a59b5c12a0d679c47c56011d894737cf1}{set\+Force}} (force\+\_\+t Force)
+\item 
+void \mbox{\hyperlink{classparticleSys_a1b8dc2c1cf5b7dbf0792009772e95454}{set\+Dist}} (dist\+\_\+t Distribution)
+\item 
+void \mbox{\hyperlink{classparticleSys_adc59974a3cf7371c49d1b316bbf0261d}{set\+Color\+Dist}} (dist\+\_\+t color\+\_\+\+Dist)
+\item 
+void \mbox{\hyperlink{classparticleSys_a3777eaf4d8ec16f7cfb3413c2f97b474}{set\+Initial\+Velocity\+Func}} (force\+\_\+t Velocity\+Func)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classparticleSys_adc59974a3cf7371c49d1b316bbf0261d}\label{classparticleSys_adc59974a3cf7371c49d1b316bbf0261d} 
+\index{particleSys@{particleSys}!setColorDist@{setColorDist}}
+\index{setColorDist@{setColorDist}!particleSys@{particleSys}}
+\doxysubsubsection{\texorpdfstring{setColorDist()}{setColorDist()}}
+{\footnotesize\ttfamily void particle\+Sys\+::set\+Color\+Dist (\begin{DoxyParamCaption}\item[{dist\+\_\+t}]{color\+\_\+\+Dist }\end{DoxyParamCaption})}
+
+Sets the color distribution function. \Hypertarget{classparticleSys_a1b8dc2c1cf5b7dbf0792009772e95454}\label{classparticleSys_a1b8dc2c1cf5b7dbf0792009772e95454} 
+\index{particleSys@{particleSys}!setDist@{setDist}}
+\index{setDist@{setDist}!particleSys@{particleSys}}
+\doxysubsubsection{\texorpdfstring{setDist()}{setDist()}}
+{\footnotesize\ttfamily void particle\+Sys\+::set\+Dist (\begin{DoxyParamCaption}\item[{dist\+\_\+t}]{Distribution }\end{DoxyParamCaption})}
+
+Sets the function of distribution of points, on a 1-\/dimensional line. This distribution will select particle position at times t from \mbox{[}0,1\mbox{]} inclusive \Hypertarget{classparticleSys_a59b5c12a0d679c47c56011d894737cf1}\label{classparticleSys_a59b5c12a0d679c47c56011d894737cf1} 
+\index{particleSys@{particleSys}!setForce@{setForce}}
+\index{setForce@{setForce}!particleSys@{particleSys}}
+\doxysubsubsection{\texorpdfstring{setForce()}{setForce()}}
+{\footnotesize\ttfamily void particle\+Sys\+::set\+Force (\begin{DoxyParamCaption}\item[{force\+\_\+t}]{Force }\end{DoxyParamCaption})}
+
+Sets the force function based on position and velocity (and other characteristics) of our particle \Hypertarget{classparticleSys_a3777eaf4d8ec16f7cfb3413c2f97b474}\label{classparticleSys_a3777eaf4d8ec16f7cfb3413c2f97b474} 
+\index{particleSys@{particleSys}!setInitialVelocityFunc@{setInitialVelocityFunc}}
+\index{setInitialVelocityFunc@{setInitialVelocityFunc}!particleSys@{particleSys}}
+\doxysubsubsection{\texorpdfstring{setInitialVelocityFunc()}{setInitialVelocityFunc()}}
+{\footnotesize\ttfamily void particle\+Sys\+::set\+Initial\+Velocity\+Func (\begin{DoxyParamCaption}\item[{force\+\_\+t}]{Velocity\+Func }\end{DoxyParamCaption})}
+
+Sets the initial velocity function \Hypertarget{classparticleSys_ab1ee16d7efddcaccad409399737e5797}\label{classparticleSys_ab1ee16d7efddcaccad409399737e5797} 
+\index{particleSys@{particleSys}!setOrigin@{setOrigin}}
+\index{setOrigin@{setOrigin}!particleSys@{particleSys}}
+\doxysubsubsection{\texorpdfstring{setOrigin()}{setOrigin()}}
+{\footnotesize\ttfamily void particle\+Sys\+::set\+Origin (\begin{DoxyParamCaption}\item[{glm\+::vec3}]{source }\end{DoxyParamCaption})}
+
+Sets the origin in world space of our particle system, defining the vector field relative to this point. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/particle\+Sys.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/particle\+Sys.\+cpp\end{DoxyCompactItemize}

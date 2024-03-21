@@ -12,8 +12,10 @@
 
 using namespace glm;
 using namespace std;
-using force_t = glm::vec3(*)(glm::vec3, Particle);
-using dist_t = glm::vec3(*)(float, float, float);
+using force_t = std::function<glm::vec3(glm::vec3, Particle)>;
+//using force_t = glm::vec3(*)(glm::vec3, Particle);
+using dist_t = std::function<glm::vec3(float, float, float)>;
+// using dist_t = glm::vec3(*)(float, float, float);
 
 class ParticleSorter {
 public:

@@ -1,0 +1,27 @@
+\doxysection{Materials.\+h}
+\hypertarget{Materials_8h_source}{}\label{Materials_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Materials.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Materials.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MATERIALS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MATERIALS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ SET\_MODE(texProg,\ x)\ (glUniform1f(texProg-\/>getUniform("{}mode"{}),\ x)\ )}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ SET\_SOLIDCOLOR(solidColorProg,x,\ y,\ z)\ (glUniform3f(solidColorProg-\/>getUniform("{}solidColor"{}),\ x,\ y,\ z))}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ shiny,}
+\DoxyCodeLine{00013\ \ \ \ \ plastic,\ }
+\DoxyCodeLine{00014\ \ \ \ \ metalic,}
+\DoxyCodeLine{00015\ \ \ \ \ gold,}
+\DoxyCodeLine{00016\ \ \ \ \ ethereal}
+\DoxyCodeLine{00017\ \}\ material\_t;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ SetMaterial(std::shared\_ptr<Program>,\ material\_t,\ glm::vec3);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

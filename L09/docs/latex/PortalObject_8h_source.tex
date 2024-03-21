@@ -1,0 +1,51 @@
+\doxysection{Portal\+Object.\+h}
+\hypertarget{PortalObject_8h_source}{}\label{PortalObject_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/PortalObject.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/PortalObject.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PORTAL\_OBJ\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PORTAL\_OBJ\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}function\_generator.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Bobject.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}FBObject.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}particleSys.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Texture.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}TextureObject.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}Materials.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classPortalObj}{PortalObj}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classBobject}{Bobject}}<>}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPortalObj}{PortalObj}}(}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ resourceDir,\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Program>\ prog,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3\ color}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ )\ :\ \mbox{\hyperlink{classBobject}{Bobject}}(resourceDir,\ prog),\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ color(color)}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPortalObj}{\string~PortalObj}}()\ \{\};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPortalObj_aed68dc432ea938846a5a96f8e38f5a69}{init\_transforms}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ method\ for\ this\ object...}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPortalObj_a1cc5c1ff7e13d73bf4960af4ce1550f6}{drawMe}}(std::shared\_ptr<MatrixStack>);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ std::shared\_ptr<Program>\ partProg;\ \textcolor{comment}{//\ particle\ shader...}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ std::shared\_ptr<Program>\ passProg;\ \textcolor{comment}{//\ pass\ through\ shader\ for\ FBOs}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classparticleSys}{particleSys}}\ *thePartSystem;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::shared\_ptr<Texture>\ particleTexture;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ glm::vec3\ color;}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,44 @@
+\doxysection{Window\+Manager Class Reference}
+\hypertarget{classWindowManager}{}\label{classWindowManager}\index{WindowManager@{WindowManager}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classWindowManager_a2f8a3ac32a710be798fe4568d65181e1}\label{classWindowManager_a2f8a3ac32a710be798fe4568d65181e1} 
+{\bfseries Window\+Manager} (const \mbox{\hyperlink{classWindowManager}{Window\+Manager}} \&)=delete
+\item 
+\Hypertarget{classWindowManager_a54bd959f030f7376e0eb757b82f1a075}\label{classWindowManager_a54bd959f030f7376e0eb757b82f1a075} 
+\mbox{\hyperlink{classWindowManager}{Window\+Manager}} \& {\bfseries operator=} (const \mbox{\hyperlink{classWindowManager}{Window\+Manager}} \&)=delete
+\item 
+\Hypertarget{classWindowManager_a9718f83d79f1124c4797e1d018e74ed2}\label{classWindowManager_a9718f83d79f1124c4797e1d018e74ed2} 
+bool {\bfseries init} (int const width, int const height)
+\item 
+\Hypertarget{classWindowManager_a987f35bfd043fcce7c13e1346452db0c}\label{classWindowManager_a987f35bfd043fcce7c13e1346452db0c} 
+void {\bfseries shutdown} ()
+\item 
+\Hypertarget{classWindowManager_ad36bd95d64b233bba5d1854aeb67ec6b}\label{classWindowManager_ad36bd95d64b233bba5d1854aeb67ec6b} 
+void {\bfseries set\+Event\+Callbacks} (\mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}} \texorpdfstring{$\ast$}{*}callbacks)
+\item 
+\Hypertarget{classWindowManager_a9c03350e9dfb9689b4961f33e2551df7}\label{classWindowManager_a9c03350e9dfb9689b4961f33e2551df7} 
+GLFWwindow \texorpdfstring{$\ast$}{*} {\bfseries get\+Handle} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classWindowManager_ad2fadcbcfda280c413a0ece5a919ba37}\label{classWindowManager_ad2fadcbcfda280c413a0ece5a919ba37} 
+GLFWwindow \texorpdfstring{$\ast$}{*} {\bfseries window\+Handle} = nullptr
+\item 
+\Hypertarget{classWindowManager_a75ed19ffb98e650572332e60cbb99067}\label{classWindowManager_a75ed19ffb98e650572332e60cbb99067} 
+\mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}} \texorpdfstring{$\ast$}{*} {\bfseries callbacks} = nullptr
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classWindowManager_a686bfdeda03b97bb832a7bf9531ad8e8}\label{classWindowManager_a686bfdeda03b97bb832a7bf9531ad8e8} 
+static \mbox{\hyperlink{classWindowManager}{Window\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries instance} = nullptr
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Window\+Manager.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Window\+Manager.\+cpp\end{DoxyCompactItemize}

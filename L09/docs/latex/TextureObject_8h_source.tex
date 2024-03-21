@@ -1,0 +1,38 @@
+\doxysection{Texture\+Object.\+h}
+\hypertarget{TextureObject_8h_source}{}\label{TextureObject_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/TextureObject.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/TextureObject.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MY\_TEXTUREOBJ\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MY\_TEXTUREOBJ\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Texture.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}MatrixStack.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classTextureObject}{TextureObject}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classObject}{Object}}}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00011\ \ \ \ \ std::shared\_ptr<Texture>\ myTex;}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classTextureObject}{TextureObject}}(\textcolor{keyword}{const}\ std::string\ \&resourceDirectory,\ \textcolor{keyword}{const}\ std::string\ \&filename,std::shared\_ptr<Program>\ shader,\ \textcolor{keyword}{const}\ std::string\ \&texturePictureLocation)}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ :\ \ \ \mbox{\hyperlink{classObject}{Object}}(resourceDirectory,\ filename,\ shader)}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>myTex\ =\ std::make\_shared<Texture>();}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>myTex-\/>setFilename(resourceDirectory\ +\ texturePictureLocation);}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>myTex-\/>init();}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>myTex-\/>setUnit(0);}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>myTex-\/>setWrapModes(GL\_CLAMP\_TO\_EDGE,\ GL\_CLAMP\_TO\_EDGE);}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classTextureObject}{TextureObject}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classObject}{Object}}\ obj,\ std::shared\_ptr<Texture>\ tex)\ :}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classObject}{Object}}(obj),}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ myTex(tex)}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \{\};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTextureObject_a842efe9b573450851f98370432a8be8d}{draw}}(std::shared\_ptr<MatrixStack>)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00030\ \ \ \ \ std::shared\_ptr<TextureObject>\ \mbox{\hyperlink{classTextureObject_ada3d59836e85c321b1eb26de4dfc0853}{copy}}();}
+\DoxyCodeLine{00031\ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

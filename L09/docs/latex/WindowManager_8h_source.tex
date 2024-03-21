@@ -1,0 +1,94 @@
+\doxysection{Window\+Manager.\+h}
+\hypertarget{WindowManager_8h_source}{}\label{WindowManager_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/WindowManager.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/WindowManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Window\ Management\ helpers}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ This\ class\ contains\ most\ of\ the\ GLFW3\ code\ necessary\ to\ interface\ with\ the}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ operating\ system.\ Tasks\ include\ creating\ a\ window\ and\ handling\ event}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ callback,\ though\ GLFW3\ is\ capable\ of\ more.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ You\ don't\ really\ need\ to\ worry\ about\ this\ file\ or\ WindowManager.cpp.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ Once\ you\ become\ more\ comfortable\ with\ C++\ and\ would\ like\ to\ expand\ the}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ functionality\ of\ your\ application,\ there\ are\ a\ few\ things\ you\ might\ be}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ able\ to\ add\ or\ change\ here.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ Written\ by\ Ian\ Dunn,\ 9/24/2017}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#pragma\ \ once}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ LAB471\_WINDOW\_H\_INCLUDED}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ LAB471\_WINDOW\_H\_INCLUDED}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <GLFW/glfw3.h>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ This\ interface\ let's\ us\ write\ our\ own\ class\ that\ can\ be\ notified\ by\ input}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ events,\ such\ as\ key\ presses\ and\ mouse\ movement.}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classEventCallbacks}{EventCallbacks}}}
+\DoxyCodeLine{00029\ \{}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ keyCallback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods)\ =\ 0;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ mouseCallback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods)\ =\ 0;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ resizeCallback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ in\_width,\ \textcolor{keywordtype}{int}\ in\_height)\ =\ 0;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ scrollCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{double}\ deltaX,\ \textcolor{keywordtype}{double}\ deltaY)\ =\ 0;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ This\ class\ is\ responsible\ for\ all\ window\ management\ code,\ i.e.\ GLFW3\ code}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ You\ shouldn't\ have\ to\ touch\ this\ code\ for\ any\ of\ the\ early\ lab\ assignments}}
+\DoxyCodeLine{00046\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classWindowManager}{WindowManager}}}
+\DoxyCodeLine{00047\ \{}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classWindowManager}{WindowManager}}();}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classWindowManager}{\string~WindowManager}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ Go\ ahead\ and\ ignore\ these\ two\ lines\ :-\/)\ for\ now}}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classWindowManager}{WindowManager}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classWindowManager}{WindowManager}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classWindowManager}{WindowManager}}\&\ operator=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classWindowManager}{WindowManager}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{bool}\ init(\textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ width,\ \textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ height);}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ shutdown();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ setEventCallbacks(\mbox{\hyperlink{classEventCallbacks}{EventCallbacks}}\ *callbacks);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ GLFWwindow\ *getHandle();}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ This\ class\ implements\ the\ singleton\ design\ pattern}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classWindowManager}{WindowManager}}\ *\ instance;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ GLFWwindow\ *windowHandle\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classEventCallbacks}{EventCallbacks}}\ *callbacks\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ What\ are\ these?!}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{//\ GLFW3\ expects\ C-\/style\ callbacks,\ but\ we\ want\ to\ be\ able\ to\ use\ C++-\/style}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{//\ callbacks\ so\ that\ we\ can\ avoid\ global\ variables.}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ This\ is\ a\ common\ trick\ or\ \`{}idiom`\ that\ makes\ it\ possible}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ key\_callback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ mouse\_callback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ resize\_callback(GLFWwindow\ *window,\ \textcolor{keywordtype}{int}\ in\_width,\ \textcolor{keywordtype}{int}\ in\_height);}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ scroll\_callback(GLFWwindow\ *window,\ \textcolor{keywordtype}{double}\ in\_deltaX,\ \textcolor{keywordtype}{double}\ in\_deltaY);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

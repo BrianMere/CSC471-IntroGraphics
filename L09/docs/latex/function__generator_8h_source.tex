@@ -1,0 +1,31 @@
+\doxysection{function\+\_\+generator.\+h}
+\hypertarget{function__generator_8h_source}{}\label{function__generator_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/function\_generator.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/function\_generator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ FUNC\_GEN\_H}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ FUNC\_GEN\_H}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keywordtype}{void}\ funcToObj(}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&,\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&,}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int},\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{const}\ std::function<\textcolor{keywordtype}{float}\ (\textcolor{keywordtype}{float},\ \textcolor{keywordtype}{float})>,}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ xmin,\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ xmax,\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ ymin,\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ ymax,}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{const}\ std::function<\textcolor{keywordtype}{bool}\ (\textcolor{keywordtype}{float},\ \textcolor{keywordtype}{float})>\ =\ [](\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y)\ \{\textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\}}
+\DoxyCodeLine{00022\ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{00025\ }
+
+\end{DoxyCode}

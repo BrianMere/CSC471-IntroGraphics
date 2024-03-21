@@ -1,0 +1,153 @@
+\doxysection{Application Class Reference}
+\hypertarget{classApplication}{}\label{classApplication}\index{Application@{Application}}
+Inheritance diagram for Application\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classApplication}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classApplication_ad8ade3f4f891c7ac54b5c69d6ca9ce5a}{key\+Callback}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, int key, int scancode, int action, int mods)
+\item 
+void \mbox{\hyperlink{classApplication_a3e18122b38e2e0df6757109c799a3bf0}{mouse\+Callback}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, int button, int action, int mods)
+\item 
+void \mbox{\hyperlink{classApplication_a4a24c4844b44719b23d6bd5938d1abab}{resize\+Callback}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, int width, int height)
+\item 
+void \mbox{\hyperlink{classApplication_aa856a36b44cb89d92c1c230bda21c23a}{scroll\+Callback}} (GLFWwindow \texorpdfstring{$\ast$}{*}window, double deltaX, double deltaY)
+\item 
+\Hypertarget{classApplication_ab752d702e2f4c2b65ca6425e86c7609b}\label{classApplication_ab752d702e2f4c2b65ca6425e86c7609b} 
+void {\bfseries init} (const std\+::string \&resource\+Directory)
+\item 
+void \mbox{\hyperlink{classApplication_a0159c0e1df71117d5f68f52a0e5f98b2}{init\+Geom}} (const std\+::string \&resource\+Directory)
+\item 
+void \mbox{\hyperlink{classApplication_acc451b459e5b19ed87d20d443384ee26}{update\+Using\+Camera\+Path}} (float frametime)
+\item 
+\Hypertarget{classApplication_a82168ed1445126171e00bcd2dcb2c78a}\label{classApplication_a82168ed1445126171e00bcd2dcb2c78a} 
+void {\bfseries render} (float delta\+Time)
+\item 
+\Hypertarget{classApplication_ae24796c1da80096697a6dcf78c875619}\label{classApplication_ae24796c1da80096697a6dcf78c875619} 
+void {\bfseries draw\+The\+World} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$ Model)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classApplication_af5248e374f21433c93e563136601b97f}\label{classApplication_af5248e374f21433c93e563136601b97f} 
+\mbox{\hyperlink{classWindowManager}{Window\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries window\+Manager} = nullptr
+\item 
+\Hypertarget{classApplication_a0f1553d6b105c71c352eed8bb6ebbff8}\label{classApplication_a0f1553d6b105c71c352eed8bb6ebbff8} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries prog}
+\item 
+\Hypertarget{classApplication_afbaa1307c1d6c6a0190c02322d189674}\label{classApplication_afbaa1307c1d6c6a0190c02322d189674} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries solid\+Color\+Prog}
+\item 
+\Hypertarget{classApplication_ac336245895f3e7a61e7353f8c40c9b90}\label{classApplication_ac336245895f3e7a61e7353f8c40c9b90} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries tex\+Prog}
+\item 
+\Hypertarget{classApplication_a4d96c3b0a8388cd2c7084f6701314375}\label{classApplication_a4d96c3b0a8388cd2c7084f6701314375} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries part\+Prog}
+\item 
+\Hypertarget{classApplication_aabf03de69f692338e23a66bc082bfd4c}\label{classApplication_aabf03de69f692338e23a66bc082bfd4c} 
+std\+::map$<$ std\+::string, shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries objects}
+\item 
+\Hypertarget{classApplication_a546c2c8b66544235ca62fdc0c2fcb99f}\label{classApplication_a546c2c8b66544235ca62fdc0c2fcb99f} 
+std\+::map$<$ std\+::string, shared\+\_\+ptr$<$ \mbox{\hyperlink{classTextureObject}{Texture\+Object}} $>$ $>$ {\bfseries texobjects}
+\item 
+\Hypertarget{classApplication_a666de0ac070ad9bc447c5c397ce3de4e}\label{classApplication_a666de0ac070ad9bc447c5c397ce3de4e} 
+std\+::map$<$ std\+::string, shared\+\_\+ptr$<$ \mbox{\hyperlink{classBobject}{Bobject}}$<$$>$ $>$ $>$ {\bfseries Void\+Bobjects}
+\item 
+\Hypertarget{classApplication_a86cd800fe3299183ce145f6a0b09d454}\label{classApplication_a86cd800fe3299183ce145f6a0b09d454} 
+std\+::map$<$ std\+::string, shared\+\_\+ptr$<$ \mbox{\hyperlink{classPortalObj}{Portal\+Obj}} $>$ $>$ {\bfseries portal\+Objs}
+\item 
+\Hypertarget{classApplication_a9aa07986de77e7fc97177e18151f8d2f}\label{classApplication_a9aa07986de77e7fc97177e18151f8d2f} 
+std\+::map$<$ std\+::string, shared\+\_\+ptr$<$ \mbox{\hyperlink{classTexture}{Texture}} $>$ $>$ {\bfseries misc\+Textures}
+\item 
+\Hypertarget{classApplication_a4b48407c4c3a4c5c73ee23f468b7ae8a}\label{classApplication_a4b48407c4c3a4c5c73ee23f468b7ae8a} 
+\mbox{\hyperlink{classCamera}{Camera}} {\bfseries scene\+Camera} = \mbox{\hyperlink{classCamera}{Camera}}()
+\item 
+\Hypertarget{classApplication_acfd6020680fe086622d25b4854b47eb4}\label{classApplication_acfd6020680fe086622d25b4854b47eb4} 
+\mbox{\hyperlink{classSpline}{Spline}} {\bfseries splinepath} \mbox{[}2\mbox{]}
+\item 
+\Hypertarget{classApplication_a8b82a91994006c11f471589b02b2f786}\label{classApplication_a8b82a91994006c11f471589b02b2f786} 
+bool {\bfseries is\+Tour} = false
+\item 
+\Hypertarget{classApplication_a0c309d3d22ff6f9b996947ecab599f60}\label{classApplication_a0c309d3d22ff6f9b996947ecab599f60} 
+double {\bfseries lastx} = 0
+\item 
+\Hypertarget{classApplication_a50ed94d5faa9c1dad5ad6bf6d633698c}\label{classApplication_a50ed94d5faa9c1dad5ad6bf6d633698c} 
+double {\bfseries lasty} = 0
+\item 
+\Hypertarget{classApplication_aeb0d6b479b665a6dd77f76ab4e1b7f83}\label{classApplication_aeb0d6b479b665a6dd77f76ab4e1b7f83} 
+bool {\bfseries keys} \mbox{[}GLFW\+\_\+\+KEY\+\_\+\+LAST\mbox{]} = \{false\}
+\item 
+\Hypertarget{classApplication_aff7244c8564d3caec16f1c5455aff846}\label{classApplication_aff7244c8564d3caec16f1c5455aff846} 
+bool {\bfseries mouse\+Pressed} = false
+\item 
+\Hypertarget{classApplication_a0ea0e92efa50c9c99f2b94a767bfab9a}\label{classApplication_a0ea0e92efa50c9c99f2b94a767bfab9a} 
+double {\bfseries posX}
+\item 
+\Hypertarget{classApplication_a57db93456b662a2c290ff712bd3b0722}\label{classApplication_a57db93456b662a2c290ff712bd3b0722} 
+double {\bfseries posY}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classApplication_a0159c0e1df71117d5f68f52a0e5f98b2}\label{classApplication_a0159c0e1df71117d5f68f52a0e5f98b2} 
+\index{Application@{Application}!initGeom@{initGeom}}
+\index{initGeom@{initGeom}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{initGeom()}{initGeom()}}
+{\footnotesize\ttfamily void Application\+::init\+Geom (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{resource\+Directory }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define what Mesh objects we have and where their resources are called. ~\newline
+ \Hypertarget{classApplication_ad8ade3f4f891c7ac54b5c69d6ca9ce5a}\label{classApplication_ad8ade3f4f891c7ac54b5c69d6ca9ce5a} 
+\index{Application@{Application}!keyCallback@{keyCallback}}
+\index{keyCallback@{keyCallback}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{keyCallback()}{keyCallback()}}
+{\footnotesize\ttfamily void Application\+::key\+Callback (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window,  }\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}}.
+
+\Hypertarget{classApplication_a3e18122b38e2e0df6757109c799a3bf0}\label{classApplication_a3e18122b38e2e0df6757109c799a3bf0} 
+\index{Application@{Application}!mouseCallback@{mouseCallback}}
+\index{mouseCallback@{mouseCallback}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{mouseCallback()}{mouseCallback()}}
+{\footnotesize\ttfamily void Application\+::mouse\+Callback (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window,  }\item[{int}]{button,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}}.
+
+\Hypertarget{classApplication_a4a24c4844b44719b23d6bd5938d1abab}\label{classApplication_a4a24c4844b44719b23d6bd5938d1abab} 
+\index{Application@{Application}!resizeCallback@{resizeCallback}}
+\index{resizeCallback@{resizeCallback}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{resizeCallback()}{resizeCallback()}}
+{\footnotesize\ttfamily void Application\+::resize\+Callback (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window,  }\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}}.
+
+\Hypertarget{classApplication_aa856a36b44cb89d92c1c230bda21c23a}\label{classApplication_aa856a36b44cb89d92c1c230bda21c23a} 
+\index{Application@{Application}!scrollCallback@{scrollCallback}}
+\index{scrollCallback@{scrollCallback}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{scrollCallback()}{scrollCallback()}}
+{\footnotesize\ttfamily void Application\+::scroll\+Callback (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{window,  }\item[{double}]{deltaX,  }\item[{double}]{deltaY }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classEventCallbacks}{Event\+Callbacks}}.
+
+\Hypertarget{classApplication_acc451b459e5b19ed87d20d443384ee26}\label{classApplication_acc451b459e5b19ed87d20d443384ee26} 
+\index{Application@{Application}!updateUsingCameraPath@{updateUsingCameraPath}}
+\index{updateUsingCameraPath@{updateUsingCameraPath}!Application@{Application}}
+\doxysubsubsection{\texorpdfstring{updateUsingCameraPath()}{updateUsingCameraPath()}}
+{\footnotesize\ttfamily void Application\+::update\+Using\+Camera\+Path (\begin{DoxyParamCaption}\item[{float}]{frametime }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Update camera based on if we are doing a camera tour of our scene currently 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/main.\+cpp\end{DoxyCompactItemize}

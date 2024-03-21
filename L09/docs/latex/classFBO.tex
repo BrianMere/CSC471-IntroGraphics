@@ -1,0 +1,53 @@
+\doxysection{FBO Class Reference}
+\hypertarget{classFBO}{}\label{classFBO}\index{FBO@{FBO}}
+Inheritance diagram for FBO\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classFBO}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFBO_ac0580c643452c32267082a402e79f7cd}\label{classFBO_ac0580c643452c32267082a402e79f7cd} 
+{\bfseries FBO} (bool is\+Depth, int width, int height)
+\item 
+\Hypertarget{classFBO_a4eba7d49aa841434462a50fd64098431}\label{classFBO_a4eba7d49aa841434462a50fd64098431} 
+GLuint {\bfseries get\+Frame\+Buf} ()
+\item 
+\Hypertarget{classFBO_a204ab6fd19d3bd1121a779ddaab7d37b}\label{classFBO_a204ab6fd19d3bd1121a779ddaab7d37b} 
+GLuint {\bfseries get\+Tex\+Buf} ()
+\item 
+\Hypertarget{classFBO_ad47832b6a16b84a901ee3917f3efdc1a}\label{classFBO_ad47832b6a16b84a901ee3917f3efdc1a} 
+bool {\bfseries get\+Is\+Depth} ()
+\item 
+\Hypertarget{classFBO_aa3aad9319f6a805380e056cfbc7d4702}\label{classFBO_aa3aad9319f6a805380e056cfbc7d4702} 
+void {\bfseries init} (int width, int height)
+\item 
+void \mbox{\hyperlink{classFBO_abcec71b709af326cccb0f98b09e807e1}{Process\+Draw\+Tex}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader, GLuint in\+Tex)
+\item 
+\Hypertarget{classFBO_a4627285692d2415addc04044fec04c14}\label{classFBO_a4627285692d2415addc04044fec04c14} 
+void {\bfseries Process\+Draw\+Tex} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader)
+\item 
+\Hypertarget{classFBO_a0d89066f7bf052dc981f26638ba8f020}\label{classFBO_a0d89066f7bf052dc981f26638ba8f020} 
+void {\bfseries write\+Image\+File} (std\+::string filename)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classFBO_abcec71b709af326cccb0f98b09e807e1}\label{classFBO_abcec71b709af326cccb0f98b09e807e1} 
+\index{FBO@{FBO}!ProcessDrawTex@{ProcessDrawTex}}
+\index{ProcessDrawTex@{ProcessDrawTex}!FBO@{FBO}}
+\doxysubsubsection{\texorpdfstring{ProcessDrawTex()}{ProcessDrawTex()}}
+{\footnotesize\ttfamily void FBO\+::\+Process\+Draw\+Tex (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$}]{shader,  }\item[{GLuint}]{in\+Tex }\end{DoxyParamCaption})}
+
+Bind this \doxylink{classFBO}{FBO}.
+
+This assumes that shader is setup prior to have the "{}tex\+Buf"{} uniform, where the passed texture data will be mapped to that uniform.
+
+If in\+Tex is 0, then we don\textquotesingle{}t bind any texture. This is useful for writing the first time, without any texture data generated yet. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/FBO.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/FBO.\+cpp\end{DoxyCompactItemize}

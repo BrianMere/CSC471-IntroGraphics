@@ -1,0 +1,107 @@
+\doxysection{Camera.\+h}
+\hypertarget{Camera_8h_source}{}\label{Camera_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Camera.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Camera.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MY\_CAMERA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MY\_CAMERA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}math.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ DEF\_POS\ glm::vec3(0.0f,\ 0.0f,\ 0.0f)}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ DEF\_ROT\ glm::vec3(1.0f,\ M\_PI\_2f,\ M\_PI\_2f)}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCamera}{Camera}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00015\ \ \ \ \ glm::vec3\ cameraPos;\ \textcolor{comment}{//\ in\ (x,y,z)}}
+\DoxyCodeLine{00016\ \ \ \ \ glm::vec3\ cameraRot;\ \textcolor{comment}{//\ in\ (r,\ theta,\ phi)\ in\ radians\ }}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ glm::vec3\ viewVector;\ \textcolor{comment}{//\ view\ vector\ in\ (x,y,z)\ coords}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{float}\ rotSpeed;\ \ \ \ \ \textcolor{comment}{//\ rate\ at\ which\ cameraRot\ changes\ per\ frame\ (in\ radians\ /\ frame)}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{float}\ transSpeed;\ \ \ \textcolor{comment}{//\ rate\ at\ which\ cameraPos\ changes\ per\ frame}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{float}\ neckRads;\ \ \ \ \textcolor{comment}{//\ maximum\ radial\ angle\ to\ have\ for\ looking\ up/down}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classCamera}{Camera}}()\ }
+\DoxyCodeLine{00025\ \ \ \ \ :\ cameraPos(DEF\_POS),}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ cameraRot(DEF\_ROT),\ \textcolor{comment}{//\ start\ looking\ down\ the\ z-\/axis}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ rotSpeed(1.0f),\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ transSpeed(1.0f),\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ neckRads(10.0f\ *\ (M\_PIf\ /\ 180.0f))}
+\DoxyCodeLine{00030\ \ \ \ \ \{\};}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classCamera}{Camera}}(}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ glm::vec3\ initialPosition,\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ glm::vec3\ initialRotation,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ rotSpeed,\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ transSpeed,\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ neckRads}
+\DoxyCodeLine{00037\ \ \ \ \ )}
+\DoxyCodeLine{00038\ \ \ \ \ :\ cameraPos(initialPosition),}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ cameraRot(initialRotation),\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ rotSpeed(rotSpeed),\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ transSpeed(transSpeed),\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ neckRads(neckRads)}
+\DoxyCodeLine{00043\ \ \ \ \ \{\};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classCamera}{\string~Camera}}()\ \{\};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_a38c93f4b605889e185fff19c24ce8684}{recalcViewVector}}();}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_a3c749083b1e54b70edf2e24a2e0d712c}{rotateCamera}}(\textcolor{keywordtype}{double}\ deltaX,\ \textcolor{keywordtype}{double}\ deltaY);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_ab3e70a6bd2c3f641afc2cbbf0d506243}{translateCamera}}(\textcolor{keywordtype}{int}\ deltaW,\ \textcolor{keywordtype}{int}\ deltaD);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00066\ \ \ \ \ glm::mat4\ \mbox{\hyperlink{classCamera_a106cea54efcfe579a08fcd1f204f1eb9}{getLookAtMatrix}}();}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_aee8027b5309a5dc77db956d27924c387}{resetCamera}}()}
+\DoxyCodeLine{00072\ \ \ \ \ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ this-\/>cameraPos\ =\ DEF\_POS;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ this-\/>cameraRot\ =\ DEF\_ROT;}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{inline}\ glm::vec3\ \mbox{\hyperlink{classCamera_a520c5a7413b3e704f2f442288db17bcf}{getPosition}}()}
+\DoxyCodeLine{00081\ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cameraPos;}
+\DoxyCodeLine{00083\ \ \ \ \ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_a4d2c15659569234a37b4a957d877a217}{setPosition}}(glm::vec3\ newPos)}
+\DoxyCodeLine{00091\ \ \ \ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ this-\/>cameraPos\ =\ newPos;}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCamera_adc3284d29a2a6d71bebe2d0f205db47b}{setRotation}}(glm::vec3\ newNorm)}
+\DoxyCodeLine{00100\ \ \ \ \ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ this-\/>cameraRot.x\ =\ glm::length(newNorm);}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ this-\/>cameraRot.y\ =\ atan(-\/1\ *\ newNorm.z\ /\ newNorm.x);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ this-\/>cameraRot.z\ =\ atan(newNorm.y\ /\ sqrt(newNorm.x\ *\ newNorm.x\ +\ newNorm.z\ *\ newNorm.z));}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00109\ \ \ \ \ std::string\ \mbox{\hyperlink{classCamera_a16c1a7f57530a37b4f30aee4f62aaab5}{toString}}()\ }
+\DoxyCodeLine{00110\ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ std::stringstream\ out;}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \textcolor{comment}{//\ Position}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ out\ <<\ \textcolor{stringliteral}{"{}Current\ Position:\ (x,y,z)\ =\ ("{}}\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraPos.x)\ <<\ \textcolor{stringliteral}{"{},\ "{}}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraPos.y)\ <<\ \textcolor{stringliteral}{"{},\ "{}}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraPos.z)\ <<\ \textcolor{stringliteral}{"{})\(\backslash\)n"{}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ out\ <<\ std::endl;}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ out\ <<\ \textcolor{stringliteral}{"{}Current\ Rotation:\ (r,\ theta,\ phi)\ =\ ("{}}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraRot.x)\ <<\ \textcolor{stringliteral}{"{},\ "{}}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraRot.y)\ <<\ \textcolor{stringliteral}{"{},\ "{}}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ <<\ std::to\_string(this-\/>cameraRot.z)\ <<\ \textcolor{stringliteral}{"{})\(\backslash\)n"{}};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ out\ <<\ std::endl;}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ out.str();}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00132\ }
+
+\end{DoxyCode}

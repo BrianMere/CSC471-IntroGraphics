@@ -2,6 +2,9 @@
 #define MY_BOBJECT_H
 
 #include "Object.h"
+#include "TextureObject.h"
+#include "FBObject.h"
+#include "Bobject.h"
 #include "Program.h"
 
 /**
@@ -13,10 +16,14 @@ class Bobject
 {
 protected:
     std::map< std::string, std::shared_ptr<Object> > objs;
+    std::map< std::string, std::shared_ptr<TextureObject> > texobjs;
+    //std::map< std::string, std::shared_ptr<Bobject <>> > mBobjects;
 
     std::string resourceDir;
     std::shared_ptr<Program> prog;
 public:
+
+    std::map< std::string, std::shared_ptr<FBObject> > fbobjs;
 
     Bobject(const std::string& resourceDir, std::shared_ptr<Program> prog) : 
         objs(std::map< std::string, std::shared_ptr<Object>>()),
@@ -39,7 +46,7 @@ public:
 
     // Method to call a specified method on all objects in the list
     template<typename T, typename... Args>
-    inline void CallMethodOnAll(void(T::*method)(Args...), Args... args) {
+    inline void CallMethodOnAllObjs(void(T::*method)(Args...), Args... args) {
         for (const auto& pair : objs) {
             T* object = dynamic_cast<T*>(pair.second.get());
             if (object) {
@@ -48,7 +55,20 @@ public:
                 // Handle the case where the cast fails
                 // This object is not of the correct type
             }
+        }
     }
+
+    template<typename T, typename... Args>
+    inline void CallMethodOnAllTexobjs(void(T::*method)(Args...), Args... args) {
+        for (const auto& pair : texobjs) {
+            T* object = dynamic_cast<T*>(pair.second.get());
+            if (object) {
+                (object->*method)(args...);
+            } else {
+                // Handle the case where the cast fails
+                // This object is not of the correct type
+            }
+        }
     }
 };
 

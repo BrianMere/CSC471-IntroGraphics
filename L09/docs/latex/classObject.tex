@@ -1,0 +1,184 @@
+\doxysection{Object Class Reference}
+\hypertarget{classObject}{}\label{classObject}\index{Object@{Object}}
+
+
+{\ttfamily \#include $<$Object.\+h$>$}
+
+Inheritance diagram for Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classObject}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObject_a8979aaac17f7488e6c81fada498100c5}\label{classObject_a8979aaac17f7488e6c81fada498100c5} 
+{\bfseries Object} (const std\+::string \&resource\+Directory, const std\+::string \&filename, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader)
+\item 
+void \mbox{\hyperlink{classObject_a4260041188d83812b924434c8b0300b9}{set\+Parent\+Center}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o)
+\item 
+void \mbox{\hyperlink{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}{calc\+Resize}} ()
+\item 
+void \mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_ab4acbf895d5a713a249208fe282ce3d0}{add\+\_\+solo\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_a6e0f5df76266c347c53234d7ccbdde3f}{flush}} ()
+\item 
+void \mbox{\hyperlink{classObject_af59b9a88274d9718e8edc9e1f935fd23}{add\+\_\+subobj}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ obj)
+\item 
+virtual void \mbox{\hyperlink{classObject_a94875c5f54d87e783284c63affb68b06}{draw}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$)
+\item 
+\Hypertarget{classObject_a9185e6c3723a8d65748675ece549c338}\label{classObject_a9185e6c3723a8d65748675ece549c338} 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&prog, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$M)
+\item 
+\Hypertarget{classObject_ac05166dac33da2b201cebc873dc0461c}\label{classObject_ac05166dac33da2b201cebc873dc0461c} 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&curS, glm\+::vec3 trans, float rotY, float rotX, float sc)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ \mbox{\hyperlink{classObject_af1d1202a01eb04faa00b89a621237cdd}{copy}} ()
+\item 
+void \mbox{\hyperlink{classObject_a7b0249227a712763d10936ead0b6b7d4}{set\+Shader}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ new\+Shader)
+\item 
+void \mbox{\hyperlink{classObject_a7b0ea53220dbf71881336d031235a992}{move\+\_\+to}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o\+\_\+obj)
+\item 
+void \mbox{\hyperlink{classObject_a86fb7b563788f7d7589c91f99fe378c2}{move\+\_\+to}} (glm\+::vec3 v)
+\item 
+glm\+::vec3 \mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{get\+World\+Center\+Point}} ()
+\item 
+void \mbox{\hyperlink{classObject_a2ecedd20173af63984395821bd2a6a6d}{print\+Center}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObject_a14a1a386232b4d270451f9a68ad193be}\label{classObject_a14a1a386232b4d270451f9a68ad193be} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries sub\+\_\+objs}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObject_acda91c4131af9bdbfb3edf7b6ca56efe}\label{classObject_acda91c4131af9bdbfb3edf7b6ca56efe} 
+\mbox{\hyperlink{classMeshContainer}{Mesh\+Container}} {\bfseries my\+\_\+mesh}
+\item 
+\Hypertarget{classObject_af5804c830cafb57524c08f82218a0c07}\label{classObject_af5804c830cafb57524c08f82218a0c07} 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries transformations}
+\item 
+\Hypertarget{classObject_abc3f9f6d9557cc8c6df2239cf3238655}\label{classObject_abc3f9f6d9557cc8c6df2239cf3238655} 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries solo\+\_\+transformations}
+\item 
+\Hypertarget{classObject_ac0a4567888c64f986683d01abeb95b70}\label{classObject_ac0a4567888c64f986683d01abeb95b70} 
+glm\+::mat4 {\bfseries resize\+Mat}
+\item 
+\Hypertarget{classObject_aa9218adba9eeccfd7531e7b674c2e8ff}\label{classObject_aa9218adba9eeccfd7531e7b674c2e8ff} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries shader}
+\item 
+\Hypertarget{classObject_a5116270d101bee967fba0d18384c7d9b}\label{classObject_a5116270d101bee967fba0d18384c7d9b} 
+glm\+::vec3 {\bfseries mid}
+\item 
+\Hypertarget{classObject_aba43c81dd978ed8974af471ecb6e42cf}\label{classObject_aba43c81dd978ed8974af471ecb6e42cf} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ {\bfseries parent\+Center}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a world object that can contain other objects relative to itself. This is made to abstract away the matrix stack while still being high in performance. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classObject_ab4acbf895d5a713a249208fe282ce3d0}\label{classObject_ab4acbf895d5a713a249208fe282ce3d0} 
+\index{Object@{Object}!add\_solo\_transform@{add\_solo\_transform}}
+\index{add\_solo\_transform@{add\_solo\_transform}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{add\_solo\_transform()}{add\_solo\_transform()}}
+{\footnotesize\ttfamily void Object\+::add\+\_\+solo\+\_\+transform (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{matrix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Add a transform that ONLY affects this own object.
+
+Note that these are transformations that happen AFTER we draw our subobjects. \Hypertarget{classObject_af59b9a88274d9718e8edc9e1f935fd23}\label{classObject_af59b9a88274d9718e8edc9e1f935fd23} 
+\index{Object@{Object}!add\_subobj@{add\_subobj}}
+\index{add\_subobj@{add\_subobj}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{add\_subobj()}{add\_subobj()}}
+{\footnotesize\ttfamily void Object\+::add\+\_\+subobj (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Add an object as a child with transformations relative to this object
+
+Transformations on subobjects subsequently occurs in PARENT space, or in the coordinate space relative to their parent. \Hypertarget{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}\label{classObject_a0ceab0590b17c4224dbe5703bde3e1ab} 
+\index{Object@{Object}!add\_transform@{add\_transform}}
+\index{add\_transform@{add\_transform}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{add\_transform()}{add\_transform()}}
+{\footnotesize\ttfamily void Object\+::add\+\_\+transform (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{matrix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Add a transform from the \doxylink{classMatrixStack}{Matrix\+Stack} to a local tracker of transformations in order.
+
+This affects the transformations of child objects. ~\newline
+ \Hypertarget{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}\label{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac} 
+\index{Object@{Object}!calcResize@{calcResize}}
+\index{calcResize@{calcResize}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{calcResize()}{calcResize()}}
+{\footnotesize\ttfamily void Object\+::calc\+Resize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Calculates and stores this object\textquotesingle{}s resize matrix based on internal data. \Hypertarget{classObject_af1d1202a01eb04faa00b89a621237cdd}\label{classObject_af1d1202a01eb04faa00b89a621237cdd} 
+\index{Object@{Object}!copy@{copy}}
+\index{copy@{copy}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{copy()}{copy()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ Object\+::copy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Clone this \doxylink{classObject}{Object} into new data. \Hypertarget{classObject_a94875c5f54d87e783284c63affb68b06}\label{classObject_a94875c5f54d87e783284c63affb68b06} 
+\index{Object@{Object}!draw@{draw}}
+\index{draw@{draw}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Object\+::draw (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Draw all objects, and all subobjects, of this object.
+
+It is assumed that Model will change over the course of this call, but on return it should be back to the same state. ~\newline
+ 
+
+Reimplemented in \mbox{\hyperlink{classFBObject_a4fea46f7fcacd2145b66c5c876bae370}{FBObject}}, and \mbox{\hyperlink{classTextureObject_a842efe9b573450851f98370432a8be8d}{Texture\+Object}}.
+
+\Hypertarget{classObject_a6e0f5df76266c347c53234d7ccbdde3f}\label{classObject_a6e0f5df76266c347c53234d7ccbdde3f} 
+\index{Object@{Object}!flush@{flush}}
+\index{flush@{flush}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{flush()}{flush()}}
+{\footnotesize\ttfamily void Object\+::flush (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Remove the log of this object\textquotesingle{}s transforms, subobjs, and everything \Hypertarget{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}\label{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab} 
+\index{Object@{Object}!getWorldCenterPoint@{getWorldCenterPoint}}
+\index{getWorldCenterPoint@{getWorldCenterPoint}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{getWorldCenterPoint()}{getWorldCenterPoint()}}
+{\footnotesize\ttfamily glm\+::vec3 Object\+::get\+World\+Center\+Point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the center coordinates of the object currently in world coordinates. \Hypertarget{classObject_a86fb7b563788f7d7589c91f99fe378c2}\label{classObject_a86fb7b563788f7d7589c91f99fe378c2} 
+\index{Object@{Object}!move\_to@{move\_to}}
+\index{move\_to@{move\_to}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{move\_to()}{move\_to()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Object\+::move\+\_\+to (\begin{DoxyParamCaption}\item[{glm\+::vec3}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Move to a point in world space \Hypertarget{classObject_a7b0ea53220dbf71881336d031235a992}\label{classObject_a7b0ea53220dbf71881336d031235a992} 
+\index{Object@{Object}!move\_to@{move\_to}}
+\index{move\_to@{move\_to}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{move\_to()}{move\_to()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Object\+::move\+\_\+to (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$}]{o\+\_\+obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Copies the transformations of the passed \doxylink{classObject}{Object} to move\+\_\+to said object \Hypertarget{classObject_a2ecedd20173af63984395821bd2a6a6d}\label{classObject_a2ecedd20173af63984395821bd2a6a6d} 
+\index{Object@{Object}!printCenter@{printCenter}}
+\index{printCenter@{printCenter}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{printCenter()}{printCenter()}}
+{\footnotesize\ttfamily void Object\+::print\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Print the center point as a glm string on a newline \Hypertarget{classObject_a4260041188d83812b924434c8b0300b9}\label{classObject_a4260041188d83812b924434c8b0300b9} 
+\index{Object@{Object}!setParentCenter@{setParentCenter}}
+\index{setParentCenter@{setParentCenter}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{setParentCenter()}{setParentCenter()}}
+{\footnotesize\ttfamily void Object\+::set\+Parent\+Center (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$}]{o }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the relative position of the parent in world space (if this is a subobj). \Hypertarget{classObject_a7b0249227a712763d10936ead0b6b7d4}\label{classObject_a7b0249227a712763d10936ead0b6b7d4} 
+\index{Object@{Object}!setShader@{setShader}}
+\index{setShader@{setShader}!Object@{Object}}
+\doxysubsubsection{\texorpdfstring{setShader()}{setShader()}}
+{\footnotesize\ttfamily void Object\+::set\+Shader (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$}]{new\+Shader }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Set this \doxylink{classObject}{Object}\textquotesingle{}s shader. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Object.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Object.\+cpp\end{DoxyCompactItemize}

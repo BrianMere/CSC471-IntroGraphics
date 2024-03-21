@@ -1,0 +1,69 @@
+\doxysection{Bobject.\+h}
+\hypertarget{Bobject_8h_source}{}\label{Bobject_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Bobject.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Bobject.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MY\_BOBJECT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MY\_BOBJECT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}TextureObject.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}FBObject.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Bobject.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ ArgsPrime>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classBobject}{Bobject}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00018\ \ \ \ \ std::map<\ std::string,\ std::shared\_ptr<Object>\ >\ objs;}
+\DoxyCodeLine{00019\ \ \ \ \ std::map<\ std::string,\ std::shared\_ptr<TextureObject>\ >\ texobjs;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//std::map<\ std::string,\ std::shared\_ptr<Bobject\ <>>\ >\ mBobjects;}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ std::string\ resourceDir;}
+\DoxyCodeLine{00023\ \ \ \ \ std::shared\_ptr<Program>\ prog;}
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ std::map<\ std::string,\ std::shared\_ptr<FBObject>\ >\ fbobjs;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classBobject}{Bobject}}(\textcolor{keyword}{const}\ std::string\&\ resourceDir,\ std::shared\_ptr<Program>\ prog)\ :\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ objs(std::map<\ std::string,\ std::shared\_ptr<Object>>()),}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ resourceDir(resourceDir),\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ prog(prog)}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classBobject}{\string~Bobject}}()\ \{\};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBobject_ad7ce3e5da3513b3b780104252f471674}{init}}(ArgsPrime...\ args)\ =\ 0;\ \textcolor{comment}{//\ allow\ for\ arguments\ to\ be\ passed\ into\ an\ object\ like\ this.}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBobject_a253bd2daf40edfd0bbb501cbe1344c51}{init\_transforms}}()\ =\ 0;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ Method\ to\ call\ a\ specified\ method\ on\ all\ objects\ in\ the\ list}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ CallMethodOnAllObjs(\textcolor{keywordtype}{void}(T::*method)(Args...),\ Args...\ args)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pair\ :\ objs)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ T*\ \textcolor{keywordtype}{object}\ =\ \textcolor{keyword}{dynamic\_cast<}T*\textcolor{keyword}{>}(pair.second.get());}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{object})\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{object}-\/>*method)(args...);}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ case\ where\ the\ cast\ fails}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ object\ is\ not\ of\ the\ correct\ type}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ CallMethodOnAllTexobjs(\textcolor{keywordtype}{void}(T::*method)(Args...),\ Args...\ args)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pair\ :\ texobjs)\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ T*\ \textcolor{keywordtype}{object}\ =\ \textcolor{keyword}{dynamic\_cast<}T*\textcolor{keyword}{>}(pair.second.get());}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{object})\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{object}-\/>*method)(args...);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ case\ where\ the\ cast\ fails}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ object\ is\ not\ of\ the\ correct\ type}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ \};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

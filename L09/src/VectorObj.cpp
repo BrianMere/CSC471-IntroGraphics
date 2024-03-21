@@ -56,6 +56,6 @@ void VectorObj::init_transforms()
     this->objs["Cone"]->add_transform(rotate(mat4(1.0f), -M_PI_2f, vec3(0,1,0)));
     this->objs["Cone"]->add_transform(translate(mat4(1.0f), vec3(inverse_arrowsize,0,0)));
 
-    this->CallMethodOnAll(&Object::add_transform, scale(mat4(1.0f), vec3(1/inverse_arrowsize, 1/inverse_arrowsize, 1/inverse_arrowsize)));
-    this->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(1,0,0)));
+    this->CallMethodOnAllObjs(&Object::add_transform, scale(mat4(1.0f), vec3(1/inverse_arrowsize, 1/inverse_arrowsize, 1/inverse_arrowsize)));
+    this->CallMethodOnAllObjs(&Object::add_transform, translate(mat4(1.0f), vec3(1,0,0)));
 }

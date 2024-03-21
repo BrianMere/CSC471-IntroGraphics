@@ -1,0 +1,52 @@
+\doxysection{GLTexture\+Writer Namespace Reference}
+\hypertarget{namespaceGLTextureWriter}{}\label{namespaceGLTextureWriter}\index{GLTextureWriter@{GLTextureWriter}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{namespaceGLTextureWriter_a100f8f9060da5bf94ef4a2fc19cdbdef}{Write\+Image}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTexture}{Texture}} $>$ texture, std\+::string file\+Name)
+\item 
+bool \mbox{\hyperlink{namespaceGLTextureWriter_ad202feb1e8ef73e0ddad50d91f2896b1}{Write\+Image}} (const \mbox{\hyperlink{classTexture}{Texture}} \&texture, std\+::string file\+Name)
+\item 
+\Hypertarget{namespaceGLTextureWriter_a8394bfe4a87fdf708184fe6898de0814}\label{namespaceGLTextureWriter_a8394bfe4a87fdf708184fe6898de0814} 
+bool {\bfseries Write\+Image} (GLint texture\+Handle, std\+::string file\+Name)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{namespaceGLTextureWriter}{GLTexture\+Writer} outputs a three channel (GL\+\_\+\+RGB) image to a png file given by file name.
+
+Contact \href{mailto:kpidding@calpoly.edu}{\texttt{ kpidding@calpoly.\+edu}} for any support questions! 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceGLTextureWriter_ad202feb1e8ef73e0ddad50d91f2896b1}\label{namespaceGLTextureWriter_ad202feb1e8ef73e0ddad50d91f2896b1} 
+\index{GLTextureWriter@{GLTextureWriter}!WriteImage@{WriteImage}}
+\index{WriteImage@{WriteImage}!GLTextureWriter@{GLTextureWriter}}
+\doxysubsubsection{\texorpdfstring{WriteImage()}{WriteImage()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool GLTexture\+Writer\+::\+Write\+Image (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTexture}{Texture}} \&}]{texture,  }\item[{std\+::string}]{img\+Name }\end{DoxyParamCaption})}
+
+Write a texture to a file 
+\begin{DoxyParams}{Parameters}
+{\em texture} & a texture object \\
+\hline
+{\em img\+Name} & the filename to write to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGLTextureWriter_a100f8f9060da5bf94ef4a2fc19cdbdef}\label{namespaceGLTextureWriter_a100f8f9060da5bf94ef4a2fc19cdbdef} 
+\index{GLTextureWriter@{GLTextureWriter}!WriteImage@{WriteImage}}
+\index{WriteImage@{WriteImage}!GLTextureWriter@{GLTextureWriter}}
+\doxysubsubsection{\texorpdfstring{WriteImage()}{WriteImage()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool GLTexture\+Writer\+::\+Write\+Image (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTexture}{Texture}} $>$}]{texture,  }\item[{std\+::string}]{file\+Name }\end{DoxyParamCaption})}
+
+Write a texture to a file 
+\begin{DoxyParams}{Parameters}
+{\em texture} & a shared pointer to a texture \\
+\hline
+{\em file\+Name} & the name of the file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successfull 
+\end{DoxyReturn}

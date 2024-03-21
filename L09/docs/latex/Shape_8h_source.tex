@@ -1,0 +1,44 @@
+\doxysection{Shape.\+h}
+\hypertarget{Shape_8h_source}{}\label{Shape_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Shape.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Shape.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#ifndef\ \_SHAPE\_H\_}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#define\ \_SHAPE\_H\_}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <tiny\_obj\_loader/tiny\_obj\_loader.h>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classProgram}{Program}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classShape}{Shape}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classShape}{Shape}}(\textcolor{keywordtype}{bool}\ textured);}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classShape}{\string~Shape}}();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ createShape(tinyobj::shape\_t\ \&\ shape);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ init();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ measure();}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ draw(\textcolor{keyword}{const}\ std::shared\_ptr<Program>\ prog)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \ \ glm::vec3\ min;}
+\DoxyCodeLine{00023\ \ \ \ \ glm::vec3\ max;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ std::vector<unsigned\ int>\ eleBuf;}
+\DoxyCodeLine{00027\ \ \ \ \ std::vector<float>\ posBuf;}
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<float>\ norBuf;}
+\DoxyCodeLine{00029\ \ \ \ \ std::vector<float>\ texBuf;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ eleBufID;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ posBufID;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ norBufID;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ texBufID;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ vaoID;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ texOff;}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

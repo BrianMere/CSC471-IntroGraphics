@@ -1,0 +1,83 @@
+\doxysection{Particle.\+h}
+\hypertarget{Particle_8h_source}{}\label{Particle_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Particle.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Particle.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ sueda}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ November,\ 2014/\ wood\ 16}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ LAB471\_PARTICLE\_H\_INCLUDED}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ LAB471\_PARTICLE\_H\_INCLUDED}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <glm/gtc/matrix\_transform.hpp>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{using\ namespace\ }glm;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{float}\ randFloat(\textcolor{keywordtype}{float}\ l,\ \textcolor{keywordtype}{float}\ h);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classParticle}{Particle}}}
+\DoxyCodeLine{00025\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ public\ characteristics\ of\ our\ particle}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{float}\ charge;\ \textcolor{comment}{//\ +1\ or\ -\/1}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{float}\ m;\ \textcolor{comment}{//\ mass}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{float}\ d;\ \textcolor{comment}{//\ viscous\ damping}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classParticle}{Particle}}(vec3\ pos);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classParticle}{\string~Particle}}();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ load();}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ rebirth(\textcolor{keywordtype}{float}\ t);}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ update(\textcolor{keywordtype}{float}\ t,\ \textcolor{keywordtype}{float}\ h,\ \textcolor{keyword}{const}\ glm::vec3\ \&g);}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ vec3\ \&getPosition()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ x;\ \};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ vec3\ \&getVelocity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ v;\ \};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ vec4\ \&getColor()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ color;\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ setStartingVelocity(glm::vec3\ velocity)}
+\DoxyCodeLine{00043\ \ \ \ \ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ this-\/>v\ =\ velocity;}
+\DoxyCodeLine{00045\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ setColor(glm::vec3\ color)}
+\DoxyCodeLine{00048\ \ \ \ \ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ this-\/>color\ =\ glm::vec4(color.x,\ color.y,\ color.z,\ 1.0f);}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{inline}\ glm::vec4\ getColor()}
+\DoxyCodeLine{00053\ \ \ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>color;}
+\DoxyCodeLine{00055\ \ \ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ setPosition(glm::vec3\ newPos)}
+\DoxyCodeLine{00058\ \ \ \ \ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ this-\/>x\ =\ newPos;}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ setStart(glm::vec3\ newStart)}
+\DoxyCodeLine{00063\ \ \ \ \ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ this-\/>start\ =\ newStart;}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ vec3\ x;\ \textcolor{comment}{//\ position}}
+\DoxyCodeLine{00070\ \ \ \ \ vec3\ v;\ \textcolor{comment}{//\ velocity}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{float}\ lifespan;\ \textcolor{comment}{//\ how\ long\ this\ particle\ lives}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{float}\ tEnd;\ \ \ \ \ \textcolor{comment}{//\ time\ this\ particle\ dies}}
+\DoxyCodeLine{00073\ \ \ \ \ vec4\ color;}
+\DoxyCodeLine{00074\ \ \ \ \ vec3\ start;\ \textcolor{comment}{//\ starting\ position.}}
+\DoxyCodeLine{00075\ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LAB471\_PARTICLE\_H\_INCLUDED}}
+
+\end{DoxyCode}

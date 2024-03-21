@@ -1,0 +1,59 @@
+\doxysection{Matrix\+Stack Class Reference}
+\hypertarget{classMatrixStack}{}\label{classMatrixStack}\index{MatrixStack@{MatrixStack}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classMatrixStack_a8dc92deca8176112d54ed36427396134}\label{classMatrixStack_a8dc92deca8176112d54ed36427396134} 
+void {\bfseries push\+Matrix} ()
+\item 
+\Hypertarget{classMatrixStack_ae65f661d4e59e973443b640e6a99c665}\label{classMatrixStack_ae65f661d4e59e973443b640e6a99c665} 
+void {\bfseries pop\+Matrix} ()
+\item 
+\Hypertarget{classMatrixStack_acff30b6ddee97549d97660222d8d94de}\label{classMatrixStack_acff30b6ddee97549d97660222d8d94de} 
+void {\bfseries load\+Identity} ()
+\item 
+\Hypertarget{classMatrixStack_a0a62f4a6b6108f4b6c3341864ac597e1}\label{classMatrixStack_a0a62f4a6b6108f4b6c3341864ac597e1} 
+void {\bfseries mult\+Matrix} (const glm\+::mat4 \&matrix)
+\item 
+\Hypertarget{classMatrixStack_a049aa666598002cf52f5fb5f7fd8a51b}\label{classMatrixStack_a049aa666598002cf52f5fb5f7fd8a51b} 
+void {\bfseries translate} (const glm\+::vec3 \&offset)
+\item 
+\Hypertarget{classMatrixStack_a3810681e49e2da8007709c089f1f43b0}\label{classMatrixStack_a3810681e49e2da8007709c089f1f43b0} 
+void {\bfseries scale} (const glm\+::vec3 \&scaleV)
+\item 
+\Hypertarget{classMatrixStack_ae644afb34a7d17ccde32a428a30f6236}\label{classMatrixStack_ae644afb34a7d17ccde32a428a30f6236} 
+void {\bfseries scale} (float size)
+\item 
+\Hypertarget{classMatrixStack_a6087d6a9f8ac2a7274ede9c87b92a605}\label{classMatrixStack_a6087d6a9f8ac2a7274ede9c87b92a605} 
+void {\bfseries rotate} (float angle, const glm\+::vec3 \&axis)
+\item 
+\Hypertarget{classMatrixStack_aeb32b1083509142b0707b866833338e8}\label{classMatrixStack_aeb32b1083509142b0707b866833338e8} 
+const glm\+::mat4 \& {\bfseries top\+Matrix} () const
+\item 
+\Hypertarget{classMatrixStack_a4a66ad32de903ef73f439b8e2ef45b09}\label{classMatrixStack_a4a66ad32de903ef73f439b8e2ef45b09} 
+void {\bfseries ortho} (float left, float right, float bottom, float top, float z\+Near, float z\+Far)
+\item 
+\Hypertarget{classMatrixStack_a3d8fb3292db9a9573875832f50973178}\label{classMatrixStack_a3d8fb3292db9a9573875832f50973178} 
+void {\bfseries perspective} (float fovy, float aspect, float z\+Near, float z\+Far)
+\item 
+\Hypertarget{classMatrixStack_a3b05c54c10614e5756e47d59666d5aa4}\label{classMatrixStack_a3b05c54c10614e5756e47d59666d5aa4} 
+void {\bfseries frustum} (float Right, float right, float bottom, float top, float z\+Near, float z\+Far)
+\item 
+\Hypertarget{classMatrixStack_ac1976da753640f31e3bc52c6735d9ba2}\label{classMatrixStack_ac1976da753640f31e3bc52c6735d9ba2} 
+void {\bfseries look\+At} (const glm\+::vec3 \&eye, const glm\+::vec3 \&target, const glm\+::vec3 \&up)
+\item 
+\Hypertarget{classMatrixStack_ac41330aee20ffe1c4ca29b4a7ce2f19c}\label{classMatrixStack_ac41330aee20ffe1c4ca29b4a7ce2f19c} 
+void {\bfseries print} (const char \texorpdfstring{$\ast$}{*}name=0) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classMatrixStack_aefcf7eb8d6d2bd2927dc56d53ce4711a}\label{classMatrixStack_aefcf7eb8d6d2bd2927dc56d53ce4711a} 
+static void {\bfseries print} (const glm\+::mat4 \&mat, const char \texorpdfstring{$\ast$}{*}name=0)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Matrix\+Stack.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/Matrix\+Stack.\+cpp\end{DoxyCompactItemize}

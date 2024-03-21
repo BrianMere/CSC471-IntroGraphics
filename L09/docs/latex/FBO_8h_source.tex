@@ -1,0 +1,50 @@
+\doxysection{FBO.\+h}
+\hypertarget{FBO_8h_source}{}\label{FBO_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/FBO.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/FBO.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ FBO\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ FBO\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}GLSL.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}GLTextureWriter.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classFBO}{FBO}}\ :\ \mbox{\hyperlink{classTexture}{Texture}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00016\ \ \ \ \ GLuint\ frameBuf;}
+\DoxyCodeLine{00017\ \ \ \ \ GLuint\ texBuf;}
+\DoxyCodeLine{00018\ \ \ \ \ GLuint\ depthBuf;\ \textcolor{comment}{//\ optional...}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ isDepth;\ \ \ \ \textcolor{comment}{//\ flag\ to\ denote\ if\ it's\ okay\ to\ use\ depthBuffer}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ GLuint\ quad\_VertexArrayID;}
+\DoxyCodeLine{00022\ \ \ \ \ GLuint\ quad\_vertexbuffer;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ initQuad();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classFBO}{FBO}}(\textcolor{keywordtype}{bool}\ isDepth,\ \textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classFBO}{\string~FBO}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ GLuint\ getFrameBuf()\ \{\ \textcolor{keywordflow}{return}\ frameBuf;\ \};}
+\DoxyCodeLine{00031\ \ \ \ \ GLuint\ getTexBuf()\ \ \ \{\ \textcolor{keywordflow}{return}\ texBuf;\ \ \ \};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ getIsDepth()\ \ \{\ \textcolor{keywordflow}{return}\ isDepth;\ \ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBO_abcec71b709af326cccb0f98b09e807e1}{ProcessDrawTex}}(std::shared\_ptr<Program>\ shader,\ GLuint\ inTex);}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFBO_abcec71b709af326cccb0f98b09e807e1}{ProcessDrawTex}}(std::shared\_ptr<Program>\ shader)\{this-\/>\mbox{\hyperlink{classFBO_abcec71b709af326cccb0f98b09e807e1}{ProcessDrawTex}}(shader,\ texBuf);\};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ writeImageFile(std::string\ filename)}
+\DoxyCodeLine{00039\ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ assert(\mbox{\hyperlink{namespaceGLTextureWriter_a100f8f9060da5bf94ef4a2fc19cdbdef}{GLTextureWriter::WriteImage}}(texBuf,filename\ +\ \textcolor{stringliteral}{"{}.png"{}}));}
+\DoxyCodeLine{00041\ \ \ \ \ \};}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

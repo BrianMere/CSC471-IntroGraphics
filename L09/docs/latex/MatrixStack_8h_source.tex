@@ -1,0 +1,79 @@
+\doxysection{Matrix\+Stack.\+h}
+\hypertarget{MatrixStack_8h_source}{}\label{MatrixStack_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/MatrixStack.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/MatrixStack.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ LAB471\_MATRIXSTACK\_H\_INCLUDED}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ LAB471\_MATRIXSTACK\_H\_INCLUDED}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stack>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}glm/glm.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}glm/vec4.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}glm/mat4x4.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}glm/gtc/matrix\_transform.hpp"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMatrixStack}{MatrixStack}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ std::stack<glm::mat4>\ stack;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classMatrixStack}{MatrixStack}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Copies\ the\ current\ matrix\ and\ adds\ it\ to\ the\ top\ of\ the\ stack}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ pushMatrix();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Removes\ the\ top\ of\ the\ stack\ and\ sets\ the\ current\ matrix\ to\ be\ the\ matrix\ that\ is\ now\ on\ top}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ popMatrix();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ \ Sets\ the\ top\ matrix\ to\ be\ the\ identity}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ loadIdentity();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ glMultMatrix():\ Right\ multiplies\ the\ top\ matrix}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ multMatrix(\textcolor{keyword}{const}\ glm::mat4\ \&matrix);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ Right\ multiplies\ the\ top\ matrix\ by\ a\ translation\ matrix}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ translate(\textcolor{keyword}{const}\ glm::vec3\ \&offset);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Right\ multiplies\ the\ top\ matrix\ by\ a\ scaling\ matrix}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ scale(\textcolor{keyword}{const}\ glm::vec3\ \&scaleV);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ \ Right\ multiplies\ the\ top\ matrix\ by\ a\ scaling\ matrix}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ scale(\textcolor{keywordtype}{float}\ size);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Right\ multiplies\ the\ top\ matrix\ by\ a\ rotation\ matrix\ (angle\ in\ deg)}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ rotate(\textcolor{keywordtype}{float}\ angle,\ \textcolor{keyword}{const}\ glm::vec3\ \&axis);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Gets\ the\ top\ matrix}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{const}\ glm::mat4\ \&topMatrix()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ Sets\ the\ top\ matrix\ to\ be\ an\ orthogonal\ projection\ matrix}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ ortho(\textcolor{keywordtype}{float}\ left,\ \textcolor{keywordtype}{float}\ right,\ \textcolor{keywordtype}{float}\ bottom,\ \textcolor{keywordtype}{float}\ top,\ \textcolor{keywordtype}{float}\ zNear,\ \textcolor{keywordtype}{float}\ zFar);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ Sets\ the\ top\ matrix\ to\ be\ a\ perspective\ projection\ matrix\ (fovy\ in\ deg)}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ perspective(\textcolor{keywordtype}{float}\ fovy,\ \textcolor{keywordtype}{float}\ aspect,\ \textcolor{keywordtype}{float}\ zNear,\ \textcolor{keywordtype}{float}\ zFar);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Sets\ the\ top\ matrix\ to\ be\ a\ perspective\ projection\ matrix}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ frustum(\textcolor{keywordtype}{float}\ Right,\ \textcolor{keywordtype}{float}\ right,\ \textcolor{keywordtype}{float}\ bottom,\ \textcolor{keywordtype}{float}\ top,\ \textcolor{keywordtype}{float}\ zNear,\ \textcolor{keywordtype}{float}\ zFar);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ Sets\ the\ top\ matrix\ to\ be\ a\ viewing\ matrix}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ lookAt(\textcolor{keyword}{const}\ glm::vec3\ \&eye,\ \textcolor{keyword}{const}\ glm::vec3\ \&target,\ \textcolor{keyword}{const}\ glm::vec3\ \&up);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ Prints\ out\ the\ specified\ matrix}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ print(\textcolor{keyword}{const}\ glm::mat4\ \&mat,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *name\ =\ 0);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ Prints\ out\ the\ top\ matrix}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ print(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *name\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LAB471\_PROGRAM\_H\_INCLUDED}}
+
+\end{DoxyCode}

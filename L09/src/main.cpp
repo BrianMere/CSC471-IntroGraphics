@@ -13,6 +13,7 @@
 #include <functional>
 #include <chrono>
 
+#include "Materials.h"
 #include "GLSL.h"
 #include "Program.h"
 #include "Texture.h"
@@ -38,9 +39,7 @@
 #include "TextureObject.h"
 #include "function_generator.h"
 #include "VectorObj.h"
-
-#define SET_MODE(x) (glUniform1f(texProg->getUniform("mode"), x) )
-#define SET_SOLIDCOLOR(x, y, z) (glUniform3f(solidColorProg->getUniform("solidColor"), x, y, z))
+#include "PortalObject.h"
 
 
 using namespace std;
@@ -69,11 +68,9 @@ public:
 	std::map<std::string, shared_ptr<Object>> objects;
 	std::map<std::string, shared_ptr<TextureObject>> texobjects;
 	std::map<std::string, shared_ptr<Bobject<>>> VoidBobjects;
+	std::map<std::string, shared_ptr<PortalObj> > portalObjs;
 
 	std::map<std::string, shared_ptr<Texture>> miscTextures;
-
-	// Particle System
-	particleSys *thePartSystem;
 
 	// camera data
 	Camera sceneCamera = Camera();
@@ -199,76 +196,7 @@ public:
 		texProg->addUniform("MatShine");
 		texProg->addUniform("mode");
 
-		// Initialize the GLSL program.
-		partProg = make_shared<Program>();
-		partProg->setVerbose(true);
-		partProg->setShaderNames(
-			resourceDirectory + "/particle_vert.glsl",
-			resourceDirectory + "/particle_frag.glsl");
-		if (! partProg->init())
-		{
-			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-			exit(1);
-		}
-		partProg->addUniform("P");
-		partProg->addUniform("M");
-		partProg->addUniform("V");
-		partProg->addAttribute("pColor");
-		partProg->addUniform("alphaTexture");
-		partProg->addAttribute("vertPos");
-
-		// Initialize the particle system...
-		thePartSystem = new particleSys();
-
-
-		thePartSystem->setInitialVelocityFunc(
-			[](glm::vec3 v, Particle p) {
-				return 0.1f * (1/glm::distance(v, vec3(0,0,0))) * glm::normalize(glm::vec3(glm::vec4(v, 1.0f) * rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1))));
-			}
-		);
-
-		thePartSystem->setForce(
-			[](glm::vec3 x, Particle p) {
-				// the unit perp vector field
-
-				double comp = pow(x.x, 2) + pow(x.y, 2)/4.0;
-				comp = (float) comp;
-				if(comp == 1) // on the ellipse
-				{
-					return -4 * M_PIf * x;
-				}
-				glm::vec3 re = (float)(1 - comp) * x;
-				if (comp > 1) // outside of the ellipse
-				{
-					re = (float)(comp-1) * (glm::vec4(re, 1.0f) * rotate(mat4(1.0f), 0.1f, vec3(0.0f,0.0f,1.0f))); // rotate just a little bit CCW to edge into the ellipse
-				}
-				else { // inside of the ellipse
-					re = (float)(1-comp) * (glm::vec4(re, 1.0f) * rotate(mat4(1.0f), 0.1f, vec3(0.0f,0.0f,1.0f))); // rotate just a little bit CW to edge into ellipse
-				}
-				re.z = -x.z;
-				return re * p.m;
-			}
-		);
-		thePartSystem->setDist(
-			[](float t, float a, float b) {
-				return glm::vec3(
-					(0.9f + (a / 2.5f)) * cos(M_PIf * 2 * t), 
-					2*(0.9f + (b / 2.5f)) * sin(M_PIf * 2 * t), 
-					a > 0 ? (b * 0.1) : (-b * 0.1)
-				);
-			}
-		);
-		thePartSystem->setColorDist(
-			[](float t, float a, float b) {
-				return glm::vec3(
-					0,
-					0.5*t + 0.4, 
-					0.8*t + 0.4
-				);
-			}
-		);
-
-		thePartSystem->gpuSetup();
+		
 
 		// init splines up and down
        	splinepath[0] = Spline(glm::vec3(-1,0.5,1), glm::vec3(-0.5,1,1), glm::vec3(0.5, 0 , 1), glm::vec3(1,0.5,1), 5);
@@ -327,43 +255,11 @@ public:
 			1.0
 		);
 
-		funcToObj(
-			resourceDirectory + "/portal",
-			"portal_plane.obj", 
-			1, 
-			[](float x, float y) { return 0; },
-			-1.0, 
-			1.0, 
-			-2.0, 
-			2.0
-		);
-
-		texobjects["PlanePortalable"] = make_shared<TextureObject>(TextureObject(
-			resourceDirectory + "/misc",
-			"plane.obj",
-			texProg, 
-			"/wall_texture.png"
-		));
-
 		texobjects["PlaneUnportalable"] = make_shared<TextureObject>(TextureObject(
 			resourceDirectory + "/misc",
 			"plane.obj",
 			texProg, 
 			"/black_floor.jpg"
-		));
-
-		texobjects["BluePortal"] = make_shared<TextureObject>(TextureObject(
-			resourceDirectory + "/portal",
-			"portal_plane.obj",
-			texProg, 
-			"/blue_swirl.jpg"
-		));
-
-		texobjects["OrangePortal"] = make_shared<TextureObject>(TextureObject(
-			resourceDirectory + "/portal",
-			"portal_plane.obj",
-			texProg, 
-			"/orange_swirl.jpg"
 		));
 
 		texobjects["SmoothSphere"] = make_shared<TextureObject>(TextureObject(
@@ -404,101 +300,25 @@ public:
 		));
 		VoidBobjects["V3"]->init();
 
-		// Textures
-		miscTextures["Particle"] = make_shared<Texture>(Texture());
-		miscTextures["Particle"]->setFilename(resourceDirectory +"/particles" + "/alpha.bmp");
-		miscTextures["Particle"]->init();
-		miscTextures["Particle"]->setUnit(0);
-		miscTextures["Particle"]->setWrapModes(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
-
 		// FBO's
+		portalObjs["BluePortal"] = make_shared<PortalObj>(PortalObj(
+			resourceDirectory, 
+			texProg,
+			vec3(0.0,0.0,1.0)
+		));
 
-		// The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
-		GLuint FramebufferName = 0;
-		glGenFramebuffers(1, &FramebufferName);
-		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+		portalObjs["OrangePortal"] = make_shared<PortalObj>(PortalObj(
+			resourceDirectory, 
+			texProg, 
+			vec3(1.0,0.5,0.0)
+		));
 
-		// The texture we're going to render to
-		GLuint renderedTexture;
-		glGenTextures(1, &renderedTexture);
+		for(std::map<std::string, shared_ptr<PortalObj>>::iterator it = portalObjs.begin(); it != portalObjs.end(); ++it) {
+			it->second->init();
+		}
 
-		// "Bind" the newly created texture : all future texture functions will modify this texture
-		glBindTexture(GL_TEXTURE_2D, renderedTexture);
-
-		// Give an empty image to OpenGL ( the last "0" )
-		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, 1024, 768, 0,GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-		// Poor filtering. Needed !
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		// The depth buffer
-		GLuint depthrenderbuffer;
-		glGenRenderbuffers(1, &depthrenderbuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
-
-		// Set "renderedTexture" as our colour attachement #0
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
-
-		// Set the list of draw buffers.
-		GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-
-		// Always check that our framebuffer is ok
-		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			exit(0);
 	}
 
-	typedef enum {
-		shiny,
-		plastic, 
-		metalic,
-		gold,
-		ethereal
-	} material_t;
-
-	/**
-	 * helper function to pass material data to the GPU.
-	 * 
-	 * Review material_t for supported materials to pass in. 
-	 * Color is an associated RGB value. 
-	 * */
-	void SetMaterial(shared_ptr<Program> curS, material_t material, vec3 color) {
-
-    	switch (material) {
-    		case shiny:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
-    			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatSpec"), 0.9, 0.9, 0.9);
-    			glUniform1f(curS->getUniform("MatShine"), 120.0);
-    		break;
-    		case plastic:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
-    			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatSpec"), 0.1 , 0.1, 0.1);
-    			glUniform1f(curS->getUniform("MatShine"), 4.0);
-    		break;
-    		case metalic:
-    			glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
-    			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatSpec"), 0.3, 0.3, 0.3);
-    			glUniform1f(curS->getUniform("MatShine"), 27.0);
-    		break;
-			case gold:
-				glUniform3f(curS->getUniform("MatAmb"), 0.1 * color.x, 0.1 * color.y, 0.1 * color.z);
-    			glUniform3f(curS->getUniform("MatDif"), color.x, color.y, color.z);
-    			glUniform3f(curS->getUniform("MatSpec"), 0.6 * color.y, 0.6 * color.x, 0.6 * color.z);
-    			glUniform1f(curS->getUniform("MatShine"), 27.0);
-			case ethereal: // high ambient color (near white), no diffusion, high specular
-				glUniform3f(curS->getUniform("MatAmb"), 1.1 * color.x, 1.1 * color.y, 0.8 * color.z);
-    			glUniform3f(curS->getUniform("MatDif"), 0.0, 0.0, 0.0);
-    			glUniform3f(curS->getUniform("MatSpec"), 0.3 * color.x, 0.3 * color.y, 0.3 * color.z);
-    			glUniform1f(curS->getUniform("MatShine"), 120.0);
-    		break;
-  		}
-	}
 
 	/**
 	 * Update camera based on if we are doing a camera tour of our scene currently
@@ -548,8 +368,6 @@ public:
 			View->loadIdentity();
 			View->multMatrix(sceneCamera.getLookAtMatrix());
 
-			thePartSystem->setCamera(View->topMatrix());
-
 		Model->loadIdentity();
 
 		glm::vec3 lightPosition = vec3(2.0, 2.0, -4.0); // center a light really far away super high...
@@ -568,7 +386,7 @@ public:
 			CHECKED_GL_CALL(glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
 			CHECKED_GL_CALL(glUniformMatrix4fv(texProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
 			CHECKED_GL_CALL(glUniform3f(texProg->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z));
-			SET_MODE(0);
+			SET_MODE(texProg, 0);
 		texProg->unbind();
 
 		prog->bind();
@@ -578,79 +396,62 @@ public:
 			CHECKED_GL_CALL(glUniform3f(prog->getUniform("lightPos"), lightPosition.x, lightPosition.y, lightPosition.z));
 		prog->unbind();
 
-		partProg->bind();
-			miscTextures["Particle"]->bind(partProg->getUniform("alphaTexture"));
-			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
-			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
-			CHECKED_GL_CALL(glUniformMatrix4fv(partProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
-		partProg->unbind();
+		for(std::map<std::string, shared_ptr<PortalObj>>::iterator it = portalObjs.begin(); it != portalObjs.end(); ++it) {
+			it->second->partProg->bind();
+				CHECKED_GL_CALL(glUniformMatrix4fv(it->second->partProg->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix())));
+				CHECKED_GL_CALL(glUniformMatrix4fv(it->second->partProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix())));
+				CHECKED_GL_CALL(glUniformMatrix4fv(it->second->partProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix())));
+			it->second->partProg->unbind();
+
+			// No need to bind anything for the passProg shader... 
+		}
 
 		// Define World Geometry Here!
-		texobjects["BluePortal"]->add_transform(scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f)));
-		texobjects["BluePortal"]->add_transform(translate(mat4(1.0f), vec3(0,0,-5)));
-		texobjects["BluePortal"]->add_subobj(texobjects["PlanePortalable"]);
-
-		texobjects["BluePortal"]->add_solo_transform(translate(mat4(1.0f), vec3(0,0,0.01)));
 
 		objects["SmoothSphere"]->move_to(lightPosition);
 
 		// x-axis
 		VoidBobjects["V1"]->init_transforms();
-		VoidBobjects["V1"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
+		VoidBobjects["V1"]->CallMethodOnAllObjs(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
 		// y-axis
 		VoidBobjects["V2"]->init_transforms();
-		VoidBobjects["V2"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1)));
-		VoidBobjects["V2"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
+		VoidBobjects["V2"]->CallMethodOnAllObjs(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,0,1)));
+		VoidBobjects["V2"]->CallMethodOnAllObjs(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
 		// z-axis
 		VoidBobjects["V3"]->init_transforms();
-		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,1,0)));
-		VoidBobjects["V3"]->CallMethodOnAll(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
+		VoidBobjects["V3"]->CallMethodOnAllObjs(&Object::add_transform, rotate(mat4(1.0f), M_PI_2f, vec3(0,1,0)));
+		VoidBobjects["V3"]->CallMethodOnAllObjs(&Object::add_transform, translate(mat4(1.0f), vec3(-2,-2,-4)));
 
-		std::cout << glm::to_string(texobjects["BluePortal"]->getWorldCenterPoint()) << std::endl;
+		// Portals
+		portalObjs["BluePortal"]->init_transforms();
+		portalObjs["BluePortal"]->CallMethodOnAllTexobjs<TextureObject>(&TextureObject::move_to, vec3(-2, 0,-5));
+		portalObjs["BluePortal"]->thePartSystem->setOrigin(vec3(-2, 0, -5));
 
-		// update our particle system's origin
-		thePartSystem->setOrigin(texobjects["BluePortal"]->getWorldCenterPoint());
+		portalObjs["OrangePortal"]->init_transforms();
+		portalObjs["OrangePortal"]->CallMethodOnAllTexobjs<TextureObject>(&TextureObject::move_to, vec3(2, 0,-5));
+		portalObjs["OrangePortal"]->thePartSystem->setOrigin(vec3(2, 0, -5));
 
 		// draw objects here... 
 
-		partProg->bind();
-			thePartSystem->update();
-			thePartSystem->drawMe(partProg);
-		partProg->unbind();
+		// Portal FBO Rendering
+		portalObjs["BluePortal"]->fbobjs["PortalHole"]->setupFBO(View, Model, {solidColorProg, prog});
+			drawTheWorld(Model);
+			portalObjs["OrangePortal"]->drawMe(Model);
+		portalObjs["BluePortal"]->fbobjs["PortalHole"]->renderFBO(Model, {solidColorProg, prog});
 
-		texProg->bind();
+		portalObjs["OrangePortal"]->fbobjs["PortalHole"]->setupFBO(View, Model, {solidColorProg, prog});
+			drawTheWorld(Model);
+			portalObjs["BluePortal"]->drawMe(Model);
+		portalObjs["OrangePortal"]->fbobjs["PortalHole"]->renderFBO(Model, {solidColorProg, prog});
 
-			SET_MODE(0); // lighting and shading 
-
-			SetMaterial(texProg, material_t::plastic, vec3(0.1,0.1,0.1));
-			//texobjects["PlanePortalable"]->draw(Model);
-
-			SET_MODE(1); // Removing very black pixels from the textures, reserved for portals or other similar textures
-
-			SetMaterial(texProg, material_t::ethereal, vec3(0,0,0.1));
-			texobjects["BluePortal"]->draw(Model);
-
-			SET_MODE(2); // textured while unlit
-			
-		texProg->unbind();
-
-		solidColorProg->bind();
-			SET_SOLIDCOLOR(0.5, 0, 0);
-			VoidBobjects["V1"]->CallMethodOnAll(&Object::draw, Model);
-
-			SET_SOLIDCOLOR(0, 0.5, 0);
-			VoidBobjects["V2"]->CallMethodOnAll(&Object::draw, Model);
-
-			SET_SOLIDCOLOR(0,0,0.5);
-			VoidBobjects["V3"]->CallMethodOnAll(&Object::draw, Model);
-		solidColorProg->unbind();
-
-		prog->bind();
-			SetMaterial(prog, material_t::gold, vec3(1, 1, 0));
-			objects["SmoothSphere"]->draw(Model);
-		prog->unbind();
+		// now show the screen (we don't output the image of texBuf[2] here, we're just saving it. )
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		drawTheWorld(Model);
+		portalObjs["BluePortal"]->drawMe(Model);
+		portalObjs["OrangePortal"]->drawMe(Model);
 
 		// Camera Updates
 		sceneCamera.rotSpeed = 0.02f;
@@ -671,7 +472,11 @@ public:
 			sceneCamera.resetCamera();
 		}
 		if (keys[GLFW_KEY_P]) {
-			thePartSystem->reSet();
+			for(auto it : portalObjs)
+			{
+				it.second->fbobjs["PortalHole"]->writeImageFile(it.first);
+			}
+			//thePartSystem->reSet();
 		}
 
 		// Pop matrix stacks.
@@ -686,12 +491,36 @@ public:
 			it->second->flush();
 		}
 		for(std::map<std::string, shared_ptr<Bobject<>>>::iterator it = VoidBobjects.begin(); it != VoidBobjects.end(); ++it) {
-			it->second->CallMethodOnAll(&Object::flush);
+			it->second->CallMethodOnAllObjs<Object>(&Object::flush);
+		}
+		for(std::map<std::string, shared_ptr<PortalObj>>::iterator it = portalObjs.begin(); it != portalObjs.end(); ++it) {
+			it->second->CallMethodOnAllTexobjs<Object>(&Object::flush);
+			it->second->thePartSystem->setOrigin(vec3(0,0,0));
 		}
 
 		// Debugging: Print out our current position
 		std::cout << sceneCamera.toString() << std::endl;
 	}
+
+	void drawTheWorld(std::shared_ptr<MatrixStack> Model)
+	{
+		solidColorProg->bind();
+			SET_SOLIDCOLOR(solidColorProg, 0.5, 0, 0);
+			//VoidBobjects["V1"]->CallMethodOnAllObjs(&Object::draw, Model);
+
+			SET_SOLIDCOLOR(solidColorProg, 0, 0.5, 0);
+			//VoidBobjects["V2"]->CallMethodOnAllObjs(&Object::draw, Model);
+
+			SET_SOLIDCOLOR(solidColorProg, 0,0,0.5);
+			//VoidBobjects["V3"]->CallMethodOnAllObjs(&Object::draw, Model);
+		solidColorProg->unbind();
+
+		prog->bind();
+			SetMaterial(prog, material_t::gold, vec3(1, 1, 0));
+			//objects["SmoothSphere"]->draw(Model);
+		prog->unbind();
+	}
+
 };
 
 int main(int argc, char *argv[])

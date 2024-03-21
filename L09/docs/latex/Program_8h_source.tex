@@ -1,0 +1,53 @@
+\doxysection{Program.\+h}
+\hypertarget{Program_8h_source}{}\label{Program_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Program.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/Program.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ \ once}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifndef\ LAB471\_PROGRAM\_H\_INCLUDED}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ LAB471\_PROGRAM\_H\_INCLUDED}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ std::string\ readFileAsString(\textcolor{keyword}{const}\ std::string\ \&fileName);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classProgram}{Program}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ setVerbose(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ v)\ \{\ verbose\ =\ v;\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ isVerbose()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ verbose;\ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ setShaderNames(\textcolor{keyword}{const}\ std::string\ \&v,\ \textcolor{keyword}{const}\ std::string\ \&f);}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ init();}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ bind();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ unbind();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ addAttribute(\textcolor{keyword}{const}\ std::string\ \&name);}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ addUniform(\textcolor{keyword}{const}\ std::string\ \&name);}
+\DoxyCodeLine{00030\ \ \ \ \ GLint\ getAttribute(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ GLint\ getUniform(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ std::string\ vShaderName;}
+\DoxyCodeLine{00036\ \ \ \ \ std::string\ fShaderName;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ GLuint\ pid\ =\ 0;}
+\DoxyCodeLine{00041\ \ \ \ \ std::map<std::string,\ GLint>\ attributes;}
+\DoxyCodeLine{00042\ \ \ \ \ std::map<std::string,\ GLint>\ uniforms;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LAB471\_PROGRAM\_H\_INCLUDED}}
+
+\end{DoxyCode}

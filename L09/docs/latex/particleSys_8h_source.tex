@@ -1,0 +1,87 @@
+\doxysection{particle\+Sys.\+h}
+\hypertarget{particleSys_8h_source}{}\label{particleSys_8h_source}\index{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/particleSys.h@{/home/brianm/Documents/Repositories/CSC471-\/IntroGraphics/L09/src/particleSys.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#ifndef\ \_\_particleS\_\_}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#define\ \_\_particleS\_\_}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Particle.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Program.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ NUMP\ 300}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ namespace\ }glm;}
+\DoxyCodeLine{00014\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{using\ }force\_t\ =\ std::function<glm::vec3(glm::vec3,\ \mbox{\hyperlink{classParticle}{Particle}})>;}
+\DoxyCodeLine{00016\ \textcolor{comment}{//using\ force\_t\ =\ glm::vec3(*)(glm::vec3,\ Particle);}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{using\ }dist\_t\ =\ std::function<glm::vec3(\textcolor{keywordtype}{float},\ \textcolor{keywordtype}{float},\ \textcolor{keywordtype}{float})>;}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ using\ dist\_t\ =\ glm::vec3(*)(float,\ float,\ float);}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classParticleSorter}{ParticleSorter}}\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keyword}{const}\ shared\_ptr<Particle>\ p0,\ \textcolor{keyword}{const}\ shared\_ptr<Particle>\ p1)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{\ \ \ }\{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \textcolor{comment}{//\ Particle\ positions\ in\ world\ space}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \textcolor{keyword}{const}\ vec3\ \&x0\ =\ p0-\/>getPosition();}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{const}\ vec3\ \&x1\ =\ p1-\/>getPosition();}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \textcolor{comment}{//\ Particle\ positions\ in\ camera\ space}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ vec4\ x0w\ =\ C\ *\ vec4(x0.x,\ x0.y,\ x0.z,\ 1.0f);}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ vec4\ x1w\ =\ C\ *\ vec4(x1.x,\ x1.y,\ x1.z,\ 1.0f);}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x0w.z\ <\ x1w.z;}
+\DoxyCodeLine{00031\ \ \ \ \}}
+\DoxyCodeLine{00032\ \ \ }
+\DoxyCodeLine{00033\ \ \ \ mat4\ C;\ \textcolor{comment}{//\ current\ camera\ matrix}}
+\DoxyCodeLine{00034\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparticleSys}{particleSys}}\ \{}
+\DoxyCodeLine{00037\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ vector<shared\_ptr<Particle>>\ particles;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ force\_t\ F;\ \textcolor{comment}{//force\ function}}
+\DoxyCodeLine{00041\ \ \ \ \ dist\_t\ dist;\ \textcolor{comment}{//\ distribution\ function\ (of\ particles)}}
+\DoxyCodeLine{00042\ \ \ \ \ dist\_t\ colorDist;\ \textcolor{comment}{//\ distribution\ function\ for\ color}}
+\DoxyCodeLine{00043\ \ \ \ \ force\_t\ V;\ \textcolor{comment}{//\ velocity\ function}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{float}\ t,\ h;\ \textcolor{comment}{//?}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{int}\ numP;}
+\DoxyCodeLine{00047\ \ \ \ \ vec3\ start;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classParticleSorter}{ParticleSorter}}\ sorter;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//this\ is\ not\ great\ that\ this\ is\ hard\ coded\ -\/\ you\ can\ make\ it\ better}}
+\DoxyCodeLine{00050\ \ \ \ \ GLfloat\ points[3*NUMP];}
+\DoxyCodeLine{00051\ \ \ \ \ GLfloat\ pointColors[4*NUMP];}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ mat4\ theCamera;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ vertArrObj;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ vertBuffObj;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ colorArrObj;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ colorBuffObj;}
+\DoxyCodeLine{00059\ \ \ \ \ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classparticleSys}{particleSys}}();}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ drawMe(std::shared\_ptr<Program>\ prog);}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ gpuSetup();}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ update();}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ reSet();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ setCamera(mat4\ inC)\ \{theCamera\ =\ inC;\}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classparticleSys_ab1ee16d7efddcaccad409399737e5797}{setOrigin}}(glm::vec3\ source);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classparticleSys_a59b5c12a0d679c47c56011d894737cf1}{setForce}}(force\_t\ Force);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classparticleSys_a1b8dc2c1cf5b7dbf0792009772e95454}{setDist}}(dist\_t\ Distribution);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classparticleSys_adc59974a3cf7371c49d1b316bbf0261d}{setColorDist}}(dist\_t\ color\_Dist);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classparticleSys_a3777eaf4d8ec16f7cfb3413c2f97b474}{setInitialVelocityFunc}}(force\_t\ VelocityFunc);}
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,136 @@
+\doxysection{FBObject Class Reference}
+\hypertarget{classFBObject}{}\label{classFBObject}\index{FBObject@{FBObject}}
+Inheritance diagram for FBObject\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classFBObject}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFBObject_a9c8ee8932d3f3bf9723199ad39d4b4d7}\label{classFBObject_a9c8ee8932d3f3bf9723199ad39d4b4d7} 
+{\bfseries FBObject} (const std\+::string \&resource\+Directory, const std\+::string \&filename, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ fbo\+Shader, bool is\+Depth, int width, int height)
+\item 
+\Hypertarget{classFBObject_af1283ced5f6316e40bfb6817c333d49f}\label{classFBObject_af1283ced5f6316e40bfb6817c333d49f} 
+{\bfseries FBObject} (const \mbox{\hyperlink{classObject}{Object}} obj, const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBO}{FBO}} $>$ i\+\_\+\+FBO)
+\item 
+void \mbox{\hyperlink{classFBObject_a83cdc35e7c3a23e42b0c4af9171b3f1b}{update}} (int width, int height)
+\item 
+void \mbox{\hyperlink{classFBObject_a4fea46f7fcacd2145b66c5c876bae370}{draw}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$) override
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBObject}{FBObject}} $>$ \mbox{\hyperlink{classFBObject_a8c4a3cbfcc6ee5ed7e2e68f40faebf4d}{copy}} ()
+\item 
+void \mbox{\hyperlink{classFBObject_a34172a50324917470d2a861a9f331548}{render\+FBO}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$ Model, std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ $>$ list\+Of\+Shaders\+To\+Update)
+\item 
+void \mbox{\hyperlink{classFBObject_a9904ea6393fd0772414b8a6cd9b41e56}{setup\+FBO}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$ prev\+View, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$ Model, std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ $>$ list\+Of\+Shaders\+To\+Update)
+\item 
+\Hypertarget{classFBObject_a49b41b2eb28fbc30b9456d3e8d144a97}\label{classFBObject_a49b41b2eb28fbc30b9456d3e8d144a97} 
+void {\bfseries write\+Image\+File} (const std\+::string filename)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} (const std\+::string \&resource\+Directory, const std\+::string \&filename, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ shader)
+\item 
+void \mbox{\hyperlink{classObject_a4260041188d83812b924434c8b0300b9}{set\+Parent\+Center}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o)
+\item 
+void \mbox{\hyperlink{classObject_a200f8e5b04bf7df9c2a9c2b0fe3e49ac}{calc\+Resize}} ()
+\item 
+void \mbox{\hyperlink{classObject_a0ceab0590b17c4224dbe5703bde3e1ab}{add\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_ab4acbf895d5a713a249208fe282ce3d0}{add\+\_\+solo\+\_\+transform}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{classObject_a6e0f5df76266c347c53234d7ccbdde3f}{flush}} ()
+\item 
+void \mbox{\hyperlink{classObject_af59b9a88274d9718e8edc9e1f935fd23}{add\+\_\+subobj}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ obj)
+\item 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&prog, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$M)
+\item 
+void {\bfseries set\+Model} (\mbox{\hyperlink{classProgram}{Program}} \&curS, glm\+::vec3 trans, float rotY, float rotX, float sc)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ \mbox{\hyperlink{classObject_af1d1202a01eb04faa00b89a621237cdd}{copy}} ()
+\item 
+void \mbox{\hyperlink{classObject_a7b0249227a712763d10936ead0b6b7d4}{set\+Shader}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ new\+Shader)
+\item 
+void \mbox{\hyperlink{classObject_a7b0ea53220dbf71881336d031235a992}{move\+\_\+to}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ o\+\_\+obj)
+\item 
+void \mbox{\hyperlink{classObject_a86fb7b563788f7d7589c91f99fe378c2}{move\+\_\+to}} (glm\+::vec3 v)
+\item 
+glm\+::vec3 \mbox{\hyperlink{classObject_ae5162e85f1128c2ae4b1627cbe4e06ab}{get\+World\+Center\+Point}} ()
+\item 
+void \mbox{\hyperlink{classObject_a2ecedd20173af63984395821bd2a6a6d}{print\+Center}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ $>$ {\bfseries sub\+\_\+objs}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classObject}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMeshContainer}{Mesh\+Container}} {\bfseries my\+\_\+mesh}
+\item 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries transformations}
+\item 
+std\+::vector$<$ glm\+::mat4 $>$ {\bfseries solo\+\_\+transformations}
+\item 
+glm\+::mat4 {\bfseries resize\+Mat}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ {\bfseries shader}
+\item 
+glm\+::vec3 {\bfseries mid}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classObject}{Object}} $>$ {\bfseries parent\+Center}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classFBObject_a8c4a3cbfcc6ee5ed7e2e68f40faebf4d}\label{classFBObject_a8c4a3cbfcc6ee5ed7e2e68f40faebf4d} 
+\index{FBObject@{FBObject}!copy@{copy}}
+\index{copy@{copy}!FBObject@{FBObject}}
+\doxysubsubsection{\texorpdfstring{copy()}{copy()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classFBObject}{FBObject}} $>$ FBObject\+::copy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Clone this \doxylink{classObject}{Object} into new data. \Hypertarget{classFBObject_a4fea46f7fcacd2145b66c5c876bae370}\label{classFBObject_a4fea46f7fcacd2145b66c5c876bae370} 
+\index{FBObject@{FBObject}!draw@{draw}}
+\index{draw@{draw}!FBObject@{FBObject}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void FBObject\+::draw (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Note, this method uses the shader\textquotesingle{}s "{}\+Texture0"{} uniform parameter. Make sure you\textquotesingle{}ve set this up correctly. 
+
+Reimplemented from \mbox{\hyperlink{classObject_a94875c5f54d87e783284c63affb68b06}{Object}}.
+
+\Hypertarget{classFBObject_a34172a50324917470d2a861a9f331548}\label{classFBObject_a34172a50324917470d2a861a9f331548} 
+\index{FBObject@{FBObject}!renderFBO@{renderFBO}}
+\index{renderFBO@{renderFBO}!FBObject@{FBObject}}
+\doxysubsubsection{\texorpdfstring{renderFBO()}{renderFBO()}}
+{\footnotesize\ttfamily void FBObject\+::render\+FBO (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model,  }\item[{std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ $>$}]{list\+Of\+Shaders\+To\+Update }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+The world "{}\+Application"{} that calls this needs to, prior to this call\+:
+\begin{DoxyItemize}
+\item Have called this-\/\texorpdfstring{$>$}{>}setup\+FBO before drawing anything...
+\item Setup any of the relavent transforms for all passed through geometry
+\item Drawn all relavent geometry
+\end{DoxyItemize}
+
+This takes in the world camera\textquotesingle{}s view to help reset the binding in the shader. \Hypertarget{classFBObject_a9904ea6393fd0772414b8a6cd9b41e56}\label{classFBObject_a9904ea6393fd0772414b8a6cd9b41e56} 
+\index{FBObject@{FBObject}!setupFBO@{setupFBO}}
+\index{setupFBO@{setupFBO}!FBObject@{FBObject}}
+\doxysubsubsection{\texorpdfstring{setupFBO()}{setupFBO()}}
+{\footnotesize\ttfamily void FBObject\+::setup\+FBO (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{prev\+View,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMatrixStack}{Matrix\+Stack}} $>$}]{Model,  }\item[{std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProgram}{Program}} $>$ $>$}]{list\+Of\+Shaders\+To\+Update }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Setup \doxylink{classFBO}{FBO} for writing data to\+: \Hypertarget{classFBObject_a83cdc35e7c3a23e42b0c4af9171b3f1b}\label{classFBObject_a83cdc35e7c3a23e42b0c4af9171b3f1b} 
+\index{FBObject@{FBObject}!update@{update}}
+\index{update@{update}!FBObject@{FBObject}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void FBObject\+::update (\begin{DoxyParamCaption}\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Update our \doxylink{classFBO}{FBO} with new width and height parameters. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/FBObject.\+h\item 
+/home/brianm/\+Documents/\+Repositories/\+CSC471-\/\+Intro\+Graphics/\+L09/src/FBObject.\+cpp\end{DoxyCompactItemize}
